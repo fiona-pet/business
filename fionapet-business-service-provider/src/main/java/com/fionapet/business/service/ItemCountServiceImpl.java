@@ -59,6 +59,22 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
                 } catch (InvocationTargetException e) {
                     e.printStackTrace();
                 }
+            }else{
+                //商品进价是否有变化
+                if (Double.compare(itemCount.getInputPrice(), warehouseInrecordDetail.getInputPrice()) != 0){
+                    //新单价=((原进价*库存+原进价/零散比*散装数量)+新进价*数量)/((原库存+新进数量)*零散比+散装数量)*零散比
+                    //原成本
+                    double oldTotal = itemCount.getInputPrice() * itemCount.getItemCountNum() + itemCount.getInputPrice()/itemCount.getItemBulk()*itemCount.getScatteredCountNum();
+                    //新进成本
+                    double newTotal = warehouseInrecordDetail.getInputPrice() * warehouseInrecordDetail.getInputCount();
+                    //总散装数量
+                    double count = (itemCount.getItemCountNum() + warehouseInrecordDetail.getInputCount())*itemCount.getItemBulk() + itemCount.getScatteredCountNum();
+
+                    double newInputPrice = (oldTotal + newTotal)/count*itemCount.getItemBulk();
+
+                    itemCount.setInputPrice(newInputPrice);
+                }
+
             }
 
             itemCount.setItemCountNum(itemCount.getItemCountNum() + warehouseInrecordDetail.getInputCount());
