@@ -1,5 +1,6 @@
 package com.fionapet.business.service;
 
+import cn.fiona.pet.account.entity.Role;
 import cn.fiona.pet.account.entity.User;
 import cn.fiona.pet.account.service.AccountService;
 import com.fionapet.business.entity.Persons;
@@ -7,6 +8,9 @@ import com.fionapet.business.repository.PersonsDao;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *  宠物主人信息
@@ -43,6 +47,13 @@ public class PersonsServiceImpl extends CURDServiceBase<Persons> implements Pers
         user.setPlainPassword(entity.getPassword());
         user.setId(persons.getId());
         user.setSalt("6d65d24122c30500");
+
+        Role role = new Role();
+        role.setCode(entity.getRoleId());
+        Set<Role> roleSet = new HashSet<Role>();
+        roleSet.add(role);
+
+        user.setRoles(roleSet);
 
         accountService.createUser(user);
 
