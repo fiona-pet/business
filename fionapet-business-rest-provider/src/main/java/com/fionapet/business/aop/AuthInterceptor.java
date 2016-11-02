@@ -4,6 +4,7 @@ import cn.fiona.pet.account.entity.User;
 import cn.fiona.pet.account.exception.ApiException;
 import cn.fiona.pet.account.exception.AuthorizationException;
 import cn.fiona.pet.account.service.AccountService;
+import org.apache.commons.beanutils.BeanUtilsBean;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -11,9 +12,14 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.dubbo.x.facade.RestServiceBase;
+import org.dubbo.x.service.CURDService;
+import org.reflections.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.lang.reflect.Field;
+import java.util.Set;
 
 /**
  * 身份认证 切面
@@ -61,10 +67,30 @@ public class AuthInterceptor {
                 User currentUser = accountService.getByToken(token);
 
                 restServiceBase.getService().setCurrentUser(currentUser);
+
+                setCurrentUser(restServiceBase.getService(), currentUser);
             }
         } catch (Exception e) {
             LOGGER.warn("Request filter invoked:Token validate fail!");
             throw new AuthorizationException("token 验证失败!");
+        }
+    }
+
+    private void setCurrentUser(CURDService service, User user){
+        Class c = service.getClass();
+        Set<Field> fs = ReflectionUtils.getAllFields(c);
+        for (Field f :fs){
+            if (f.getType().getInterfaces().length>0) {
+                if (f.getType().getInterfaces()[0].isAssignableFrom(CURDService.class)) {
+                    try {
+                        f.setAccessible(true);
+                        BeanUtilsBean.getInstance().setProperty(f,"setCurrentUser", user);
+                    } catch (Exception e) {
+                        LOGGER.warn("set current user is error!", e);
+//                        e.printStackTrace();
+                    }
+                }
+            }
         }
     }
 
