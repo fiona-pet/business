@@ -1,6 +1,7 @@
 package com.fionapet.business.service;
 
 import com.fionapet.business.entity.ItemCount;
+import com.fionapet.business.entity.MedicPrescriptionDetail;
 import com.fionapet.business.entity.WarehouseInrecord;
 import org.dubbo.x.service.CURDService;
 /**
@@ -9,4 +10,11 @@ import org.dubbo.x.service.CURDService;
  */
 public interface ItemCountService extends CURDService<ItemCount> {
     void update(String warehouseInrecordId);
+
+    /**
+     * 消除库存
+     *
+     * @param medicPrescriptionDetail
+     */
+    void decrease(final MedicPrescriptionDetail medicPrescriptionDetail);
 }

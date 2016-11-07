@@ -21,7 +21,7 @@ public class UserDictDetailDaoTest extends SpringTransactionalTestCase {
 
     @Test
     public void findAll(){
-        List<UserDictDetail> userDictDetails = userDictDetailDao.findAllBy();
+        List<UserDictDetail> userDictDetails = userDictDetailDao.findDictDetailCodeOrId("adc","");
 
         Assert.assertNotNull(userDictDetails);
 

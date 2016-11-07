@@ -2567,5 +2567,6 @@ CREATE TABLE `t_dealer` (
 
 
 CREATE UNIQUE INDEX t_medic_medictreat_record_register_no_uindex ON fiona_pet_business.t_medic_medictreat_record (register_no);
+CREATE UNIQUE INDEX t_persons_person_name_uindex ON fiona_pet_business.t_persons (person_name);
 
 

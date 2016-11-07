@@ -43,7 +43,9 @@
 
 
 	<!-- 医生处方明细 api -->
-    <bean id="medicPrescriptionService" class="com.fionapet.business.service.MedicPrescriptionServiceImpl"/>
+    <bean id="medicPrescriptionService" class="com.fionapet.business.service.MedicPrescriptionServiceImpl">
+
+    </bean>
 
     <dubbo:service interface="com.fionapet.business.service.MedicPrescriptionService" ref="medicPrescriptionService"
                    protocol="dubbo" validation="true" timeout="5000" />
@@ -163,7 +165,9 @@
 
 
 	<!-- 医生登记记录明细 api -->
-    <bean id="medicRegisterRecordService" class="com.fionapet.business.service.MedicRegisterRecordServiceImpl"/>
+    <bean id="medicRegisterRecordService" class="com.fionapet.business.service.MedicRegisterRecordServiceImpl">
+        <property name="accountService" ref="accountService"></property>
+    </bean>
 
     <dubbo:service interface="com.fionapet.business.service.MedicRegisterRecordService" ref="medicRegisterRecordService"
                    protocol="dubbo" validation="true" timeout="5000" />

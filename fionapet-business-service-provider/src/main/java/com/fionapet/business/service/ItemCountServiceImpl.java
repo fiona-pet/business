@@ -1,8 +1,10 @@
 package com.fionapet.business.service;
 
 import com.fionapet.business.entity.ItemCount;
+import com.fionapet.business.entity.MedicPrescriptionDetail;
 import com.fionapet.business.entity.WarehouseInrecord;
 import com.fionapet.business.entity.WarehouseInrecordDetail;
+import com.fionapet.business.entity.status.WarehouseStatus;
 import com.fionapet.business.repository.WarehouseInrecordDao;
 import com.fionapet.business.repository.WarehouseInrecordDetailDao;
 import org.apache.commons.beanutils.BeanUtilsBean;
@@ -82,5 +84,36 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
             createOrUpdte(itemCount);
         }
 
+    }
+
+    @Override
+    @Transactional
+    public void decrease(final MedicPrescriptionDetail medicPrescriptionDetail) {
+        String itemCountStatus = null;
+        ItemCount itemCount = itemCountDao.findByItemCode(medicPrescriptionDetail.getItemCode());
+        //无库存
+        if (null == itemCount){
+            itemCountStatus = WarehouseStatus.NOT_FOUND+"";
+        }else {
+            //库存不足
+            if (itemCount.getScatteredCountNum() < medicPrescriptionDetail.getItemNum()) {
+                int count = (int) medicPrescriptionDetail.getItemNum() / itemCount.getItemBulk();
+                itemCount.setItemCountNum(itemCount.getItemCountNum() - count);
+
+                itemCount.setScatteredCountNum(count * itemCount.getItemBulk() + itemCount.getScatteredCountNum() - medicPrescriptionDetail.getItemNum());
+            } else {
+                itemCount.setScatteredCountNum(itemCount.getScatteredCountNum() - medicPrescriptionDetail.getItemNum());
+            }
+
+            if (itemCount.getItemCountNum() < 0) {
+                itemCountStatus = WarehouseStatus.NOT_ENOUGH + "";
+            } else {
+                itemCountStatus = WarehouseStatus.ENOUGH + "";
+            }
+        }
+
+        medicPrescriptionDetail.setItemCountStatus(itemCountStatus);
+
+        itemCountDao.save(itemCount);
     }
 }

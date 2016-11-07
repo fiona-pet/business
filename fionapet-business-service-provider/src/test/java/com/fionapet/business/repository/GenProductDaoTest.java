@@ -18,7 +18,7 @@ import org.springside.modules.test.spring.SpringTransactionalTestCase;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
-import java.util.List;
+import java.util.*;
 
 /**
  * 应用配置
@@ -33,6 +33,76 @@ public class GenProductDaoTest extends SpringTransactionalTestCase {
 
     @Autowired
     private UserDictDetailDao userDictDetailDao;
+
+    private static final Map<Integer, Set<String>> CACHE = new HashMap<Integer, Set<String>>();
+
+
+    @Test
+    public void show(){
+        int index= 0;
+        hasExist(index);
+    }
+    public void hasExist(Integer sheet){
+        String file = "福莱－常用药品－20161106.xls";
+        String sourceFile = "products.xls";
+        Set data = CACHE.get(sheet);
+        if (null == data){
+            data = new HashSet<String>();
+            List<List<String>> sourceData = ExcelUtils.toList(GenProductDaoTest.class.getClassLoader().getResourceAsStream(sourceFile), 0);
+            for (List<String> row: sourceData){
+                data.add(row.get(0));
+            }
+            CACHE.put(sheet, data);
+        }
+
+        System.out.println(data);
+
+        List<List<String>> newData = ExcelUtils.toList(GenProductDaoTest.class.getClassLoader().getResourceAsStream(file),2);
+        for (List<String> row: newData){
+            String name = row.get(1);
+            if (!StringUtils.isEmpty(name) && !data.contains(name)){
+                String str = row.get(1) + "\t"+ row.get(2) + "*" + row.get(3) + "";
+                if (str.endsWith("*")){
+                    str = str.substring(0, str.length()-1);
+                }
+
+                //销售单位
+                String sellPrice = str.substring(str.length()-1, str.length());
+                str = str + "\t" + sellPrice;
+
+
+                //处方单位
+                String pPrice = row.get(4);
+                str = str + "\t" + pPrice;
+
+                //零售比
+                int lsb = 1;
+                if (sellPrice.equals(pPrice)) {
+                    str = str + "\t" + "1";
+                }else{
+                    if (row.get(3).indexOf(pPrice) > -1) {
+                        lsb = Integer.parseInt(row.get(3).substring(0, row.get(3).indexOf(pPrice)));
+                        str = str + "\t" + row.get(3).substring(0, row.get(3).indexOf(pPrice));
+                    }else{
+                        str = str + "\t" + row.get(3);
+                    }
+                }
+                //处方价格
+                str = str + "\t" + row.get(6);
+                //进价
+                try {
+                    str = str + "\t" + lsb * Double.parseDouble(row.get(5));
+                }catch (Exception e){
+                    str = str + "\t" + row.get(5);
+                }
+
+
+                System.out.println(str);
+
+            }
+//            System.out.println(name);
+        }
+    }
 
     @Test
     @Rollback(false)

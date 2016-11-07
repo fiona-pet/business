@@ -44,14 +44,16 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
     @Autowired
     private  MedicPrescriptionDetailService medicPrescriptionDetailService;
 
+    @Autowired
+    private ItemCountService itemCountService;
+
     @Override
     public DaoBase<GestPaidRecord> getDao() {
         return gestPaidRecordDao;
     }
 
     @Override
-    public List<BillVO> billList() {
-        List<BillVO> result = billVODao.findAllBy();
+    public List<BillVO> billList() {List<BillVO> result = billVODao.findAllBy();
         return result;
     }
 
@@ -144,7 +146,12 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
                 MedicPrescriptionDetail medicPrescriptionDetail = medicPrescriptionDetailService.detail(settleAccountsView.getRelationDetailId());
                 medicPrescriptionDetail.setPaidStatus(dictTypeDetail.getDictDetailCode());
                 medicPrescriptionDetail.setPaidTime(new Date());
+
+                //消除库存
+//                itemCountService.decrease(medicPrescriptionDetail);
+
                 medicPrescriptionDetailService.createOrUpdte(medicPrescriptionDetail);
+
             }
         }
 

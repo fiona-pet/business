@@ -13,4 +13,6 @@ public interface MedicRegisterRecordDao extends DaoBase<MedicRegisterRecord> {
     MedicRegisterRecord findByRegisterNo(String registerNo);
 
     List<MedicRegisterRecord> findByPetIdAndPaidStatusNot(String id, String sm00051);
+
+    List<MedicRegisterRecord> findByDoctor(String name);
 }

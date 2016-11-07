@@ -1,7 +1,14 @@
 package com.fionapet.business.service;
 
+import cn.fiona.pet.account.entity.Account;
+import cn.fiona.pet.account.entity.Role;
+import cn.fiona.pet.account.entity.User;
+import cn.fiona.pet.account.exception.ApiException;
+import cn.fiona.pet.account.service.AccountService;
 import com.fionapet.business.entity.DictTypeDetail;
 import com.fionapet.business.entity.MedicRegisterRecord;
+import com.fionapet.business.entity.Persons;
+import com.fionapet.business.entity.UserDict;
 import com.fionapet.business.facade.vo.BillItemVO;
 import com.fionapet.business.repository.DictTypeDetailDao;
 import org.dubbo.x.entity.PageSearch;
@@ -24,33 +31,67 @@ public class MedicRegisterRecordServiceImpl extends CURDServiceBase<MedicRegiste
     private MedicRegisterRecordDao medicRegisterRecordDao;
     @Autowired
     private DictTypeDetailDao dictTypeDetailDao;
+    @Autowired
+    private PersonsService personsService;
+    @Autowired
+    private AccountService accountService;
+
+    public AccountService getAccountService() {
+        return accountService;
+    }
+
+    public void setAccountService(AccountService accountService) {
+        this.accountService = accountService;
+    }
 
     @Override
     public DaoBase<MedicRegisterRecord> getDao() {
         return medicRegisterRecordDao;
     }
 
-
     @Override
-    public Page<MedicRegisterRecord> page(PageSearch pageSearch) {
-        SearchFilter searchFilter = new SearchFilter();
-
-        searchFilter.setFieldName("createUserId");
-        searchFilter.setOperator(SearchFilter.Operator.EQ.toString());
-        searchFilter.setValue(getCurrentUser().getId());
-
-        pageSearch.getFilters().add(searchFilter);
-
-        searchFilter = new SearchFilter();
-
-        searchFilter.setFieldName("status.dictDetailCode");
-        searchFilter.setOperator(SearchFilter.Operator.EQ.toString());
-        searchFilter.setValue("SM00037");
-
-        pageSearch.getFilters().add(searchFilter);
-
-        return super.page(pageSearch);
+    public List<MedicRegisterRecord> listAll() {
+        User user = (User)getCurrentUser();
+        return medicRegisterRecordDao.findByDoctor(user.getName());
     }
+
+//    @Override
+//    public Page<MedicRegisterRecord> page(PageSearch pageSearch) {
+//        SearchFilter searchFilter = new SearchFilter();
+//
+////        try {
+////            if (accountService.hasRole("doctor", getToken())){
+////                searchFilter.setFieldName("doctorId");
+////                searchFilter.setOperator(SearchFilter.Operator.EQ.toString());
+////                searchFilter.setValue(getCurrentUser().getId());
+////                pageSearch.getFilters().add(searchFilter);
+////            }
+////        } catch (ApiException e) {
+////            e.printStackTrace();
+////        }
+//
+////        User user = (User) getCurrentUser();
+////        if (null != user){
+////            for (Role role: user.getRoles()){
+////                if ("doctor".equals(role.getCode())){
+////                    searchFilter.setFieldName("doctorId");
+////                    searchFilter.setOperator(SearchFilter.Operator.EQ.toString());
+////                    searchFilter.setValue(getCurrentUser().getId());
+////                    pageSearch.getFilters().add(searchFilter);
+////                }
+////            }
+//////                searchFilter = new SearchFilter();
+////
+//////                searchFilter.setFieldName("statusDictDetailCode");
+//////                searchFilter.setOperator(SearchFilter.Operator.NOT_EQ.toString());
+//////                searchFilter.setValue("SM00036");
+//////                pageSearch.getFilters().add(searchFilter);
+////        }
+//
+//
+//
+//        return super.page(pageSearch);
+//    }
 
     @Override
     public MedicRegisterRecord createOrUpdte(MedicRegisterRecord entity) {

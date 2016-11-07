@@ -39,9 +39,9 @@ public class ExcelUtils {
                 //创建一个数组 用来存储每一列的值
                 List<String> str = new ArrayList<String>(sheet.getColumns());
 
-                if (StringUtils.isEmpty(sheet.getCell(0, i).getContents())){
-                    break;
-                }
+//                if (StringUtils.isEmpty(sheet.getCell(0, i).getContents())){
+//                    break;
+//                }
 
                 //列数
                 for(int j=0; j<sheet.getColumns(); j++){
