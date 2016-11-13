@@ -127,7 +127,7 @@ public class GenProductDaoTest extends SpringTransactionalTestCase {
             itemType.setInputPrice(Double.parseDouble(StringUtils.defaultIfEmpty(row.get(6),"0")));
             itemType.setSellPrice(Double.parseDouble(StringUtils.defaultIfEmpty(row.get(7),"0")));
             itemType.setRecipePrice(Double.parseDouble(StringUtils.defaultIfEmpty(row.get(5),"0")));
-            itemType.setItemBulk(Integer.parseInt(StringUtils.defaultIfEmpty(row.get(4),"0")));
+            itemType.setItemBulk(Integer.parseInt(StringUtils.defaultIfEmpty(row.get(4),"1")));
             itemType.setItemStandard(row.get(1));
             itemType.setCateNo("ICate01");
             itemType.setPackageUnit(getUserDictDetailNo(row.get(2)));
