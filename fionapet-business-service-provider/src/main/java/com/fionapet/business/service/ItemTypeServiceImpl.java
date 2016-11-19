@@ -1,7 +1,7 @@
 package com.fionapet.business.service;
 
 import com.fionapet.business.entity.ItemType;
-import com.sun.tools.javac.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
 import com.fionapet.business.repository.ItemTypeDao;
@@ -24,7 +24,7 @@ public class ItemTypeServiceImpl extends CURDServiceBase<ItemType> implements It
 
     @Override
     public List<ItemType> search(String key) {
-        String s = StringUtils.toUpperCase(key) + "%";
+        String s = StringUtils.upperCase(key) + "%";
         List<ItemType> result = itemTypeDao.findByInputCodeLikeOrItemNameLikeOrItemCodeLikeOrderByCateNoAsc(s, s, s);
         return result;
     }
