@@ -27,4 +27,14 @@ public class ItemTypeDaoTest extends SpringTransactionalTestCase {
 
         Assert.assertEquals(itemTypes.size(), 85);
     }
+
+    @Test
+    public void search(){
+        String key = "dc";
+        List<ItemType> itemTypes = itemTypeDao.findByInputCodeLikeOrItemNameLikeOrItemCodeLikeOrderByCateNoAsc(key+"%",key+"%",key+"%");
+
+        Assert.assertNotNull(itemTypes);
+
+        System.out.println(itemTypes);
+    }
 }

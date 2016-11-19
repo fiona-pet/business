@@ -1,11 +1,16 @@
 package com.fionapet.business.facade;
 
 import com.fionapet.business.entity.ItemType;
+import org.dubbo.x.facade.RestResult;
 import org.dubbo.x.service.CURDService;
 import org.dubbo.x.facade.RestServiceBase;
 import com.fionapet.business.service.ItemTypeService;
+import org.dubbo.x.util.ConstantVariable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.ws.rs.HeaderParam;
+import java.util.List;
 
 /**
  * 商品类型
@@ -30,4 +35,8 @@ public class ItemTypeRestServiceImpl extends RestServiceBase<ItemType> implement
         return itemTypeService;
     }
 
+    @Override
+    public List<ItemType> search(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, String key) {
+        return itemTypeService.search(key);
+    }
 }

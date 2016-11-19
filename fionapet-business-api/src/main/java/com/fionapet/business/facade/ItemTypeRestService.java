@@ -35,6 +35,16 @@ public interface ItemTypeRestService extends CURDRestService<ItemType>{
     RestResult<List<ItemType>> list(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token);
 
     /**
+     * 商品搜索
+     * @return
+     */
+    @GET
+    @Path("/search")
+    @ApiOperation(value = "商品类型",
+            notes = "商品类型列表.")
+    List<ItemType> search(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @QueryParam("s") String key);
+
+    /**
      * 商品类型 详细信息
      *
      * @return
