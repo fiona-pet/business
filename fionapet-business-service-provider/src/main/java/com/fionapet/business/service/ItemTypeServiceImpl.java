@@ -7,6 +7,7 @@ import org.dubbo.x.service.CURDServiceBase;
 import com.fionapet.business.repository.ItemTypeDao;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,8 +25,15 @@ public class ItemTypeServiceImpl extends CURDServiceBase<ItemType> implements It
 
     @Override
     public List<ItemType> search(String key) {
-        String s = StringUtils.upperCase(key) + "%";
-        List<ItemType> result = itemTypeDao.findByInputCodeLikeOrItemNameLikeOrItemCodeLikeOrderByCateNoAsc(s, s, s);
+        List<ItemType> result = null;
+
+        if (StringUtils.isEmpty(key)){
+            result = itemTypeDao.findAllBy();
+        }else{
+            String s = StringUtils.upperCase(key) + "%";
+            result = itemTypeDao.findByInputCodeLikeOrItemNameLikeOrItemCodeLikeOrderByCateNoAsc(s, s, s);
+        }
+
         return result;
     }
 }

@@ -1,7 +1,8 @@
 package com.fionapet.business.facade;
 
 import com.fionapet.business.entity.ItemType;
-import org.dubbo.x.facade.RestResult;
+import com.fionapet.business.facade.vo.ItemTypeVO;
+import org.apache.commons.beanutils.BeanUtilsBean;
 import org.dubbo.x.service.CURDService;
 import org.dubbo.x.facade.RestServiceBase;
 import com.fionapet.business.service.ItemTypeService;
@@ -10,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.HeaderParam;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,7 +39,21 @@ public class ItemTypeRestServiceImpl extends RestServiceBase<ItemType> implement
     }
 
     @Override
-    public List<ItemType> search(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, String key) {
-        return itemTypeService.search(key);
+    public List<ItemTypeVO> search(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, String key) {
+        List<ItemTypeVO> result = new ArrayList<ItemTypeVO>();
+
+        List<ItemType> itemTypes = itemTypeService.search(key);
+        for (ItemType itemType: itemTypes){
+            ItemTypeVO vo = new ItemTypeVO();
+
+            try {
+                BeanUtilsBean.getInstance().copyProperties(vo, itemType);
+            } catch (Exception e) {
+                LOGGER.info("copy property error!", e);
+            }
+
+            result.add(vo);
+        }
+        return result;
     }
 }

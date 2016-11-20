@@ -1,5 +1,6 @@
 package com.fionapet.business.facade;
 
+import com.fionapet.business.facade.vo.ItemTypeVO;
 import org.dubbo.x.facade.CURDRestService;
 import org.dubbo.x.facade.RestResult;
 import org.dubbo.x.util.ConstantVariable;
@@ -42,7 +43,7 @@ public interface ItemTypeRestService extends CURDRestService<ItemType>{
     @Path("/search")
     @ApiOperation(value = "商品类型",
             notes = "商品类型列表.")
-    List<ItemType> search(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @QueryParam("s") String key);
+    List<ItemTypeVO> search(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @QueryParam("s") String key);
 
     /**
      * 商品类型 详细信息
