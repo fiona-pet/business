@@ -7,6 +7,7 @@ import com.google.common.base.Predicates;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.dubbo.x.service.CURDService;
 import org.dubbo.x.service.CURDServiceBase;
 import org.junit.Test;
@@ -25,28 +26,33 @@ import java.util.Set;
 public class AppConfigServiceTest{
     @Test
     public void testProties(){
-        AppConfigService appConfigService = new AppConfigServiceImpl();
+        Long toDatatime = 3*30*24*60*60*1000l;
+        System.out.println(DateFormatUtils.format(System.currentTimeMillis()+toDatatime,"yyyy-MM-dd"));
 
+        System.out.println(System.currentTimeMillis()+toDatatime);
 
-        Class c = appConfigService.getClass();
-        Set<Field> fs = ReflectionUtils.getAllFields(c);
-        for (Field f :fs){
-            if (f.getType().getInterfaces().length>0) {
-//                System.out.println(f.getType().getInterfaces()[0]);
-                if (f.getType().getInterfaces()[0].isAssignableFrom(CURDService.class)) {
-                    User currentUser = new User();
-                    currentUser.setName("abc");
-                    try {
-                        f.setAccessible(true);
-                        BeanUtilsBean.getInstance().setProperty(f,"setCurrentUser", currentUser);
-                        System.out.println(BeanUtilsBean.getInstance().getProperty(appConfigService, "serialNumberService"));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    System.out.println("f=" + f);
-                }
-            }
+//        AppConfigService appConfigService = new AppConfigServiceImpl();
+//
+//
+//        Class c = appConfigService.getClass();
+//        Set<Field> fs = ReflectionUtils.getAllFields(c);
+//        for (Field f :fs){
+//            if (f.getType().getInterfaces().length>0) {
+////                System.out.println(f.getType().getInterfaces()[0]);
+//                if (f.getType().getInterfaces()[0].isAssignableFrom(CURDService.class)) {
+//                    User currentUser = new User();
+//                    currentUser.setName("abc");
+//                    try {
+//                        f.setAccessible(true);
+//                        BeanUtilsBean.getInstance().setProperty(f,"setCurrentUser", currentUser);
+//                        System.out.println(BeanUtilsBean.getInstance().getProperty(appConfigService, "serialNumberService"));
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                    System.out.println("f=" + f);
+//                }
+//            }
         }
 
 //        System.out.println(appConfigService.getClass());
@@ -63,5 +69,5 @@ public class AppConfigServiceTest{
 //        for (PropertyDescriptor propertyDescriptor: PropertyUtils.getPropertyDescriptors(appConfigService.getClass())) {
 //            System.out.println(propertyDescriptor.getPropertyType());
 //        }
-    }
+//    }
 }

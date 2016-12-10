@@ -1,7 +1,7 @@
 package com.fionapet.business.service;
 
 import com.fionapet.business.entity.ItemType;
-import org.dubbo.x.facade.RestResult;
+import com.fionapet.business.facade.vo.ItemTypeVO;
 import org.dubbo.x.service.CURDService;
 
 import java.util.List;
@@ -12,5 +12,5 @@ import java.util.List;
  */
 public interface ItemTypeService extends CURDService<ItemType> {
 
-    List<ItemType> search(String key);
+    List<ItemTypeVO> search(String key);
 }

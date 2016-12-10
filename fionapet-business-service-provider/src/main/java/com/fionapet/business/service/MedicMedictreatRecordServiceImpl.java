@@ -26,6 +26,8 @@ public class MedicMedictreatRecordServiceImpl extends CURDServiceBase<MedicMedic
     @Autowired
     private AppConfigService appConfigService;
 
+    private static final String CURD_KEY = "CURD";
+
     @Override
     public DaoBase<MedicMedictreatRecord> getDao() {
 
@@ -34,37 +36,39 @@ public class MedicMedictreatRecordServiceImpl extends CURDServiceBase<MedicMedic
 
     @Override
     @Transactional
-    public synchronized MedicMedictreatRecord createOrUpdte(MedicMedictreatRecord entity) {
-        MedicMedictreatRecord medicMedictreatRecord = medicMedictreatRecordDao.findByRegisterNo(entity.getRegisterNo());
-        if (null == medicMedictreatRecord){
-            medicMedictreatRecord = new MedicMedictreatRecord();
-            medicMedictreatRecord.setStatus(CMSEntity.DEFAULT());
-            medicMedictreatRecord.setRegisterNo(entity.getRegisterNo());
-            appConfigService.setCurrentUser(getCurrentUser());
-            medicMedictreatRecord.setMediTreatmentCode(appConfigService.genNumberByName("就诊编号"));
+    public MedicMedictreatRecord createOrUpdte(MedicMedictreatRecord entity) {
+        synchronized (CURD_KEY) {
+            MedicMedictreatRecord medicMedictreatRecord = medicMedictreatRecordDao.findByRegisterNo(entity.getRegisterNo());
+            if (null == medicMedictreatRecord) {
+                medicMedictreatRecord = new MedicMedictreatRecord();
+                medicMedictreatRecord.setStatus(CMSEntity.DEFAULT());
+                medicMedictreatRecord.setRegisterNo(entity.getRegisterNo());
+                appConfigService.setCurrentUser(getCurrentUser());
+                medicMedictreatRecord.setMediTreatmentCode(appConfigService.genNumberByName("就诊编号"));
 
-            MedicRegisterRecord medicRegisterRecord = medicRegisterRecordDao.findByRegisterNo(entity.getRegisterNo());
+                MedicRegisterRecord medicRegisterRecord = medicRegisterRecordDao.findByRegisterNo(entity.getRegisterNo());
 
-            if (null != medicRegisterRecord) {
-                try {
-                    BeanUtilsBean.getInstance().copyProperties(medicMedictreatRecord, medicRegisterRecord);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
+                if (null != medicRegisterRecord) {
+                    try {
+                        BeanUtilsBean.getInstance().copyProperties(medicMedictreatRecord, medicRegisterRecord);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        BeanUtilsBean.getInstance().copyProperties(entity, medicMedictreatRecord);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
                 }
-
-                try {
-                    BeanUtilsBean.getInstance().copyProperties(entity, medicMedictreatRecord);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
+            } else {
+                if (entity.getId() == null) {
+                    entity = medicMedictreatRecord;
                 }
-            }
-        }else{
-            if (entity.getId() == null){
-                entity = medicMedictreatRecord;
             }
         }
         return super.createOrUpdte(entity);

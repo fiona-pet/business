@@ -11,21 +11,21 @@ import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * 育苗表
+ * 疫苗表
  * <p>
 * Created by tom on 2016-07-18 11:47:03.
  */
 @Entity
 @Table(name = "t_medic_vaccine")
-@ApiModel("育苗表")
+@ApiModel("疫苗表")
 public class MedicVaccine extends CMSEntity {
     
     /**
-     * 育苗组编号
+     * 疫苗组编号
      */
-    @ApiModelProperty(value = "育苗组编号", required = false)
+    @ApiModelProperty(value = "疫苗组编号", required = false)
     
-    @Column(columnDefinition = "育苗组编号")
+    @Column(columnDefinition = "疫苗组编号")
     private String vaccineGroupCode;
     public String getVaccineGroupCode() {
         return vaccineGroupCode;
@@ -273,11 +273,11 @@ public class MedicVaccine extends CMSEntity {
     }
     
     /**
-     * 影像时间
+     * 支付状态
      */
-    @ApiModelProperty(value = "影像时间", required = false)
+    @ApiModelProperty(value = "支付状态", required = false)
     
-    @Column(columnDefinition = "影像时间")
+    @Column(columnDefinition = "支付状态")
     private String paidStatus;
     public String getPaidStatus() {
         return paidStatus;
@@ -315,11 +315,11 @@ public class MedicVaccine extends CMSEntity {
     }
     
     /**
-     * 影像时间
+     * 支付时间
      */
-    @ApiModelProperty(value = "影像时间", required = false)
+    @ApiModelProperty(value = "支付时间", required = false)
     
-    @Column(columnDefinition = "影像时间")
+    @Column(columnDefinition = "支付时间")
     private Date paidTime;
     public Date getPaidTime() {
         return paidTime;

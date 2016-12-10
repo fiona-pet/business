@@ -40,20 +40,6 @@ public class ItemTypeRestServiceImpl extends RestServiceBase<ItemType> implement
 
     @Override
     public List<ItemTypeVO> search(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, String key) {
-        List<ItemTypeVO> result = new ArrayList<ItemTypeVO>();
-
-        List<ItemType> itemTypes = itemTypeService.search(key);
-        for (ItemType itemType: itemTypes){
-            ItemTypeVO vo = new ItemTypeVO();
-
-            try {
-                BeanUtilsBean.getInstance().copyProperties(vo, itemType);
-            } catch (Exception e) {
-                LOGGER.info("copy property error!", e);
-            }
-
-            result.add(vo);
-        }
-        return result;
+        return itemTypeService.search(key);
     }
 }

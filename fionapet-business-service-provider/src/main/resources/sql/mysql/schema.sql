@@ -95,7 +95,7 @@ DROP TABLE IF EXISTS `t_item_type`;
 CREATE TABLE t_item_type
 (
   `id` VARCHAR(36) PRIMARY KEY NOT NULL,
-  `item_code` VARCHAR(50),-- 商品编号
+  `item_code` VARCHAR(50) UNIQUE,-- 商品编号
   `item_name` VARCHAR(100),-- 商品名称
   `cate_no` VARCHAR(50),
   `package_unit` VARCHAR(50),-- 单位

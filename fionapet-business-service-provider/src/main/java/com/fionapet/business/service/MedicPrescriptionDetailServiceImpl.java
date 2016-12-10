@@ -34,7 +34,7 @@ public class MedicPrescriptionDetailServiceImpl extends CURDServiceBase<MedicPre
     public Page<MedicPrescriptionDetail> page(PageSearch pageSearch) {
         if (null == pageSearch.getSort()) {
             Sort sort = new Sort();
-            sort.setFieldName("groupName");
+            sort.setFieldName("groupName,createDate");
             sort.setDirection("asc");
             pageSearch.setSort(sort);
         }
