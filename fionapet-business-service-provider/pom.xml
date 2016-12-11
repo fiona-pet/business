@@ -59,6 +59,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>dubbo</artifactId>
+
         </dependency>
         <dependency>
             <groupId>org.dubbo</groupId>
@@ -143,14 +144,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
@@ -387,10 +381,17 @@
         </dependency>
         <!-- end excel -->
 
+        <!-- jms -->
         <dependency>
             <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-all</artifactId>
-            <version>5.9.0</version>
+            <artifactId>activemq-core</artifactId>
+            <version>5.7.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-pool</artifactId>
+            <version>5.13.0</version>
         </dependency>
 
         <dependency>
@@ -406,6 +407,7 @@
         </dependency>
 
     </dependencies>
+
     <!--<build>-->
     <!--<plugins>-->
     <!--<plugin>-->
