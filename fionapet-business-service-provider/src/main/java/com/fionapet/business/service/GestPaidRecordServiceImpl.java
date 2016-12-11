@@ -78,8 +78,14 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
         }
 
         Double total = 0D;
+        Double dis = 1d;//折扣
         for (SettleAccountsView settleAccountsView: payList){
             total += (settleAccountsView.getItemCost() * Double.parseDouble(settleAccountsView.getItemNum()));
+            try {
+                dis = Double.parseDouble(settleAccountsView.getIsVipDiscount());
+            }catch (Exception e){
+
+            }
         }
 
         //已支付 状态
@@ -98,11 +104,14 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
 
         financeSettleAccounts.setStatus(dictTypeDetail);
         financeSettleAccounts.setTotalMoney(total);
-        financeSettleAccounts.setShouldPaidMoney(total);
+        financeSettleAccounts.setDisCountMoney(total * (1-dis));
+
+        financeSettleAccounts.setShouldPaidMoney(total-financeSettleAccounts.getDisCountMoney());
+
         //付款金额
         financeSettleAccounts.setFactPaidMoney(Double.parseDouble(pay.getGestPaidRecord().getOperateContent()));
         //找零
-        financeSettleAccounts.setChangeMoney(financeSettleAccounts.getFactPaidMoney()-total);
+        financeSettleAccounts.setChangeMoney(financeSettleAccounts.getFactPaidMoney()-financeSettleAccounts.getShouldPaidMoney());
         appConfigService.setCurrentUser(getCurrentUser());
         financeSettleAccounts.setSettleCode(appConfigService.genNumberByName("结算单号"));
 
