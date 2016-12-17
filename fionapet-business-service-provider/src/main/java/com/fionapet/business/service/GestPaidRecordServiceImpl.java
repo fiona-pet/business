@@ -94,10 +94,18 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
         //会员信息
         Gest gest = gestDao.findOne(payList.get(0).getGestId());
 
+        if (null == gest) {
+            gest = new Gest();
+            gest.setGestCode("vip000000");
+            gest.setId(UUID.randomUUID()+"");
+            gest.setGestName("散客");
+        }
+
         //支付记录
         financeSettleAccountsService.setCurrentUser(getCurrentUser());
 
         FinanceSettleAccounts financeSettleAccounts = new FinanceSettleAccounts();
+
         financeSettleAccounts.setGestCode(gest.getGestCode());
         financeSettleAccounts.setGestId(gest.getId());
         financeSettleAccounts.setGestName(gest.getGestName());
