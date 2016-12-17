@@ -7,5 +7,11 @@ import org.dubbo.x.service.CURDService;
 * Created by tom on 2016-07-18 11:56:10.
  */
 public interface WarehouseOutrecordService extends CURDService<WarehouseOutrecord> {
+    /**
+     * 审计入库
+     * @param uuid
+     * @return
+     */
+    Boolean audit(String uuid);
 
 }
