@@ -97,7 +97,7 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
         }else {
             //库存不足
             if (itemCount.getScatteredCountNum() < medicPrescriptionDetail.getItemNum()) {
-                int count = (int) medicPrescriptionDetail.getItemNum() / itemCount.getItemBulk();
+                int count = (int) medicPrescriptionDetail.getItemNum() / itemCount.getItemBulk() + 1;
                 itemCount.setItemCountNum(itemCount.getItemCountNum() - count);
 
                 itemCount.setScatteredCountNum(count * itemCount.getItemBulk() + itemCount.getScatteredCountNum() - medicPrescriptionDetail.getItemNum());

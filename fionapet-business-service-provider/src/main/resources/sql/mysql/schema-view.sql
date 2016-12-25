@@ -45,7 +45,7 @@ create view v_settle_accounts_view as
     it.is_vip_discount, mpd.recipe_unit item_unit,mpd.id relation_detail_id
   from t_medic_prescription_detail mpd
     INNER JOIN t_medic_prescription mp on mp.id = mpd.prescription_id
-    INNER JOIN t_medic_medictreat_record mmt on mp.medic_record_id = mmt.id
+    INNER JOIN t_medic_medictreat_record mmt on mp.medic_record_code = mmt.medi_treatment_code
     LEFT JOIN t_pet p on mmt.pet_id = p.id
     LEFT JOIN t_gest g on p.gest_id = g.id
     LEFT JOIN t_item_type it on mpd.item_code = it.item_code
