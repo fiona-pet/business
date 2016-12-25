@@ -229,6 +229,40 @@ public class GenProductDaoTest extends SpringTransactionalTestCase {
     }
 
 
+    @Test
+    @Rollback(false)
+    /**
+     * 宠物 食品
+     */
+    public void genFood(){
+        String file = "products.xls";
+
+        List<List<String>> data = ExcelUtils.toList(GenProductDaoTest.class.getClassLoader().getResourceAsStream(file),1);
+
+        for (List<String> row: data){
+            ItemType itemType  = toItemType(row, "ICate02");
+
+            itemTypeDao.save(itemType);
+        }
+    }
+
+    @Test
+    @Rollback(false)
+    /**
+     * 宠物 用品
+     */
+    public void genUsed(){
+        String file = "products.xls";
+
+        List<List<String>> data = ExcelUtils.toList(GenProductDaoTest.class.getClassLoader().getResourceAsStream(file),2);
+
+        for (List<String> row: data){
+            ItemType itemType  = toItemType(row, "ICate03");
+
+            itemTypeDao.save(itemType);
+        }
+    }
+
 
     private ItemType toItemType(List<String> row, String cate){
         List<ItemType> itemTypes = itemTypeDao.findByItemName(row.get(0));
