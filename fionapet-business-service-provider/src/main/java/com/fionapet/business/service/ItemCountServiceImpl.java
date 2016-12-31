@@ -5,6 +5,7 @@ import com.fionapet.business.entity.MedicPrescriptionDetail;
 import com.fionapet.business.entity.WarehouseInrecord;
 import com.fionapet.business.entity.WarehouseInrecordDetail;
 import com.fionapet.business.entity.status.WarehouseStatus;
+import com.fionapet.business.exception.ApiException;
 import com.fionapet.business.repository.WarehouseInrecordDao;
 import com.fionapet.business.repository.WarehouseInrecordDetailDao;
 import org.apache.commons.beanutils.BeanUtilsBean;
@@ -13,6 +14,8 @@ import org.apache.commons.beanutils.locale.converters.DateLocaleConverter;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
 import com.fionapet.business.repository.ItemCountDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;
@@ -26,6 +29,7 @@ import java.util.Locale;
 * Created by tom on 2016-07-25 09:32:32.
  */
 public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements ItemCountService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemCountServiceImpl.class);
     @Autowired
     private ItemCountDao itemCountDao;
     @Autowired
@@ -88,16 +92,20 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
 
     @Override
     @Transactional
-    public void decrease(final MedicPrescriptionDetail medicPrescriptionDetail) {
+    public void decrease(final MedicPrescriptionDetail medicPrescriptionDetail) throws ApiException{
         String itemCountStatus = null;
         ItemCount itemCount = itemCountDao.findByItemCode(medicPrescriptionDetail.getItemCode());
         //无库存
         if (null == itemCount){
             itemCountStatus = WarehouseStatus.NOT_FOUND+"";
+
+            LOGGER.error("{}[{}]: 商品没有库存！", medicPrescriptionDetail.getItemCode(), medicPrescriptionDetail.getItemName());
+
+            return;
         }else {
             //库存不足
             if (itemCount.getScatteredCountNum() < medicPrescriptionDetail.getItemNum()) {
-                int count = (int) medicPrescriptionDetail.getItemNum() / itemCount.getItemBulk() + 1;
+                int count = (medicPrescriptionDetail.getItemNum()-(int)itemCount.getScatteredCountNum()) / itemCount.getItemBulk() + 1;
                 itemCount.setItemCountNum(itemCount.getItemCountNum() - count);
 
                 itemCount.setScatteredCountNum(count * itemCount.getItemBulk() + itemCount.getScatteredCountNum() - medicPrescriptionDetail.getItemNum());

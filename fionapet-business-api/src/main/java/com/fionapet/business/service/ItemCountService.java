@@ -3,6 +3,7 @@ package com.fionapet.business.service;
 import com.fionapet.business.entity.ItemCount;
 import com.fionapet.business.entity.MedicPrescriptionDetail;
 import com.fionapet.business.entity.WarehouseInrecord;
+import com.fionapet.business.exception.ApiException;
 import org.dubbo.x.service.CURDService;
 /**
  * 种类数量更改原因表
@@ -16,5 +17,5 @@ public interface ItemCountService extends CURDService<ItemCount> {
      *
      * @param medicPrescriptionDetail
      */
-    void decrease(final MedicPrescriptionDetail medicPrescriptionDetail);
+    void decrease(final MedicPrescriptionDetail medicPrescriptionDetail) throws ApiException;
 }

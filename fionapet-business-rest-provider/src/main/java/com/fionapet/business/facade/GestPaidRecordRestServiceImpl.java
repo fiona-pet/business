@@ -4,6 +4,7 @@ import com.fionapet.business.entity.FinanceSettleAccounts;
 import com.fionapet.business.entity.GestPaidRecord;
 import com.fionapet.business.entity.SettleAccountsView;
 import com.fionapet.business.entity.BillVO;
+import com.fionapet.business.exception.ApiException;
 import com.fionapet.business.facade.vo.PayVO;
 import io.swagger.annotations.ApiParam;
 import org.dubbo.x.facade.RestResult;
@@ -51,7 +52,7 @@ public class GestPaidRecordRestServiceImpl extends RestServiceBase<GestPaidRecor
     }
 
     @Override
-    public RestResult<FinanceSettleAccounts> pay(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, PayVO pay) {
+    public RestResult<FinanceSettleAccounts> pay(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, PayVO pay) throws ApiException {
         return RestResult.OK(gestPaidRecordService.pay(pay));
     }
 }

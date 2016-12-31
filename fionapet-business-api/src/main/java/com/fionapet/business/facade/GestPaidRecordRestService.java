@@ -2,6 +2,7 @@ package com.fionapet.business.facade;
 
 import com.fionapet.business.entity.FinanceSettleAccounts;
 import com.fionapet.business.entity.SettleAccountsView;
+import com.fionapet.business.exception.ApiException;
 import com.fionapet.business.facade.vo.BillItemVO;
 import com.fionapet.business.entity.BillVO;
 import com.fionapet.business.facade.vo.PayVO;
@@ -85,5 +86,5 @@ public interface GestPaidRecordRestService extends CURDRestService<GestPaidRecor
     @POST
     @Path("/pay")
     @ApiOperation(value = "支付", notes = "支付记录")
-    RestResult<FinanceSettleAccounts> pay(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, PayVO pay);
+    RestResult<FinanceSettleAccounts> pay(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, PayVO pay) throws ApiException;
 }

@@ -1,6 +1,7 @@
 package com.fionapet.business.service;
 
 import com.fionapet.business.entity.*;
+import com.fionapet.business.exception.ApiException;
 import com.fionapet.business.facade.vo.BillItemVO;
 import com.fionapet.business.facade.vo.PayVO;
 import com.fionapet.business.repository.*;
@@ -66,7 +67,7 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
 
     @Override
     @Transactional
-    public FinanceSettleAccounts pay(PayVO pay) {
+    public FinanceSettleAccounts pay(PayVO pay) throws ApiException{
 
         if (null == pay)
             return new FinanceSettleAccounts();
@@ -165,7 +166,7 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
                 medicPrescriptionDetail.setPaidTime(new Date());
 
                 //消除库存
-//                itemCountService.decrease(medicPrescriptionDetail);
+                itemCountService.decrease(medicPrescriptionDetail);
 
                 medicPrescriptionDetailService.createOrUpdte(medicPrescriptionDetail);
 
