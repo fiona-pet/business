@@ -340,6 +340,22 @@ public class ItemCount extends CMSEntity {
     public void setOutDateTime(Date outDateTime) {
         this.outDateTime = outDateTime;
     }
-    
+
+
+    /**
+    * 拼音 码
+    */
+    @ApiModelProperty(value = "拼音 码", required = false)
+
+    @Column(columnDefinition = "拼音 码")
+    private String inputCode;
+
+    public String getInputCode() {
+        return inputCode;
+    }
+
+    public void setInputCode(String inputCode) {
+        this.inputCode = inputCode;
+    }
 }
 
