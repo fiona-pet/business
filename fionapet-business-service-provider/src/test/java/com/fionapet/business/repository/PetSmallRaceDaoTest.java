@@ -27,4 +27,11 @@ public class PetSmallRaceDaoTest extends SpringTransactionalTestCase {
 
         Assert.assertEquals(petSmallRaces.size(), 26);
     }
+
+    @Test
+    public void findByPetRace(){
+        List<PetSmallRace> petSmallRaces = petSmallRaceDao.findByPetRaceObjectId("123");
+        Assert.assertNotNull(petSmallRaces);
+
+    }
 }
