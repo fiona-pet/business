@@ -16,4 +16,6 @@ public interface ItemTypeDao extends DaoBase<ItemType> {
     List<ItemType> findByItemName(String itemName);
 
     List<ItemType> findByInputCodeLikeOrItemNameLikeOrItemCodeLikeOrderByCateNoAsc(String s, String key, String key1);
+
+    ItemType findByItemCode(String itemCode);
 }

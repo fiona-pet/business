@@ -3,6 +3,7 @@ package com.fionapet.business.jms;
 import com.fionapet.business.jms.process.IMessageProcess;
 import com.fionapet.business.jms.process.MessageProcessFactory;
 import com.fionapet.business.service.ItemCountService;
+import org.dubbo.x.entity.IdEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +41,20 @@ public class QueueMessageListener implements MessageListener {
             logger.debug("priority:{}"+objectMessage.getJMSPriority());
 
             //当前用户身份传递
-            itemCountService.setCurrentUser(noticeInfo.getCurrentUser());
+            IdEntity id = new IdEntity() {
+                @Override
+                public String getId() {
+                    return super.getId();
+                }
+
+                @Override
+                public void setId(String id) {
+                    super.setId(id);
+                }
+            };
+            id.setId(noticeInfo.getCurrentUserId());
+
+            itemCountService.setCurrentUser(id);
 
             IMessageProcess iMessageProcess = MessageProcessFactory.build(this, noticeInfo);
             iMessageProcess.process(noticeInfo);

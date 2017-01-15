@@ -24,12 +24,12 @@ public class NoticeInfoBuilder {
     }
 
     public NoticeInfoBuilder setWarehouseOpType(WarehouseOpType warehouseOpType) {
-        warehouseNoticeInfo.setWarehouseOpType(warehouseOpType);
+        warehouseNoticeInfo.setWarehouseOpType(warehouseOpType.toString());
         return this;
     }
 
     public NoticeInfoBuilder setCurrentUser(IdEntity currentUser) {
-        warehouseNoticeInfo.setCurrentUser(currentUser);
+        warehouseNoticeInfo.setCurrentUserId(currentUser.getId());
         return this;
     }
 

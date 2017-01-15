@@ -1,11 +1,9 @@
 package com.fionapet.business.service;
 
-import com.fionapet.business.entity.ItemCount;
-import com.fionapet.business.entity.MedicPrescriptionDetail;
-import com.fionapet.business.entity.WarehouseInrecord;
-import com.fionapet.business.entity.WarehouseInrecordDetail;
+import com.fionapet.business.entity.*;
 import com.fionapet.business.entity.status.WarehouseStatus;
 import com.fionapet.business.exception.ApiException;
+import com.fionapet.business.repository.ItemTypeDao;
 import com.fionapet.business.repository.WarehouseInrecordDao;
 import com.fionapet.business.repository.WarehouseInrecordDetailDao;
 import org.apache.commons.beanutils.BeanUtilsBean;
@@ -25,7 +23,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- *  种类数量更改原因表
+ *  库存信息
 * Created by tom on 2016-07-25 09:32:32.
  */
 public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements ItemCountService {
@@ -103,8 +101,12 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
 
             return;
         }else {
+            if (null == itemCount.getItemBulk()){
+                itemCount.setItemBulk(1);
+            }
+
             //库存不足
-            if (itemCount.getScatteredCountNum() < medicPrescriptionDetail.getItemNum()) {
+            if (medicPrescriptionDetail.getItemNum() != null && itemCount.getScatteredCountNum() < medicPrescriptionDetail.getItemNum()) {
                 int count = (medicPrescriptionDetail.getItemNum()-(int)itemCount.getScatteredCountNum()) / itemCount.getItemBulk() + 1;
                 itemCount.setItemCountNum(itemCount.getItemCountNum() - count);
 

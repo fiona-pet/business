@@ -11,6 +11,7 @@ import com.fionapet.business.jms.WarehouseNoticeInfo;
 import com.fionapet.business.jms.WarehouseOpType;
 import com.fionapet.business.repository.*;
 import org.apache.commons.beanutils.BeanUtilsBean;
+import org.dubbo.x.entity.IdEntity;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,9 @@ public class WarehouseInrecordServiceImpl extends CURDServiceBase<WarehouseInrec
         }
 
         // 发送 审核 更新库存消息
-        WarehouseNoticeInfo warehouseNoticeInfo = NoticeInfoBuilder.instance().setCurrentUser(getCurrentUser()).setWarehouseOpType(WarehouseOpType.CHECK).setWarehouseRecordId(uuid).build();
+        IdEntity idEntity = new User();
+        idEntity.setId(getCurrentUser().getId());
+        WarehouseNoticeInfo warehouseNoticeInfo = NoticeInfoBuilder.instance().setCurrentUser(idEntity).setWarehouseOpType(WarehouseOpType.CHECK).setWarehouseRecordId(uuid).build();
         queueMessageProducer.sendQueue(warehouseNoticeInfo);
 
         return true;

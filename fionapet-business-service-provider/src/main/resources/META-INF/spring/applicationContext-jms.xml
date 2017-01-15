@@ -16,9 +16,16 @@
 
 	<!-- ActiveMQ 连接工厂 -->
 	<!-- 真正可以产生Connection的ConnectionFactory，由对应的 JMS服务厂商提供-->
-	<bean id="connectinFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+	<bean id="connectinFactory" class="org.apache.activemq.spring.ActiveMQConnectionFactory">
 		 <property name="brokerURL" value="tcp://101.200.220.3:61616" />
 		<!--<property name="brokerURL" value="${mqUrl}" />-->
+		<!--<property name="trustAllPackages" value="true"/>-->
+		<!--<property name="trustedPackages">-->
+			<!--<list>-->
+				<!--<value>org.apache.activemq.test</value>-->
+				<!--<value>org.apache.camel.test</value>-->
+			<!--</list>-->
+		<!--</property>-->
 	</bean>
 	<!-- Spring Caching连接工厂 -->
 	<!-- Spring用于管理真正的ConnectionFactory的ConnectionFactory -->

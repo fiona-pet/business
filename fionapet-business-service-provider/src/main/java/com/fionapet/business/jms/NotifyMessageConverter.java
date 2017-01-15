@@ -36,6 +36,7 @@ public class NotifyMessageConverter implements MessageConverter {
                     return noticeInfo;
                 } catch (Exception e) {
                     // TODO: handle exception
+                    e.printStackTrace();
                     logger.error("Message:${} is not a instance of NoticeInfo."+message.toString());
                     throw new JMSException("Message:"+message.toString()+"is not a instance of NoticeInfo."+message.toString());
                 }
@@ -64,7 +65,7 @@ public class NotifyMessageConverter implements MessageConverter {
             msg.setObject((WarehouseNoticeInfo)obj);
             return msg;
         }else {
-            logger.debug("Convert Notify object to JMS message:${}"+obj.toString());
+            logger.error("Convert Notify object to JMS message error:{}",obj);
         }
         return null;
     }

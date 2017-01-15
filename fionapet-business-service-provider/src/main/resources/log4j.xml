@@ -28,4 +28,9 @@
         <level value="INFO"/>
         <appender-ref ref="businessServiceAppender"/>
     </root>
+
+    <category name="com.fionapet.business" additivity="false">
+        <priority value="DEBUG"/>
+        <appender-ref ref="businessServiceAppender"/>
+    </category>
 </log4j:configuration>

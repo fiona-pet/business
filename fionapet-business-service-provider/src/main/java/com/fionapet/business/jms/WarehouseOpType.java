@@ -25,5 +25,14 @@ public enum WarehouseOpType {
      */
     DELETE_RECORD_DETAIL;
 
-
+//    private String value;
+//
+//    WarehouseOpType(String str) {
+//        this.value = str;
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return this.value;
+//    }
 }

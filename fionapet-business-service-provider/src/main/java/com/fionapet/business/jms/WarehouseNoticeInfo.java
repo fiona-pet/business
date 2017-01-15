@@ -7,7 +7,8 @@ import java.io.Serializable;
 /**
  * Created by tom on 16/10/20.
  */
-public class WarehouseNoticeInfo implements Serializable{
+public class WarehouseNoticeInfo implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * 库存记录
      */
@@ -16,17 +17,15 @@ public class WarehouseNoticeInfo implements Serializable{
      * 库存操作类型
      */
     private WarehouseOpType warehouseOpType;
-    /**
-     * 当前操作人
-     */
-    private IdEntity currentUser;
 
-    public IdEntity getCurrentUser() {
-        return currentUser;
+    private String currentUserId;
+
+    public String getCurrentUserId() {
+        return currentUserId;
     }
 
-    public void setCurrentUser(IdEntity currentUser) {
-        this.currentUser = currentUser;
+    public void setCurrentUserId(String currentUserId) {
+        this.currentUserId = currentUserId;
     }
 
     public String getWarehouseRecordId() {
@@ -37,12 +36,12 @@ public class WarehouseNoticeInfo implements Serializable{
         this.warehouseRecordId = warehouseRecordId;
     }
 
-    public WarehouseOpType getWarehouseOpType() {
-        return warehouseOpType;
+    public String getWarehouseOpType() {
+        return warehouseOpType.toString();
     }
 
-    public void setWarehouseOpType(WarehouseOpType warehouseOpType) {
-        this.warehouseOpType = warehouseOpType;
+    public void setWarehouseOpType(String warehouseOpType) {
+        this.warehouseOpType = WarehouseOpType.valueOf(warehouseOpType);
     }
 
     @Override

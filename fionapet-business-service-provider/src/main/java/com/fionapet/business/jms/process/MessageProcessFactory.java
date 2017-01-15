@@ -11,15 +11,20 @@ import com.fionapet.business.jms.WarehouseOpType;
 public class MessageProcessFactory {
     public static IMessageProcess build(QueueMessageListener queueMessageListener, WarehouseNoticeInfo warehouseNoticeInfo) throws ClassNotFoundException {
         IMessageProcess iMessageProcess = null;
-        switch (warehouseNoticeInfo.getWarehouseOpType()){
-            case CHECK:{
-                iMessageProcess = new WarehouseCheckMessageProcess(queueMessageListener);
-                break;
-            }
-            default:{
-                throw new ClassNotFoundException("not found by warehouseOpType");
-            }
+        if ("CHECK".equalsIgnoreCase(warehouseNoticeInfo.getWarehouseOpType())){
+            iMessageProcess = new WarehouseCheckMessageProcess(queueMessageListener);
+        }else {
+            throw new ClassNotFoundException("not found by warehouseOpType");
         }
+//        switch (warehouseNoticeInfo.getWarehouseOpType()){
+//            case "CHECK":{
+//                iMessageProcess = new WarehouseCheckMessageProcess(queueMessageListener);
+//                break;
+//            }
+//            default:{
+//                throw new ClassNotFoundException("not found by warehouseOpType");
+//            }
+//        }
 
         return iMessageProcess;
     }
