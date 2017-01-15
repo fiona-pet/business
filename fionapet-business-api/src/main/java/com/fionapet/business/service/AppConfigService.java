@@ -9,6 +9,7 @@ import org.dubbo.x.service.CURDService;
  */
 public interface AppConfigService extends CURDService<AppConfig> {
     public final static String NUMBER_KEY_BLBH = "病历编号";
+    public final static String NUMBER_KEY_MEDIC_PRESCRIPTION_CODE = "处方流水";
 
     String genNumberByName(String name);
 }

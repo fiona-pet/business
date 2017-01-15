@@ -9,4 +9,6 @@ import org.dubbo.x.repository.DaoBase;
  **/
 public interface MedicMedictreatRecordDao extends DaoBase<MedicMedictreatRecord> {
     MedicMedictreatRecord findByRegisterNo(String registerNo);
+
+    MedicMedictreatRecord findByMediTreatmentCode(String medicRecordCode);
 }

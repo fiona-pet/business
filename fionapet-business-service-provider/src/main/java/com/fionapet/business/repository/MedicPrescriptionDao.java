@@ -8,4 +8,11 @@ import org.dubbo.x.repository.DaoBase;
 * Created by tom on 2016-07-18 11:56:08.
  **/
 public interface MedicPrescriptionDao extends DaoBase<MedicPrescription> {
+    /**
+     * 获取 处方信息
+     * @param id
+     * @param prescriptionCode
+     * @return
+     */
+    MedicPrescription findByIdOrPrescriptionCode(String id, String prescriptionCode);
 }

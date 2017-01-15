@@ -1,5 +1,6 @@
 package com.fionapet.business.facade;
 
+import org.dubbo.x.exception.ApiException;
 import org.dubbo.x.facade.CURDRestService;
 import org.dubbo.x.facade.RestResult;
 import org.dubbo.x.util.ConstantVariable;
@@ -44,6 +45,17 @@ public interface MedicPrescriptionRestService extends CURDRestService<MedicPresc
     @ApiOperation(value = "详细信息",
             notes = "医生处方明细详细信息.")
     RestResult<MedicPrescription> detail(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("id") @PathParam("id") String uuid);
+
+    /**
+     * 医生处方 复制 详细信息
+     *
+     * @return
+     */
+    @GET
+    @Path("copy/{id}")
+    @ApiOperation(value = "复制处方",
+            notes = "医生处方复制.")
+    RestResult<MedicPrescription> copy(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("id") @PathParam("id") String uuid, @ApiParam("regmedicRecordCode") @QueryParam("medicRecordCode") String medicRecordCode) throws ApiException;
 
     @POST
     @Path("")
