@@ -1,6 +1,8 @@
 package com.fionapet.business.service;
 
 import com.fionapet.business.entity.Gest;
+import com.fionapet.business.facade.vo.RechargeVO;
+import org.dubbo.x.exception.ApiException;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
 import com.fionapet.business.repository.GestDao;
@@ -17,5 +19,26 @@ public class GestServiceImpl extends CURDServiceBase<Gest> implements GestServic
     @Override
     public DaoBase<Gest> getDao() {
         return gestDao;
+    }
+
+    @Override
+    public RechargeVO recharge(String id, Double money) throws ApiException{
+        Gest gest = gestDao.findOne(id);
+
+        if (null == gest){
+            throw new ApiException("会员不存在");
+        }
+
+        RechargeVO rechargeVO = new RechargeVO();
+
+        rechargeVO.setOldMoney(gest.getVipAccount());
+        rechargeVO.setMoney(gest.getVipAccount() + money);
+        rechargeVO.setGestId(id);
+
+        gest.setVipAccount(rechargeVO.getMoney());
+
+        gestDao.save(gest);
+
+        return rechargeVO;
     }
 }

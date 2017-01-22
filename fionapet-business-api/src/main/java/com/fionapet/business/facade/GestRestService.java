@@ -1,5 +1,7 @@
 package com.fionapet.business.facade;
 
+import com.fionapet.business.facade.vo.RechargeVO;
+import org.dubbo.x.exception.ApiException;
 import org.dubbo.x.facade.CURDRestService;
 import org.dubbo.x.facade.RestResult;
 import org.dubbo.x.util.ConstantVariable;
@@ -54,4 +56,9 @@ public interface GestRestService extends CURDRestService<Gest>{
     @Path("/{id}")
     @ApiOperation(value = "删除会员", notes = "删除会员")
     RestResult<String> delete(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("id") @PathParam("id") String uuid);
+
+    @GET
+    @Path("/{id}/recharge")
+    @ApiOperation(value = "会员充值", notes = "会员充值")
+    RestResult<RechargeVO> recharge(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("id") @PathParam("id") String uuid, @QueryParam("money") Double money) throws ApiException;
 }
