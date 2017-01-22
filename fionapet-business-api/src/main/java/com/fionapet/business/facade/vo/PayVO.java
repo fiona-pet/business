@@ -10,6 +10,7 @@ import java.util.List;
  */
 public class PayVO {
     private GestPaidRecord gestPaidRecord;
+
     private List<SettleAccountsView> settleAccountsViews;
 
     public GestPaidRecord getGestPaidRecord() {

@@ -180,6 +180,12 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
         gestPaidRecord.setSettleAccountsId(financeSettleAccountsId);
         gestPaidRecord.setOperateContent(pay.getGestPaidRecord().getOperateContent());
 
+        if ("会员".equals(gestPaidRecord.getOperateAction())){
+            gest.setLastPaidTime(new Date());
+            gest.setVipAccount(gest.getVipAccount()-financeSettleAccounts.getShouldPaidMoney());
+            gestDao.save(gest);
+        }
+
         createOrUpdte(gestPaidRecord);
 
         return financeSettleAccounts;
