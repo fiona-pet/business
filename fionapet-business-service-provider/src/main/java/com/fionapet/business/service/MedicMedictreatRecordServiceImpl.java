@@ -5,6 +5,8 @@ import com.fionapet.business.entity.MedicMedictreatRecord;
 import com.fionapet.business.entity.MedicRegisterRecord;
 import com.fionapet.business.repository.MedicRegisterRecordDao;
 import org.apache.commons.beanutils.BeanUtilsBean;
+import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.commons.beanutils.converters.DateConverter;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
 import com.fionapet.business.repository.MedicMedictreatRecordDao;
@@ -37,6 +39,7 @@ public class MedicMedictreatRecordServiceImpl extends CURDServiceBase<MedicMedic
     @Override
     @Transactional
     public MedicMedictreatRecord createOrUpdte(MedicMedictreatRecord entity) {
+        ConvertUtils.register(new DateConverter(null), java.util.Date.class);
         synchronized (CURD_KEY) {
             MedicMedictreatRecord medicMedictreatRecord = medicMedictreatRecordDao.findByRegisterNo(entity.getRegisterNo());
             if (null == medicMedictreatRecord) {
@@ -67,6 +70,22 @@ public class MedicMedictreatRecordServiceImpl extends CURDServiceBase<MedicMedic
                 }
             } else {
                 if (entity.getId() == null) {
+                    medicMedictreatRecord.setTemperature(entity.getTemperature());
+                    medicMedictreatRecord.setBreath(entity.getBreath());
+                    medicMedictreatRecord.setDoctorAdvice(entity.getDoctorAdvice());
+                    medicMedictreatRecord.setDiagnosed(entity.getDiagnosed());
+                    medicMedictreatRecord.setExamination(entity.getExamination());
+                    medicMedictreatRecord.setBloodPressure(entity.getBloodPressure());
+                    medicMedictreatRecord.setHeartbeat(entity.getHeartbeat());
+                    medicMedictreatRecord.setRheme(entity.getRheme());
+
+//                    try {
+//                        BeanUtilsBean.getInstance().copyProperties(medicMedictreatRecord, entity);
+//                    } catch (IllegalAccessException e) {
+//                        e.printStackTrace();
+//                    } catch (InvocationTargetException e) {
+//                        e.printStackTrace();
+//                    }
                     entity = medicMedictreatRecord;
                 }
             }

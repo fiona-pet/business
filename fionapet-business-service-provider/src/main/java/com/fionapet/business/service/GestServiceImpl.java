@@ -21,6 +21,7 @@ public class GestServiceImpl extends CURDServiceBase<Gest> implements GestServic
         return gestDao;
     }
 
+
     @Override
     public RechargeVO recharge(String id, Double money) throws ApiException{
         Gest gest = gestDao.findOne(id);
@@ -31,11 +32,11 @@ public class GestServiceImpl extends CURDServiceBase<Gest> implements GestServic
 
         RechargeVO rechargeVO = new RechargeVO();
 
-        rechargeVO.setOldMoney(gest.getVipAccount());
-        rechargeVO.setMoney(gest.getVipAccount() + money);
+        rechargeVO.setOldMoney(gest.getPrepayMoney());
+        rechargeVO.setMoney(gest.getPrepayMoney() + money);
         rechargeVO.setGestId(id);
 
-        gest.setVipAccount(rechargeVO.getMoney());
+        gest.setPrepayMoney(rechargeVO.getMoney());
 
         gestDao.save(gest);
 

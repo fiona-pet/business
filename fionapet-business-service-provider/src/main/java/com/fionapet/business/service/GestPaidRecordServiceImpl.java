@@ -80,6 +80,7 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
 
         Double total = 0D;
         Double dis = 1d;//折扣
+
         for (SettleAccountsView settleAccountsView: payList){
             total += (settleAccountsView.getItemCost() * Double.parseDouble(settleAccountsView.getItemNum()));
             try {
@@ -124,6 +125,19 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
         appConfigService.setCurrentUser(getCurrentUser());
         financeSettleAccounts.setSettleCode(appConfigService.genNumberByName("结算单号"));
 
+
+        if ("会员".equals(pay.getGestPaidRecord().getOperateAction())){
+            gest.setLastPaidTime(new Date());
+            if (gest.getPrepayMoney()-financeSettleAccounts.getShouldPaidMoney() >= 0) {
+                gest.setPrepayMoney(gest.getPrepayMoney() - financeSettleAccounts.getShouldPaidMoney());
+                gestDao.save(gest);
+                financeSettleAccounts.setChangeMoney(gest.getPrepayMoney());
+            }else{
+                throw new ApiException(101, "余额不足");
+            }
+        }
+
+
         financeSettleAccountsService.createOrUpdte(financeSettleAccounts);
 
         String financeSettleAccountsId = financeSettleAccounts.getId();
@@ -151,7 +165,11 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
             financeSettleAccountsDetail.setRelationDetailId(settleAccountsView.getRelationDetailId());
             financeSettleAccountsDetail.setRelationId(settleAccountsView.getRelationId());
 
+
+
             financeSettleAccountsDetailService.createOrUpdte(financeSettleAccountsDetail);
+
+
 
             if ("挂号费用".equals(settleAccountsView.getBusinessType())){
                 MedicRegisterRecord medicRegisterRecord = medicRegisterRecordService.detail(settleAccountsView.getRelationId());
@@ -179,12 +197,6 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
         gestPaidRecord.setOperateAction(pay.getGestPaidRecord().getOperateAction());
         gestPaidRecord.setSettleAccountsId(financeSettleAccountsId);
         gestPaidRecord.setOperateContent(pay.getGestPaidRecord().getOperateContent());
-
-        if ("会员".equals(gestPaidRecord.getOperateAction())){
-            gest.setLastPaidTime(new Date());
-            gest.setVipAccount(gest.getVipAccount()-financeSettleAccounts.getShouldPaidMoney());
-            gestDao.save(gest);
-        }
 
         createOrUpdte(gestPaidRecord);
 

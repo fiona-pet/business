@@ -340,7 +340,7 @@
 
 	<!--医生处理记录 api -->
     <dubbo:service interface="com.fionapet.business.facade.MedicMedictreatRecordRestService" ref="medicMedictreatRecordRestService"
-                   protocol="rest" validation="true" timeout="5000" />
+                   protocol="rest" validation="true" timeout="5000" retries="0" />
 
     <bean id="medicMedictreatRecordRestService" class="com.fionapet.business.facade.MedicMedictreatRecordRestServiceImpl">
         <property name="medicMedictreatRecordService" ref="medicMedictreatRecordService"/>

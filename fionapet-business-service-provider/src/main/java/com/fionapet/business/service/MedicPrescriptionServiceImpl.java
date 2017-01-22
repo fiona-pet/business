@@ -56,11 +56,7 @@ public class MedicPrescriptionServiceImpl extends CURDServiceBase<MedicPrescript
 
         MedicPrescription medicPrescriptionOrgi = medicPrescriptionDao.findByIdOrPrescriptionCode(id,id);
         MedicPrescription medicPrescription = new MedicPrescription();
-        if (null == medicPrescriptionOrgi){
-            //获取 就诊编号id
-            medicPrescription.setMedicRecordId(medicMedictreatRecord.getId());
-            medicPrescription.setMedicRecordCode(medicRecordCode);
-        }else{
+        if (null != medicPrescriptionOrgi){
             //属性复制
             try {
                 BeanUtilsBean.getInstance().copyProperties(medicPrescription, medicPrescriptionOrgi);
@@ -68,8 +64,11 @@ public class MedicPrescriptionServiceImpl extends CURDServiceBase<MedicPrescript
                 LOGGER.warn("复制处方数据出错!", e);
                 throw new ApiException("复制处方数据出错!");
             }
-            medicPrescription.setId(null);
         }
+
+        medicPrescription.setId(null);
+        medicPrescription.setMedicRecordId(medicMedictreatRecord.getId());
+        medicPrescription.setMedicRecordCode(medicRecordCode);
 
         //获取 病例编号
         String prescriptionCode = appConfigService.genNumberByName(AppConfigService.NUMBER_KEY_MEDIC_PRESCRIPTION_CODE);
