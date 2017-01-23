@@ -70,14 +70,16 @@ public class MedicMedictreatRecordServiceImpl extends CURDServiceBase<MedicMedic
                 }
             } else {
                 if (entity.getId() == null) {
-                    medicMedictreatRecord.setTemperature(entity.getTemperature());
-                    medicMedictreatRecord.setBreath(entity.getBreath());
-                    medicMedictreatRecord.setDoctorAdvice(entity.getDoctorAdvice());
-                    medicMedictreatRecord.setDiagnosed(entity.getDiagnosed());
-                    medicMedictreatRecord.setExamination(entity.getExamination());
-                    medicMedictreatRecord.setBloodPressure(entity.getBloodPressure());
-                    medicMedictreatRecord.setHeartbeat(entity.getHeartbeat());
-                    medicMedictreatRecord.setRheme(entity.getRheme());
+//                    if (null != entity.getTemperature()) {
+//                        medicMedictreatRecord.setTemperature(entity.getTemperature());
+//                    }
+//                    medicMedictreatRecord.setBreath(entity.getBreath());
+//                    medicMedictreatRecord.setDoctorAdvice(entity.getDoctorAdvice());
+//                    medicMedictreatRecord.setDiagnosed(entity.getDiagnosed());
+//                    medicMedictreatRecord.setExamination(entity.getExamination());
+//                    medicMedictreatRecord.setBloodPressure(entity.getBloodPressure());
+//                    medicMedictreatRecord.setHeartbeat(entity.getHeartbeat());
+//                    medicMedictreatRecord.setRheme(entity.getRheme());
 
 //                    try {
 //                        BeanUtilsBean.getInstance().copyProperties(medicMedictreatRecord, entity);
@@ -89,7 +91,8 @@ public class MedicMedictreatRecordServiceImpl extends CURDServiceBase<MedicMedic
                     entity = medicMedictreatRecord;
                 }
             }
+            return super.createOrUpdte(entity);
         }
-        return super.createOrUpdte(entity);
+
     }
 }

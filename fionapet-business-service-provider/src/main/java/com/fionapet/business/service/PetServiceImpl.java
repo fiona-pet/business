@@ -2,6 +2,7 @@ package com.fionapet.business.service;
 
 import com.fionapet.business.entity.Pet;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
 import com.fionapet.business.repository.PetDao;
@@ -10,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.xml.crypto.Data;
+import java.util.Calendar;
+import java.util.Date;
 
 
 /**
@@ -29,10 +32,27 @@ public class PetServiceImpl extends CURDServiceBase<Pet> implements PetService {
     }
 
     @Override
+    public Pet detail(String uuid) {
+        Pet pet = super.detail(uuid);
+
+        if (null != pet.getPetBirthday()) {
+            pet.setAge(Math.abs(DateUtils.truncatedCompareTo(new Date(), pet.getPetBirthday(), Calendar.YEAR)));
+            petDao.save(pet);
+        }
+
+        return super.detail(uuid);
+    }
+
+    @Override
     public Pet createOrUpdte(Pet entity) {
         if (null == entity.getId()){
             entity.setSickFileCode(appConfigService.genNumberByName(AppConfigService.NUMBER_KEY_BLBH));
         }
+
+        if (null != entity.getPetBirthday()){
+            entity.setAge(Math.abs(DateUtils.truncatedCompareTo(new Date(), entity.getPetBirthday(), Calendar.YEAR)));
+        }
+
         return super.createOrUpdte(entity);
     }
 }
