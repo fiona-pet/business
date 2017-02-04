@@ -101,7 +101,7 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
 
             return;
         }else {
-            if (null == itemCount.getItemBulk()){
+            if (null == itemCount.getItemBulk()|| itemCount.getItemBulk()==0){
                 itemCount.setItemBulk(1);
             }
 

@@ -251,7 +251,7 @@ public class Gest extends CMSEntity {
      */
     @ApiModelProperty(value = "prepayMoney", required = false)
     @Column(columnDefinition = "prepayMoney")
-    private Double prepayMoney;
+    private Double prepayMoney = 0d;
     public Double getPrepayMoney() {
         return prepayMoney;
     }
