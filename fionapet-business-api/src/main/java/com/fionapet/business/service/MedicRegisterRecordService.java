@@ -14,6 +14,5 @@ public interface MedicRegisterRecordService extends CURDService<MedicRegisterRec
 
     List<BillItemVO> billDetail(String id);
 
-
     void over();
 }

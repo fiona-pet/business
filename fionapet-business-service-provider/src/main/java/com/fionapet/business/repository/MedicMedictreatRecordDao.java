@@ -14,6 +14,8 @@ public interface MedicMedictreatRecordDao extends DaoBase<MedicMedictreatRecord>
 
     MedicMedictreatRecord findByMediTreatmentCode(String medicRecordCode);
 
+    MedicMedictreatRecord findByRegisterNoOrMediTreatmentCode(String registerNo,String medicRecordCode);
+
     @Modifying
     @Query("update MedicMedictreatRecord set status ='SM00037' where status <> 'SM00037'")
     void over();

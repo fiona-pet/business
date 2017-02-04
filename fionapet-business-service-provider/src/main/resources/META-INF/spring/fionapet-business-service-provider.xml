@@ -234,7 +234,7 @@
     <bean id="medicMedictreatRecordService" class="com.fionapet.business.service.MedicMedictreatRecordServiceImpl"/>
 
     <dubbo:service interface="com.fionapet.business.service.MedicMedictreatRecordService" ref="medicMedictreatRecordService"
-                   protocol="dubbo" validation="true" timeout="5000" retries="0" />
+                   protocol="dubbo" validation="true" timeout="10000" retries="0" />
     <!-- 医生处理记录 api -->
 
 
