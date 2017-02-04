@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	   xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	   xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd"
+	   default-lazy-init="true">
+
+	<description>Quartz 公共配置 </description>
+
+	<context:property-placeholder ignore-unresolvable="true"
+								  location="classpath*:/quartz-job.properties" />
+	<!-- 工作的bean -->
+
+	<bean id="jobEnv" class="com.fionapet.business.job.JobEnv"></bean>
+
+	<bean id="overRecordJob" class="com.fionapet.business.job.OverRecordJob" >
+		<!--<property name="h3cRealtimeFaultService" ref="h3cRealtimeFaultService"></property>-->
+		<property name="jobEnv" ref="jobEnv"></property>
+	</bean>
+	<!-- 工作的bean -->
+
+	<!-- job的配置开始 -->
+	<bean id="overRecordJobDetail"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="overRecordJob" />
+		</property>
+		<property name="targetMethod">
+			<value>sync</value>
+		</property>
+	</bean>
+	<!-- job的配置结束 -->
+
+
+	<!-- 调度的配置开始 -->
+	<bean id="overRecordJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="overRecordJobDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>${over.record.cron}</value>  <!-- Cron表达式“10 */1 * * * ?”意为：从10秒开始，每1分钟执行一次。  -->
+		</property>
+	</bean>
+	<!-- 调度的配置结束 -->
+
+
+	<!-- 启动触发器的配置开始 -->
+	<bean name="startQuertz" lazy-init="false" autowire="no"
+		  class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="overRecordJobTrigger" />
+			</list>
+		</property>
+	</bean>
+	<!-- 启动触发器的配置结束 -->
+
+
+</beans>
