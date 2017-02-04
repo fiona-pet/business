@@ -11,6 +11,7 @@ import com.fionapet.business.entity.Persons;
 import com.fionapet.business.entity.UserDict;
 import com.fionapet.business.facade.vo.BillItemVO;
 import com.fionapet.business.repository.DictTypeDetailDao;
+import com.fionapet.business.repository.MedicMedictreatRecordDao;
 import org.dubbo.x.entity.PageSearch;
 import org.dubbo.x.entity.SearchFilter;
 import org.dubbo.x.repository.DaoBase;
@@ -19,6 +20,7 @@ import com.fionapet.business.repository.MedicRegisterRecordDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +31,8 @@ import java.util.List;
 public class MedicRegisterRecordServiceImpl extends CURDServiceBase<MedicRegisterRecord> implements MedicRegisterRecordService {
     @Autowired
     private MedicRegisterRecordDao medicRegisterRecordDao;
+    @Autowired
+    private MedicMedictreatRecordDao medicMedictreatRecordDao;
     @Autowired
     private DictTypeDetailDao dictTypeDetailDao;
     @Autowired
@@ -121,5 +125,12 @@ public class MedicRegisterRecordServiceImpl extends CURDServiceBase<MedicRegiste
         }
 
         return result;
+    }
+
+    @Override
+    @org.springframework.transaction.annotation.Transactional
+    public void over() {
+        medicRegisterRecordDao.over();
+        medicMedictreatRecordDao.over();
     }
 }

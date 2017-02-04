@@ -21,7 +21,7 @@
 	<bean id="jobEnv" class="com.fionapet.business.job.JobEnv"></bean>
 
 	<bean id="overRecordJob" class="com.fionapet.business.job.OverRecordJob" >
-		<!--<property name="h3cRealtimeFaultService" ref="h3cRealtimeFaultService"></property>-->
+		<property name="medicRegisterRecordService" ref="medicRegisterRecordService"></property>
 		<property name="jobEnv" ref="jobEnv"></property>
 	</bean>
 	<!-- 工作的bean -->

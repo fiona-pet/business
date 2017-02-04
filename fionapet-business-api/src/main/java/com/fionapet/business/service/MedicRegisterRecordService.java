@@ -13,4 +13,7 @@ import java.util.List;
 public interface MedicRegisterRecordService extends CURDService<MedicRegisterRecord> {
 
     List<BillItemVO> billDetail(String id);
+
+
+    void over();
 }
