@@ -95,7 +95,7 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
             DictTypeDetail dictTypeDetail = dictTypeDetailDao.findByDictDetailCode("SM00051");
 
             //会员信息
-            Gest gest = gestDao.findOne(payList.get(0).getGestId());
+            Gest gest = gestDao.findOne(payList.get(0).getGestId()+"");
 
             if (null == gest) {
                 gest = new Gest();
@@ -197,6 +197,7 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
 
             createOrUpdte(gestPaidRecord);
         }catch (Exception e){
+            e.printStackTrace();
             throw new ApiException(110, "pay error!");
         }
 
