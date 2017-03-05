@@ -70,7 +70,7 @@ public interface GestPaidRecordRestService extends CURDRestService<GestPaidRecor
     @Path("/billList")
     @ApiOperation(value = "顾客 未支付 记录表",
             notes = "顾客 未支付 记录表.")
-    RestResult<List<BillVO>> billList(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token);
+    RestResult<List<BillVO>> billList(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token,@QueryParam("_timestamp") String timestamp);
 
     /**
      * 未支付 详情

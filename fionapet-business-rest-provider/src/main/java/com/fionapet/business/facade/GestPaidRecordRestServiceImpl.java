@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.HeaderParam;
+import javax.ws.rs.QueryParam;
 import java.util.List;
 
 /**
@@ -42,7 +43,7 @@ public class GestPaidRecordRestServiceImpl extends RestServiceBase<GestPaidRecor
     }
 
     @Override
-    public RestResult<List<BillVO>> billList(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token) {
+    public RestResult<List<BillVO>> billList(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token,@QueryParam("_timestamp") String timestamp) {
         return RestResult.OK(gestPaidRecordService.billList());
     }
 
