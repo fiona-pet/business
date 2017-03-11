@@ -51,6 +51,14 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
     private  MedicPrescriptionDetailService medicPrescriptionDetailService;
 
     @Autowired
+    private  InHospitalPrescriptionDetailService inHospitalPrescriptionDetailService;
+    @Autowired
+    private  InHospitalPrescriptionService inHospitalPrescriptionService;
+    @Autowired
+    private InHospitalRecordService inHospitalRecordService;
+
+
+    @Autowired
     private ItemCountService itemCountService;
 
     @Override
@@ -194,6 +202,26 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
                     medicPrescriptionDetailService.createOrUpdte(medicPrescriptionDetail);
 
                 }
+
+                //减少 存款
+                if ("住院".equals(pay.getGestPaidRecord().getOperateAction())){
+                    if ("住院处置处方".equals(settleAccountsView.getBusinessType())) {
+                        InHospitalPrescriptionDetail inHospitalPrescriptionDetail = inHospitalPrescriptionDetailService.detail(settleAccountsView.getRelationDetailId());
+                        inHospitalPrescriptionDetail.setPaidStatus(dictTypeDetail.getDictDetailCode());
+                        inHospitalPrescriptionDetail.setPaidTime(new Date());
+
+                        //消除库存
+                        itemCountService.decrease(inHospitalPrescriptionDetail);
+
+                        inHospitalPrescriptionDetailService.createOrUpdte(inHospitalPrescriptionDetail);
+
+                        InHospitalPrescription inHospitalPrescription = inHospitalPrescriptionService.detail(inHospitalPrescriptionDetail.getPrescriptionId());
+                        InHospitalRecord inHospitalRecord = inHospitalRecordService.detail(inHospitalPrescription.getInHospitalId());
+                        inHospitalRecord.setInputMoney(inHospitalRecord.getInputMoney() - inHospitalPrescriptionDetail.getItemNum() * inHospitalPrescriptionDetail.getItemCost());
+                        inHospitalRecordService.createOrUpdte(inHospitalRecord);
+                    }
+                }
+
             }
 
             GestPaidRecord gestPaidRecord = new GestPaidRecord();

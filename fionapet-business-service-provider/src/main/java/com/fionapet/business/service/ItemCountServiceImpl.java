@@ -9,6 +9,7 @@ import com.fionapet.business.repository.WarehouseInrecordDetailDao;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.locale.converters.DateLocaleConverter;
+import org.apache.commons.lang3.StringUtils;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
 import com.fionapet.business.repository.ItemCountDao;
@@ -125,5 +126,19 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
         medicPrescriptionDetail.setItemCountStatus(itemCountStatus);
 
         itemCountDao.save(itemCount);
+    }
+
+    @Override
+    public void decrease(InHospitalPrescriptionDetail inHospitalPrescriptionDetail) {
+        MedicPrescriptionDetail medicPrescriptionDetail = new MedicPrescriptionDetail();
+        try {
+            BeanUtilsBean.getInstance().copyProperties(medicPrescriptionDetail, inHospitalPrescriptionDetail);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        decrease(medicPrescriptionDetail);
     }
 }

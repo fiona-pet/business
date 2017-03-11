@@ -50,6 +50,20 @@ create view v_settle_accounts_view as
     LEFT JOIN t_gest g on p.gest_id = g.id
     LEFT JOIN t_item_type it on mpd.item_code = it.item_code
   WHERE mpd.paid_status is null or mpd.paid_status <> 'SM00051'
+
+  UNION ALL
+
+  select uuid() id,p.gest_id, mpd.item_code,mpd.item_name,mpd.item_cost,mpd.item_num,
+  it.busi_type_id, '住院处置处方' business_type, mp.id relation_id,
+  it.is_vip_discount, udd.value_name_cn item_unit,mpd.id relation_detail_id
+from t_in_hospital_prescription_detail mpd
+  INNER JOIN t_in_hospital_prescription mp on mp.id = mpd.prescription_id
+  INNER JOIN t_in_hospital_record mmt on mp.in_hospital_no = mmt.in_hospital_no
+  INNER JOIN t_user_dict_detail udd on mpd.recipe_unit = udd.dict_detail_code
+  LEFT JOIN t_pet p on mmt.pet_id = p.id
+  LEFT JOIN t_gest g on p.gest_id = g.id
+  LEFT JOIN t_item_type it on mpd.item_code = it.item_code
+WHERE mpd.paid_status is null or mpd.paid_status <> 'SM00051'
 ;
 
 -- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --

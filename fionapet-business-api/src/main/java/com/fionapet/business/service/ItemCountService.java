@@ -1,5 +1,6 @@
 package com.fionapet.business.service;
 
+import com.fionapet.business.entity.InHospitalPrescriptionDetail;
 import com.fionapet.business.entity.ItemCount;
 import com.fionapet.business.entity.MedicPrescriptionDetail;
 import com.fionapet.business.entity.WarehouseInrecord;
@@ -18,4 +19,11 @@ public interface ItemCountService extends CURDService<ItemCount> {
      * @param medicPrescriptionDetail
      */
     void decrease(final MedicPrescriptionDetail medicPrescriptionDetail) throws ApiException;
+
+    /**
+     * 消除库存
+     *
+     * @param inHospitalPrescriptionDetail
+     */
+    void decrease(InHospitalPrescriptionDetail inHospitalPrescriptionDetail);
 }
