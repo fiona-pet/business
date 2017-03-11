@@ -44,7 +44,7 @@ public class GestPaidRecordRestServiceImpl extends RestServiceBase<GestPaidRecor
 
     @Override
     public RestResult<List<BillVO>> billList(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token,@QueryParam("_timestamp") String timestamp) {
-        return RestResult.OK(gestPaidRecordService.billList());
+        return RestResult.OK(gestPaidRecordService.billList(timestamp));
     }
 
     @Override

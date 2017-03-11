@@ -2,10 +2,7 @@ package com.fionapet.business.entity;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 /**
  * Created by tom on 16/10/23.

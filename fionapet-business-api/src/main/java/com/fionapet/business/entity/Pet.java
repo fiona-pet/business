@@ -130,13 +130,13 @@ public class Pet extends CMSEntity {
      */
     @ApiModelProperty(value = "宠物年龄", required = false)
     @Column(columnDefinition = "宠物年龄")
-    private int age;
+    private float age;
 
-    public int getAge() {
+    public float getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(float age) {
         this.age = age;
     }
 

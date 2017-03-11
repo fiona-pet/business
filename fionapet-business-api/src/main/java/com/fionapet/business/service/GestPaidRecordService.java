@@ -4,13 +4,12 @@ import com.fionapet.business.entity.FinanceSettleAccounts;
 import com.fionapet.business.entity.GestPaidRecord;
 import com.fionapet.business.entity.SettleAccountsView;
 import com.fionapet.business.exception.ApiException;
-import com.fionapet.business.facade.vo.BillItemVO;
 import com.fionapet.business.entity.BillVO;
 import com.fionapet.business.facade.vo.PayVO;
 import org.dubbo.x.service.CURDService;
 
+import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 顾客影像记录表
@@ -18,7 +17,7 @@ import java.util.Map;
  */
 public interface GestPaidRecordService extends CURDService<GestPaidRecord> {
 
-    List<BillVO> billList();
+    List<BillVO> billList(String timestamp);
 
     List<SettleAccountsView> billDetail(String gestId);
 

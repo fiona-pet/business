@@ -6,17 +6,22 @@ import com.fionapet.business.facade.vo.PayVO;
 import com.fionapet.business.repository.*;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 /**
- *  顾客影像记录表
+ *  顾客支付记录表
 * Created by tom on 2016-07-25 09:32:34.
  */
 public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> implements GestPaidRecordService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(GestPaidRecordServiceImpl.class);
+
     @Autowired
     private GestPaidRecordDao gestPaidRecordDao;
 
@@ -54,7 +59,10 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
     }
 
     @Override
-    public List<BillVO> billList() {List<BillVO> result = billVODao.findAllBy();
+    public List<BillVO> billList(String timestamp) {
+
+        List<BillVO> result = billVODao.findAllBy();
+        LOGGER.debug("{} -> bill List:{}", timestamp, result);
         return result;
     }
 
