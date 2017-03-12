@@ -8,4 +8,5 @@ import org.dubbo.x.repository.DaoBase;
 * Created by tom on 2016-07-18 15:37:44.
  **/
 public interface InHospitalPrescriptionDao extends DaoBase<InHospitalPrescription> {
+    InHospitalPrescription findByIdOrPrescriptionCode(String id, String id1);
 }

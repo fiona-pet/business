@@ -1,6 +1,7 @@
 package com.fionapet.business.service;
 
 import com.fionapet.business.entity.InHospitalPrescription;
+import org.dubbo.x.exception.ApiException;
 import org.dubbo.x.service.CURDService;
 /**
  * 住院处方
@@ -8,4 +9,5 @@ import org.dubbo.x.service.CURDService;
  */
 public interface InHospitalPrescriptionService extends CURDService<InHospitalPrescription> {
 
+    InHospitalPrescription copy(String uuid, String inHospitalRecordCode) throws ApiException;
 }

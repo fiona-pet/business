@@ -1,5 +1,7 @@
 package com.fionapet.business.facade;
 
+import com.fionapet.business.entity.MedicPrescription;
+import org.dubbo.x.exception.ApiException;
 import org.dubbo.x.facade.CURDRestService;
 import org.dubbo.x.facade.RestResult;
 import org.dubbo.x.util.ConstantVariable;
@@ -54,4 +56,15 @@ public interface InHospitalPrescriptionRestService extends CURDRestService<InHos
     @Path("/{id}")
     @ApiOperation(value = "删除住院处方", notes = "删除住院处方")
     RestResult<String> delete(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("id") @PathParam("id") String uuid);
+
+    /**
+     * 医生处方 复制 详细信息
+     *
+     * @return
+     */
+    @GET
+    @Path("copy/{id}")
+    @ApiOperation(value = "复制处方",
+            notes = "医生处方复制.")
+    RestResult<InHospitalPrescription> copy(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("id") @PathParam("id") String uuid, @ApiParam("inHospitalRecordCode") @QueryParam("inHospitalRecordCode") String inHospitalRecordCode) throws ApiException;
 }
