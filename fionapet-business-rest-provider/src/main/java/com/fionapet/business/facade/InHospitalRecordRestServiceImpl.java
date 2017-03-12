@@ -36,6 +36,15 @@ public class InHospitalRecordRestServiceImpl extends RestServiceBase<InHospitalR
     }
 
     @Override
+    public RestResult<InHospitalRecord> create(@HeaderParam("authorization") String token, InHospitalRecord entity) {
+        if (null != entity.getId()){
+            InHospitalRecord inHospitalRecord = getService().detail(entity.getId());
+            entity.setInputMoney(inHospitalRecord.getInputMoney());
+        }
+        return super.create(token, entity);
+    }
+
+    @Override
     public RestResult<InHospitalRecord> over(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("inHospitalRecordCode") String inHospitalRecordCode) {
         return RestResult.OK(((InHospitalRecordService)getService()).over(inHospitalRecordCode));
     }
