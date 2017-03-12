@@ -54,4 +54,15 @@ public interface InHospitalRecordRestService extends CURDRestService<InHospitalR
     @Path("/{id}")
     @ApiOperation(value = "删除医院记录表", notes = "删除医院记录表")
     RestResult<String> delete(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("id") @PathParam("id") String uuid);
+
+    /**
+     * 医生处方 复制 详细信息
+     *
+     * @return
+     */
+    @GET
+    @Path("over/{inHospitalRecordCode}")
+    @ApiOperation(value = "复制处方",
+            notes = "医生处方复制.")
+    RestResult<InHospitalRecord> over(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("inHospitalRecordCode") @PathParam("inHospitalRecordCode") String inHospitalRecordCode);
 }

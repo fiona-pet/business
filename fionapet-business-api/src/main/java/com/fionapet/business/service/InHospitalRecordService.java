@@ -8,4 +8,5 @@ import org.dubbo.x.service.CURDService;
  */
 public interface InHospitalRecordService extends CURDService<InHospitalRecord> {
 
+    InHospitalRecord over(String inHospitalCode);
 }
