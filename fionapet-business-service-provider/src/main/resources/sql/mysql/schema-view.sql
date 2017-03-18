@@ -82,12 +82,12 @@ INNER JOIN (select gest_id, sum(item_cost * item_num) total from v_settle_accoun
 -- -- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 drop view if exists v_report_by_person;
 create view v_report_by_person as
-SELECT sum(mpd.item_cost*mpd.item_num) total, p.person_name name, "门诊处方" type, substr(mpd.create_date, 1,10) create_date
+SELECT  uuid() id,sum(mpd.item_cost*mpd.item_num) total, p.person_name name, "门诊处方" type, substr(mpd.create_date, 1,10) create_date
 FROM t_medic_prescription_detail mpd
   JOIN t_persons p ON mpd.create_user_id = p.id
 GROUP BY mpd.create_user_id,substr(mpd.create_date, 1,10)
 UNION ALL
-SELECT sum(sdsd.sell_price*sdsd.item_num) total, p.person_name name, case when locate("CEX" ,item_code)>0 then "美容销售" when locate("BC" ,item_code)>0 then "商品销售" end type, substr(sdsd.create_date, 1,10) create_date
+SELECT  uuid() id,sum(sdsd.sell_price*sdsd.item_num) total, p.person_name name, case when locate("CEX" ,item_code)>0 then "美容销售" when locate("BC" ,item_code)>0 then "商品销售" end type, substr(sdsd.create_date, 1,10) create_date
 FROM t_store_direct_sell_detail sdsd
   JOIN t_persons p ON sdsd.create_user_id = p.id
 GROUP BY sdsd.create_user_id,create_date,type

@@ -1108,7 +1108,7 @@
 
 	<!--仓库信息表 api -->
     <dubbo:service interface="com.fionapet.business.facade.WarehouseRestService" ref="warehouseRestService"
-                   protocol="rest" validation="true" timeout="5000" connections="100"/>
+                   protocol="rest" validation="true" timeout="5000" />
 
     <bean id="warehouseRestService" class="com.fionapet.business.facade.WarehouseRestServiceImpl">
         <property name="warehouseService" ref="warehouseService"/>
@@ -1116,4 +1116,15 @@
 
     <dubbo:reference id="warehouseService" interface="com.fionapet.business.service.WarehouseService"/>
     <!--仓库信息表 api -->
+
+    <!--报表 api -->
+    <dubbo:service interface="com.fionapet.business.facade.ReportRestService" ref="reportRestService"
+                   protocol="rest" validation="true" timeout="5000" />
+
+    <bean id="reportRestService" class="com.fionapet.business.facade.ReportRestServiceImpl">
+        <property name="reportService" ref="reportService"/>
+    </bean>
+
+    <dubbo:reference id="reportService" interface="com.fionapet.business.service.ReportService"/>
+    <!--报表 api -->
 </beans>
