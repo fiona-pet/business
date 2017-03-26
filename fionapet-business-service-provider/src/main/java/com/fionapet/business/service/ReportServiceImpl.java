@@ -28,13 +28,19 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
 
     @Override
     public List<ReportByPersonVO> person(String month) {
-        String date = DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM");
+        if (month.length() == 1){
+            month = "0" + month;
+        }
+        String date = DateFormatUtils.format(System.currentTimeMillis(), "yyyy-") + month;
         return reportDao.findCreateDateBetween(date + "-01", date + "-31");
     }
 
     @Override
     public List<ReportByItemVO> item(String month) {
-        String date = DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM");
+        if (month.length() == 1){
+            month = "0" + month;
+        }
+        String date = DateFormatUtils.format(System.currentTimeMillis(), "yyyy-") + month;
         return reportByItemDao.findByCreateDateOrderByTotalDesc(date);
     }
 }

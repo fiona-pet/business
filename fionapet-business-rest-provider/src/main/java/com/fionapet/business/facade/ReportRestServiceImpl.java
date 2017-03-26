@@ -4,6 +4,7 @@ import com.fionapet.business.entity.ReportByItemVO;
 import com.fionapet.business.entity.ReportByPersonVO;
 import com.fionapet.business.service.AppConfigService;
 import com.fionapet.business.service.ReportService;
+import io.swagger.annotations.ApiParam;
 import org.dubbo.x.facade.RestResult;
 import org.dubbo.x.facade.RestServiceBase;
 import org.dubbo.x.service.CURDService;
@@ -38,12 +39,12 @@ public class ReportRestServiceImpl extends RestServiceBase<ReportByPersonVO> imp
     }
 
     @Override
-    public RestResult<List<ReportByPersonVO>> person(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token) {
-        return RestResult.OK(reportService.person(""));
+    public RestResult<List<ReportByPersonVO>> person(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") String month) {
+        return RestResult.OK(reportService.person(month));
     }
 
     @Override
-    public RestResult<List<ReportByItemVO>> item(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token) {
-        return RestResult.OK(reportService.item(""));
+    public RestResult<List<ReportByItemVO>> item(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") String month) {
+        return RestResult.OK(reportService.item(month));
     }
 }
