@@ -1,6 +1,7 @@
 package com.fionapet.business.facade;
 
 import com.alibaba.dubbo.rpc.protocol.rest.support.ContentType;
+import com.fionapet.business.entity.ReportByItemVO;
 import com.fionapet.business.entity.ReportByPersonVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +35,16 @@ public interface ReportRestService extends CURDRestService<ReportByPersonVO>{
     @ApiOperation(value = "统计报表",
             notes = "统计报表列表.")
     RestResult<List<ReportByPersonVO>> person(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token);
+    /**
+     * 统计报表
+     * @return
+     */
+    @GET
+    @Path("/item")
+    @ApiOperation(value = "统计报表",
+            notes = "统计报表列表.")
+    RestResult<List<ReportByItemVO>> item(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token);
+
     /**
      * 统计报表
      * @return

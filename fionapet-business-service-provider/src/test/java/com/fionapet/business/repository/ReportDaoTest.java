@@ -1,6 +1,7 @@
 package com.fionapet.business.repository;
 
 import com.fionapet.business.entity.AppConfig;
+import com.fionapet.business.entity.ReportByItemVO;
 import com.fionapet.business.entity.ReportByPersonVO;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
@@ -23,6 +24,8 @@ public class ReportDaoTest extends SpringTransactionalTestCase {
     @Autowired
     private ReportDao reportDao;
     @Autowired
+    private ReportByItemDao reportByItemDao;
+    @Autowired
     private EntityManagerFactory entityManagerFactory;
 
     @Test
@@ -40,6 +43,14 @@ public class ReportDaoTest extends SpringTransactionalTestCase {
         Assert.assertNotNull(reportByPersonVOs);
 
         Assert.assertEquals(reportByPersonVOs.size(), 6);
+    }
+
+    @Test
+    public void findByCreateDateBetweenOrderByTotalDesc(){
+        List<ReportByItemVO> reportByItemVOs = reportByItemDao.findByCreateDateOrderByTotalDesc("2017-03");
+        Assert.assertNotNull(reportByItemVOs);
+
+        Assert.assertEquals(reportByItemVOs.size(), 6);
     }
 
 

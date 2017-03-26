@@ -1,5 +1,6 @@
 package com.fionapet.business.facade;
 
+import com.fionapet.business.entity.ReportByItemVO;
 import com.fionapet.business.entity.ReportByPersonVO;
 import com.fionapet.business.service.AppConfigService;
 import com.fionapet.business.service.ReportService;
@@ -39,5 +40,10 @@ public class ReportRestServiceImpl extends RestServiceBase<ReportByPersonVO> imp
     @Override
     public RestResult<List<ReportByPersonVO>> person(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token) {
         return RestResult.OK(reportService.person(""));
+    }
+
+    @Override
+    public RestResult<List<ReportByItemVO>> item(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token) {
+        return RestResult.OK(reportService.item(""));
     }
 }

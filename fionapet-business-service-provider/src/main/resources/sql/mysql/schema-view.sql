@@ -92,4 +92,14 @@ FROM t_store_direct_sell_detail sdsd
   JOIN t_persons p ON sdsd.create_user_id = p.id
 GROUP BY sdsd.create_user_id,create_date,type
 
+-- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --
+-- --- Table structure for v_report_by_item  商品统计报表
+-- -- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+drop view if exists v_report_by_item;
+create view v_report_by_item as
+select uuid() id,mpd.item_code,mpd.item_name,sum(item_num) total_num,avg(item_cost) avg_price,sum(item_num) * avg(item_cost) total,avg(ic.input_price/ic.item_bulk) avg_input_price,avg(ic.input_price/ic.item_bulk)*sum(item_num) total_cost,avg(ic.item_count_num*ic.item_bulk+ic.scattered_count_num) inventory ,  "门诊处方" type,substr(mpd.create_date, 1,7) create_date  from
+  t_medic_prescription_detail mpd
+  LEFT JOIN t_item_count ic ON ic.item_code = mpd.item_code
+group by item_code,item_name,substr(mpd.create_date, 1,7)
+
 
