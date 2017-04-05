@@ -82,9 +82,10 @@ INNER JOIN (select gest_id, sum(item_cost * item_num) total from v_settle_accoun
 -- -- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 drop view if exists v_report_by_person;
 create view v_report_by_person as
-SELECT  uuid() id,sum(mpd.item_cost*mpd.item_num) total, p.person_name name, "门诊处方" type, substr(mpd.create_date, 1,10) create_date
+SELECT  uuid() id,sum(vrbiip.discount_money*mpd.item_num) total, p.person_name name, "门诊处方" type, substr(mpd.create_date, 1,10) create_date
 FROM t_medic_prescription_detail mpd
   JOIN t_persons p ON mpd.create_user_id = p.id
+  JOIN v_report_by_item_infact_price vrbiip on mpd.id = vrbiip.relation_detail_id
 GROUP BY mpd.create_user_id,substr(mpd.create_date, 1,10)
 UNION ALL
 SELECT  uuid() id,sum(sdsd.sell_price*sdsd.item_num) total, p.person_name name, case when locate("CEX" ,item_code)>0 then "美容销售" when locate("BC" ,item_code)>0 then "商品销售" end type, substr(sdsd.create_date, 1,10) create_date
@@ -101,5 +102,15 @@ select uuid() id,mpd.item_code,mpd.item_name,sum(item_num) total_num,avg(item_co
   t_medic_prescription_detail mpd
   LEFT JOIN t_item_count ic ON ic.item_code = mpd.item_code
 group by item_code,item_name,substr(mpd.create_date, 1,7)
+
+-- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --
+-- --- Table structure for v_report_by_item_infact_price  商品销售的实际价格
+-- -- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+drop view if exists v_report_by_item_infact_price;
+create view v_report_by_item_infact_price as
+select (1-fsa.dis_count_money/fsa.total_money)*fsad.total_cost discount_money,fsad.relation_detail_id
+from t_finance_settle_accounts fsa
+  JOIN t_finance_settle_accounts_detail fsad on fsa.id=fsad.settle_accounts_detail_id
+
 
 
