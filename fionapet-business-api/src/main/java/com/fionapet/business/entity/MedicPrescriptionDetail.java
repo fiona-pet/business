@@ -19,7 +19,25 @@ import java.util.Date;
 @Table(name = "t_medic_prescription_detail")
 @ApiModel("医生处方明细")
 public class MedicPrescriptionDetail extends CMSEntity {
-    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MedicPrescriptionDetail that = (MedicPrescriptionDetail) o;
+
+        if (!itemCode.equals(that.itemCode)) return false;
+        return groupName != null ? groupName.equals(that.groupName) : that.groupName == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = itemCode.hashCode();
+        result = 31 * result + (groupName != null ? groupName.hashCode() : 0);
+        return result;
+    }
+
     /**
      * 企业编号
      */

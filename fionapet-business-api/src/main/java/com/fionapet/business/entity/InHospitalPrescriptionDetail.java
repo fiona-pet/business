@@ -19,6 +19,25 @@ import java.util.Date;
 @Table(name = "t_in_hospital_prescription_detail")
 @ApiModel("住院处方明细")
 public class InHospitalPrescriptionDetail extends CMSEntity {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        InHospitalPrescriptionDetail that = (InHospitalPrescriptionDetail) o;
+
+        if (!itemCode.equals(that.itemCode)) return false;
+        return groupName != null ? groupName.equals(that.groupName) : that.groupName == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = itemCode.hashCode();
+        result = 31 * result + (groupName != null ? groupName.hashCode() : 0);
+        return result;
+    }
+
     /**
      * 处方ID
      */

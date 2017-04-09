@@ -15,9 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  *  住院处方
@@ -74,7 +72,7 @@ public class InHospitalPrescriptionServiceImpl extends CURDServiceBase<InHospita
         createOrUpdte(inHospitalPrescription);
 
         //处方明细 复制
-        List<InHospitalPrescriptionDetail> inHospitalPrescriptionDetailList = new ArrayList<InHospitalPrescriptionDetail>();
+        Set<InHospitalPrescriptionDetail> inHospitalPrescriptionDetailList = new HashSet<InHospitalPrescriptionDetail>();
         List<InHospitalPrescriptionDetail> inHospitalPrescriptionDetails = inHospitalPrescriptionDetailDao.findByPrescriptionId(inHospitalPrescriptionOrgi.getId());
 
         //状态

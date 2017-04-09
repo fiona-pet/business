@@ -18,9 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  *  医生处方明细
@@ -77,7 +75,7 @@ public class MedicPrescriptionServiceImpl extends CURDServiceBase<MedicPrescript
         createOrUpdte(medicPrescription);
 
         //处方明细 复制
-        List<MedicPrescriptionDetail> medicPrescriptionDetailList = new ArrayList<MedicPrescriptionDetail>();
+        Set<MedicPrescriptionDetail> medicPrescriptionDetailList = new HashSet<MedicPrescriptionDetail>();
         List<MedicPrescriptionDetail> medicPrescriptionDetails = medicPrescriptionDetailDao.findByPrescriptionId(medicPrescriptionOrgi.getId());
 
         //状态
