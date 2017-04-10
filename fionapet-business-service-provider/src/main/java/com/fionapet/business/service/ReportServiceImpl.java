@@ -9,7 +9,6 @@ import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -27,20 +26,34 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
     }
 
     @Override
-    public List<ReportByPersonVO> person(String month) {
+    public List<ReportByPersonVO> person(String month, String day) {
         if (month.length() == 1){
             month = "0" + month;
         }
         String date = DateFormatUtils.format(System.currentTimeMillis(), "yyyy-") + month;
-        return reportDao.findCreateDateBetween(date + "-01", date + "-31");
+        if ("-".equals(day)){
+            return reportDao.findCreateDateBetween(date + "-01", date + "-31");
+        }else{
+            if (day.length() == 1){
+                day = "0" + day;
+            }
+            return reportDao.findCreateDateBetween(date + "-" + day, date + "-" + day);
+        }
     }
 
     @Override
-    public List<ReportByItemVO> item(String month) {
+    public List<ReportByItemVO> item(String month, String day) {
         if (month.length() == 1){
             month = "0" + month;
         }
         String date = DateFormatUtils.format(System.currentTimeMillis(), "yyyy-") + month;
-        return reportByItemDao.findByCreateDateOrderByTotalDesc(date);
+        if ("-".equals(day)){
+            return reportByItemDao.findCreateDateBetween(date + "-01", date + "-31");
+        }else{
+            if (day.length() == 1){
+                day = "0" + day;
+            }
+            return reportByItemDao.findCreateDateBetween(date + "-" + day, date + "-" + day);
+        }
     }
 }

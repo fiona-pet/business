@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.HeaderParam;
+import javax.ws.rs.QueryParam;
 import java.util.List;
 
 /**
@@ -39,12 +40,12 @@ public class ReportRestServiceImpl extends RestServiceBase<ReportByPersonVO> imp
     }
 
     @Override
-    public RestResult<List<ReportByPersonVO>> person(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") String month) {
-        return RestResult.OK(reportService.person(month));
+    public RestResult<List<ReportByPersonVO>> person(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") String month, @ApiParam("day") String day) {
+        return RestResult.OK(reportService.person(month,day));
     }
 
     @Override
-    public RestResult<List<ReportByItemVO>> item(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") String month) {
-        return RestResult.OK(reportService.item(month));
+    public RestResult<List<ReportByItemVO>> item(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") String month, @ApiParam("day") String day) {
+        return RestResult.OK(reportService.item(month,day));
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface ReportService extends CURDService<ReportByPersonVO> {
 
-    List<ReportByPersonVO> person(String month);
+    List<ReportByPersonVO> person(String month, String day);
 
-    List<ReportByItemVO> item(String month);
+    List<ReportByItemVO> item(String month, String day);
 }

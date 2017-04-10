@@ -34,7 +34,7 @@ public interface ReportRestService extends CURDRestService<ReportByPersonVO>{
     @Path("/person")
     @ApiOperation(value = "统计报表",
             notes = "统计报表列表.")
-    RestResult<List<ReportByPersonVO>> person(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") @QueryParam("month") String month);
+    RestResult<List<ReportByPersonVO>> person(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") @QueryParam("month") String month, @ApiParam("day") @QueryParam("day") String day);
     /**
      * 统计报表
      * @return
@@ -43,7 +43,7 @@ public interface ReportRestService extends CURDRestService<ReportByPersonVO>{
     @Path("/item")
     @ApiOperation(value = "统计报表",
             notes = "统计报表列表.")
-    RestResult<List<ReportByItemVO>> item(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") @QueryParam("month") String month);
+    RestResult<List<ReportByItemVO>> item(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") @QueryParam("month") String month, @ApiParam("day") @QueryParam("day") String day);
 
     /**
      * 统计报表
