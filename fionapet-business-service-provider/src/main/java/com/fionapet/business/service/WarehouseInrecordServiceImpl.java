@@ -11,6 +11,7 @@ import com.fionapet.business.jms.WarehouseNoticeInfo;
 import com.fionapet.business.jms.WarehouseOpType;
 import com.fionapet.business.repository.*;
 import org.apache.commons.beanutils.BeanUtilsBean;
+import org.apache.commons.lang3.StringUtils;
 import org.dubbo.x.entity.IdEntity;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
@@ -28,6 +29,8 @@ import java.util.List;
 public class WarehouseInrecordServiceImpl extends CURDServiceBase<WarehouseInrecord> implements WarehouseInrecordService {
     @Autowired
     private WarehouseInrecordDao warehouseInrecordDao;
+    @Autowired
+    private WarehouseInrecordDetailDao warehouseInrecordDetailDao;
     @Autowired
     private DictTypeDetailDao dictTypeDetailDao;
     @Autowired
@@ -59,6 +62,7 @@ public class WarehouseInrecordServiceImpl extends CURDServiceBase<WarehouseInrec
 
             User user = (User) this.getCurrentUser();
             warehouseInrecord.setCheckMan(user.getName());
+            warehouseInrecord.setRemark(StringUtils.join(warehouseInrecordDetailDao.findTitleByRecoreCode(warehouseInrecord.getInWarehouseCode()),","));
 
             createOrUpdte(warehouseInrecord);
         }

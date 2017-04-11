@@ -2,6 +2,7 @@ package com.fionapet.business.repository;
 
 import com.fionapet.business.entity.WarehouseInrecordDetail;
 import org.dubbo.x.repository.DaoBase;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -11,4 +12,7 @@ import java.util.List;
  **/
 public interface WarehouseInrecordDetailDao extends DaoBase<WarehouseInrecordDetail> {
     List<WarehouseInrecordDetail> findByInWarehouseCode(String inWarehouseCode);
+
+    @Query("select itemName from WarehouseInrecordDetail where inWarehouseCode=?1")
+    String[] findTitleByRecoreCode(String id);
 }

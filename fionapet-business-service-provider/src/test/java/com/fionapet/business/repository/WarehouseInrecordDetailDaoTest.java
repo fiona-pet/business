@@ -1,6 +1,7 @@
 package com.fionapet.business.repository;
 
 import com.fionapet.business.entity.WarehouseInrecordDetail;
+import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,5 +27,16 @@ public class WarehouseInrecordDetailDaoTest extends SpringTransactionalTestCase 
         Assert.assertNotNull(warehouseInrecordDetails);
 
         Assert.assertEquals(warehouseInrecordDetails.size(), 0);
+    }
+
+    @Test
+    public void findTitleByRecoreCode(){
+        String[] titles = warehouseInrecordDetailDao.findTitleByRecoreCode("RK00017");
+
+        Assert.assertNotNull(titles);
+
+        Assert.assertEquals(titles.length, 4);
+
+        System.out.println(StringUtils.join(titles,","));
     }
 }
