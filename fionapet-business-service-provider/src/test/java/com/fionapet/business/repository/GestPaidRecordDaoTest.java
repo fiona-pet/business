@@ -2,12 +2,15 @@ package com.fionapet.business.repository;
 
 import com.fionapet.business.entity.GestPaidRecord;
 import com.fionapet.business.entity.BillVO;
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,5 +32,17 @@ public class GestPaidRecordDaoTest extends SpringTransactionalTestCase {
         Assert.assertEquals(gestPaidRecords.size(), 0);
     }
 
+    @Test
+    public void getReportForOperateAction() throws ParseException {
+        Date start = DateUtils.parseDate("2017-04-01", "yyyy-MM-dd");
+        Date end = DateUtils.parseDate("2017-04-01", "yyyy-MM-dd");
 
+        System.out.println(start.toLocaleString());
+        List<String[]> gestPaidRecords = gestPaidRecordDao.getReportForOperateAction(start, end);
+        System.out.println(gestPaidRecords);
+//
+//        Assert.assertNotNull(gestPaidRecords);
+//
+//        Assert.assertEquals(gestPaidRecords.size(), 4);
+    }
 }

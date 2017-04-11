@@ -40,6 +40,15 @@ public interface ReportRestService extends CURDRestService<ReportByPersonVO>{
      * @return
      */
     @GET
+    @Path("/gest/paid/action")
+    @ApiOperation(value = "统计报表",
+            notes = "统计报表列表.")
+    RestResult<List<String[]>> gestPaidAction(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") @QueryParam("month") String month, @ApiParam("day") @QueryParam("day") String day);
+    /**
+     * 统计报表
+     * @return
+     */
+    @GET
     @Path("/item")
     @ApiOperation(value = "统计报表",
             notes = "统计报表列表.")

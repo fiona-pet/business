@@ -2,13 +2,21 @@ package com.fionapet.business.service;
 
 import com.fionapet.business.entity.ReportByItemVO;
 import com.fionapet.business.entity.ReportByPersonVO;
+import com.fionapet.business.repository.GestPaidRecordDao;
 import com.fionapet.business.repository.ReportByItemDao;
 import com.fionapet.business.repository.ReportDao;
+import org.apache.catalina.startup.Catalina;
 import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,10 +24,15 @@ import java.util.List;
 * Created by tom on 2016-07-18 11:56:10.
  */
 public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> implements ReportService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReportServiceImpl.class);
+
     @Autowired
     private ReportDao reportDao;
     @Autowired
     private ReportByItemDao reportByItemDao;
+    @Autowired
+    private GestPaidRecordDao gestPaidRecordDao;
     @Override
     public DaoBase<ReportByPersonVO> getDao() {
         return reportDao;
@@ -27,33 +40,49 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
 
     @Override
     public List<ReportByPersonVO> person(String month, String day) {
-        if (month.length() == 1){
-            month = "0" + month;
-        }
-        String date = DateFormatUtils.format(System.currentTimeMillis(), "yyyy-") + month;
-        if ("-".equals(day)){
-            return reportDao.findCreateDateBetween(date + "-01", date + "-31");
-        }else{
-            if (day.length() == 1){
-                day = "0" + day;
-            }
-            return reportDao.findCreateDateBetween(date + "-" + day, date + "-" + day);
-        }
+        return reportDao.findCreateDateBetween(getDate(month, day, "01"),getDate(month, day, "31"));
     }
 
     @Override
     public List<ReportByItemVO> item(String month, String day) {
+        return reportByItemDao.findCreateDateBetween(getDate(month, day, "01"),getDate(month, day, "31"));
+    }
+
+    private String getDate(String month, String day, String defaultDay){
         if (month.length() == 1){
             month = "0" + month;
         }
+
         String date = DateFormatUtils.format(System.currentTimeMillis(), "yyyy-") + month;
+
         if ("-".equals(day)){
-            return reportByItemDao.findCreateDateBetween(date + "-01", date + "-31");
+            day = defaultDay;
         }else{
             if (day.length() == 1){
                 day = "0" + day;
             }
-            return reportByItemDao.findCreateDateBetween(date + "-" + day, date + "-" + day);
         }
+
+        return date + "-" + day;
+    }
+
+    @Override
+    public List<String[]> gestPaidAction(String month, String day) {
+        Date start = new Date();
+        Date end = new Date();
+        Calendar cale = Calendar.getInstance();
+
+        try {
+            cale.set(Calendar.MONTH, Integer.parseInt(month)-1);
+            cale.add(Calendar.MONTH,1);
+            cale.set(Calendar.DAY_OF_MONTH, 0);
+
+            start = DateUtils.parseDate(getDate(month, day, "01") + " 00:00:00", "yyyy-MM-dd hh:mm:ss");
+            end = DateUtils.parseDate(getDate(month, day, cale.get(Calendar.DATE)+"") + " 23:59:59", "yyyy-MM-dd hh:mm:ss");
+        } catch (ParseException e) {
+            e.printStackTrace();
+            LOGGER.warn("Data Format ERROR!");
+        }
+        return gestPaidRecordDao.getReportForOperateAction(start, end);
     }
 }

@@ -15,4 +15,6 @@ public interface ReportService extends CURDService<ReportByPersonVO> {
     List<ReportByPersonVO> person(String month, String day);
 
     List<ReportByItemVO> item(String month, String day);
+
+    List<String[]> gestPaidAction(String month, String day);
 }
