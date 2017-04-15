@@ -13,9 +13,11 @@ import com.fionapet.business.repository.*;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.lang3.StringUtils;
 import org.dubbo.x.entity.IdEntity;
+import org.dubbo.x.entity.PageSearch;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 
 import javax.transaction.Transactional;
 import java.lang.reflect.InvocationTargetException;

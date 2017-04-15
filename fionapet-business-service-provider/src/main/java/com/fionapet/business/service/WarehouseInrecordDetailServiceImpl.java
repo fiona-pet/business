@@ -27,8 +27,18 @@ public class WarehouseInrecordDetailServiceImpl extends CURDServiceBase<Warehous
     }
 
     @Override
-    public WarehouseInrecordDetail createOrUpdte(WarehouseInrecordDetail entity) {
-        //重新计算入库记录统计
+    @Transactional
+    public synchronized WarehouseInrecordDetail createOrUpdte(WarehouseInrecordDetail entity) {
+        //更新入库信息
+        WarehouseInrecord warehouseInrecord = warehouseInrecordDao.findByInWarehouseCode(entity.getInWarehouseCode());
+        if (null != warehouseInrecord){
+            if (warehouseInrecord.getRemark() == null){
+                warehouseInrecord.setRemark(entity.getItemName());
+            }else if (warehouseInrecord.getRemark().indexOf(entity.getItemName()) == -1){
+                warehouseInrecord.setRemark(warehouseInrecord.getRemark() + "," + entity.getItemName());
+            }
+            warehouseInrecordDao.save(warehouseInrecord);
+        }
 
         return super.createOrUpdte(entity);
     }
