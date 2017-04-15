@@ -54,5 +54,10 @@ public class ReportRestServiceImpl extends RestServiceBase<ReportByPersonVO> imp
         return RestResult.OK(reportService.item(month,day));
     }
 
+    @Override
+    public RestResult<List<String[]>> medicRegisterRecord(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") String month, @ApiParam("day") String day) {
+        return RestResult.OK(reportService.medicRegisterRecord(month,day));
+    }
+
 
 }

@@ -2,9 +2,7 @@ package com.fionapet.business.service;
 
 import com.fionapet.business.entity.ReportByItemVO;
 import com.fionapet.business.entity.ReportByPersonVO;
-import com.fionapet.business.repository.GestPaidRecordDao;
-import com.fionapet.business.repository.ReportByItemDao;
-import com.fionapet.business.repository.ReportDao;
+import com.fionapet.business.repository.*;
 import org.apache.catalina.startup.Catalina;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -33,6 +31,8 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
     private ReportByItemDao reportByItemDao;
     @Autowired
     private GestPaidRecordDao gestPaidRecordDao;
+    @Autowired
+    private MedicRegisterRecordDao medicRegisterRecordDao;
     @Override
     public DaoBase<ReportByPersonVO> getDao() {
         return reportDao;
@@ -70,19 +70,47 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
     public List<String[]> gestPaidAction(String month, String day) {
         Date start = new Date();
         Date end = new Date();
-        Calendar cale = Calendar.getInstance();
+
 
         try {
-            cale.set(Calendar.MONTH, Integer.parseInt(month)-1);
-            cale.add(Calendar.MONTH,1);
-            cale.set(Calendar.DAY_OF_MONTH, 0);
-
             start = DateUtils.parseDate(getDate(month, day, "01") + " 00:00:00", "yyyy-MM-dd hh:mm:ss");
-            end = DateUtils.parseDate(getDate(month, day, cale.get(Calendar.DATE)+"") + " 23:59:59", "yyyy-MM-dd hh:mm:ss");
+            end = getEndDate(month, day);
         } catch (ParseException e) {
-            e.printStackTrace();
-            LOGGER.warn("Data Format ERROR!");
+            LOGGER.warn("Data Format ERROR!",e);
+
         }
         return gestPaidRecordDao.getReportForOperateAction(start, end);
+    }
+
+    private Date getEndDate(String month, String day){
+        Date end = new Date();
+        Calendar cale = Calendar.getInstance();
+
+        cale.set(Calendar.MONTH, Integer.parseInt(month)-1);
+        cale.add(Calendar.MONTH,1);
+        cale.set(Calendar.DAY_OF_MONTH, 0);
+
+        try {
+            end = DateUtils.parseDate(getDate(month, day, cale.get(Calendar.DATE)+"") + " 23:59:59", "yyyy-MM-dd hh:mm:ss");
+        } catch (ParseException e) {
+            LOGGER.warn("Data Format ERROR!",e);
+        }
+
+        return end;
+    }
+
+    @Override
+    public List<String[]> medicRegisterRecord(String month, String day) {
+        Date start = new Date();
+        Date end = new Date();
+
+        try {
+            start = DateUtils.parseDate(getDate(month, day, "01") + " 00:00:00", "yyyy-MM-dd hh:mm:ss");
+            end = getEndDate(month, day);
+        } catch (ParseException e) {
+            LOGGER.warn("Data Format ERROR!",e);
+
+        }
+        return medicRegisterRecordDao.getByPaidStatusAndCreateDateBetweenGroupByDoctor("SM00051", start, end);
     }
 }
