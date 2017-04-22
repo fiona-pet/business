@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import java.util.Date;
@@ -34,7 +35,21 @@ public class FinanceSettleAccounts extends CMSEntity {
     public void setSettleCode(String settleCode) {
         this.settleCode = settleCode;
     }
-    
+
+    /**
+     * 支付类型
+     */
+
+    private String paidType;
+
+    @Transient
+    public String getPaidType() {
+        return paidType;
+    }
+    public void setPaidType(String paidType) {
+        this.paidType = paidType;
+    }
+
     /**
      * 顾客ID
      */

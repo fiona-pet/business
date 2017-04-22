@@ -15,4 +15,6 @@ import java.util.List;
 public interface GestPaidRecordDao extends DaoBase<GestPaidRecord> {
     @Query(value = "select sum(fsa.should_paid_money), operate_action from t_gest_paid_record gpr join t_finance_settle_accounts fsa on gpr.settle_accounts_id=fsa.id where gpr.create_date >=?1 and gpr.create_date < ?2 group by operate_action ",nativeQuery = true)
     List<String[]> getReportForOperateAction(Date start, Date end);
+
+    GestPaidRecord findBySettleAccountsId(String id);
 }

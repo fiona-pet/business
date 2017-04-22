@@ -22,4 +22,6 @@ public interface GestPaidRecordService extends CURDService<GestPaidRecord> {
     List<SettleAccountsView> billDetail(String gestId);
 
     FinanceSettleAccounts pay(PayVO pay) throws ApiException;
+
+    GestPaidRecord getPaidType(String id);
 }

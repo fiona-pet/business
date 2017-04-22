@@ -240,4 +240,10 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
 
         return financeSettleAccounts;
     }
+
+    @Override
+    public GestPaidRecord getPaidType(String id) {
+        GestPaidRecord gestPaidRecord = gestPaidRecordDao.findBySettleAccountsId(id);
+        return gestPaidRecord;
+    }
 }
