@@ -3,16 +3,13 @@ package com.fionapet.business.service;
 import com.fionapet.business.entity.*;
 import com.fionapet.business.entity.status.WarehouseStatus;
 import com.fionapet.business.exception.ApiException;
-import com.fionapet.business.repository.ItemTypeDao;
-import com.fionapet.business.repository.WarehouseInrecordDao;
-import com.fionapet.business.repository.WarehouseInrecordDetailDao;
+import com.fionapet.business.repository.*;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.locale.converters.DateLocaleConverter;
 import org.apache.commons.lang3.StringUtils;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
-import com.fionapet.business.repository.ItemCountDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +32,8 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
     private WarehouseInrecordDetailDao warehouseInrecordDetailDao;
     @Autowired
     private WarehouseInrecordDao warehouseInrecordDao;
+    @Autowired
+    private ItemCountChangeReasonDao itemCountChangeReasonDao;
 
     @Override
     public DaoBase<ItemCount> getDao() {
@@ -48,6 +47,18 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
         List<WarehouseInrecordDetail> warehouseInrecordDetails = warehouseInrecordDetailDao.findByInWarehouseCode(warehouseInrecord.getInWarehouseCode());
 
         for (WarehouseInrecordDetail warehouseInrecordDetail: warehouseInrecordDetails){
+            ItemCountChangeReason itemCountChangeReason = new ItemCountChangeReason();
+
+            itemCountChangeReason.setChangeReason("入库");
+
+            itemCountChangeReason.setItemCode(warehouseInrecordDetail.getItemCode());
+            itemCountChangeReason.setItemName(warehouseInrecordDetail.getItemName());
+            itemCountChangeReason.setSourceCount(warehouseInrecordDetail.getInputCount());
+            itemCountChangeReason.setSourceScatteredCount(0);
+            itemCountChangeReason.setSourceBatchNumber(warehouseInrecordDetail.getBatchNumber());
+            itemCountChangeReason.setSourceOutDateTime(warehouseInrecordDetail.getUpdateDate());
+
+
             ItemCount itemCount = itemCountDao.findByItemCode(warehouseInrecordDetail.getItemCode());
 
             if (null == itemCount){
@@ -65,6 +76,14 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
                     e.printStackTrace();
                 }
             }else{
+                itemCountChangeReason.setSourceOutDateTime(itemCount.getUpdateDate());
+                itemCountChangeReason.setSourceCount(itemCount.getItemCountNum());
+
+                //更新零散比和
+                itemCount.setItemBulk(warehouseInrecordDetail.getItemBulk());
+                itemCount.setItemName(warehouseInrecordDetail.getItemName());
+
+
                 //商品进价是否有变化
                 if (Double.compare(itemCount.getInputPrice(), warehouseInrecordDetail.getInputPrice()) != 0){
                     //新单价=((原进价*库存+原进价/零散比*散装数量)+新进价*数量)/((原库存+新进数量)*零散比+散装数量)*零散比
@@ -80,11 +99,29 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
                     itemCount.setInputPrice(newInputPrice);
                 }
 
+
+                itemCount.setSellPrice(warehouseInrecordDetail.getSellPrice());
+                itemCount.setPackageUnit(warehouseInrecordDetail.getPackageUnit());
+                itemCount.setInputPrice(warehouseInrecordDetail.getInputPrice());
             }
 
             itemCount.setItemCountNum(itemCount.getItemCountNum() + warehouseInrecordDetail.getInputCount());
 
             createOrUpdte(itemCount);
+
+            itemCountChangeReason.setWarehouseCode(itemCount.getWarehouseId());
+            itemCountChangeReason.setWarehouseName(itemCount.getWarehouseName());
+
+            itemCountChangeReason.setItemCountId(itemCount.getId());
+            itemCountChangeReason.setNewCount(itemCount.getItemCountNum());
+            itemCountChangeReason.setNewScatteredCount(itemCount.getScatteredCountNum());
+            itemCountChangeReason.setNewBatchNumber(itemCount.getBatchNumber());
+            itemCountChangeReason.setNewOutDateTime(new Date());
+
+            itemCountChangeReason.setCreateUserId(itemCount.getUpdateUserId());
+            itemCountChangeReason.setUpdateUserId(itemCount.getUpdateUserId());
+
+            itemCountChangeReasonDao.save(itemCountChangeReason);
         }
 
     }
@@ -106,14 +143,34 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
                 itemCount.setItemBulk(1);
             }
 
-            //库存不足
-            if (medicPrescriptionDetail.getItemNum() != null && itemCount.getScatteredCountNum() < medicPrescriptionDetail.getItemNum()) {
-                int count = (medicPrescriptionDetail.getItemNum()-(int)itemCount.getScatteredCountNum()) / itemCount.getItemBulk() + 1;
-                itemCount.setItemCountNum(itemCount.getItemCountNum() - count);
+            ItemCountChangeReason itemCountChangeReason = new ItemCountChangeReason();
 
-                itemCount.setScatteredCountNum(count * itemCount.getItemBulk() + itemCount.getScatteredCountNum() - medicPrescriptionDetail.getItemNum());
-            } else {
-                itemCount.setScatteredCountNum(itemCount.getScatteredCountNum() - medicPrescriptionDetail.getItemNum());
+            itemCountChangeReason.setChangeReason("出库");
+
+            itemCountChangeReason.setItemCode(itemCount.getItemCode());
+            itemCountChangeReason.setItemName(itemCount.getItemName());
+            itemCountChangeReason.setItemCountId(itemCount.getId());
+            itemCountChangeReason.setWarehouseCode(itemCount.getWarehouseId());
+            itemCountChangeReason.setWarehouseName(itemCount.getWarehouseName());
+            itemCountChangeReason.setSourceCount(itemCount.getItemCountNum());
+            itemCountChangeReason.setSourceScatteredCount(itemCount.getScatteredCountNum());
+            itemCountChangeReason.setSourceBatchNumber(itemCount.getBatchNumber());
+            itemCountChangeReason.setSourceOutDateTime(itemCount.getUpdateDate());
+            itemCountChangeReason.setCreateUserId(medicPrescriptionDetail.getCreateUserId());
+            itemCountChangeReason.setUpdateUserId(medicPrescriptionDetail.getCreateUserId());
+
+            if ("1".equals(itemCount.getItemBulk())){
+                itemCount.setItemCountNum(itemCount.getItemCountNum()-medicPrescriptionDetail.getItemNum());
+            }else {
+                //库存不足
+                if (medicPrescriptionDetail.getItemNum() != null && itemCount.getScatteredCountNum() < medicPrescriptionDetail.getItemNum()) {
+                    int count = (medicPrescriptionDetail.getItemNum() - (int) itemCount.getScatteredCountNum()) / itemCount.getItemBulk() + 1;
+                    itemCount.setItemCountNum(itemCount.getItemCountNum() - count);
+
+                    itemCount.setScatteredCountNum(count * itemCount.getItemBulk() + itemCount.getScatteredCountNum() - medicPrescriptionDetail.getItemNum());
+                } else {
+                    itemCount.setScatteredCountNum(itemCount.getScatteredCountNum() - medicPrescriptionDetail.getItemNum());
+                }
             }
 
             if (itemCount.getItemCountNum() < 0) {
@@ -121,6 +178,13 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
             } else {
                 itemCountStatus = WarehouseStatus.ENOUGH + "";
             }
+
+
+            itemCountChangeReason.setNewCount(itemCount.getItemCountNum());
+            itemCountChangeReason.setNewScatteredCount(itemCount.getScatteredCountNum());
+            itemCountChangeReason.setNewBatchNumber(itemCount.getBatchNumber());
+            itemCountChangeReason.setNewOutDateTime(new Date());
+            itemCountChangeReasonDao.save(itemCountChangeReason);
         }
 
         medicPrescriptionDetail.setItemCountStatus(itemCountStatus);
