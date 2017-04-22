@@ -83,6 +83,7 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
 
     @Override
     @org.springframework.transaction.annotation.Transactional
+    @Transactional
     public FinanceSettleAccounts pay(PayVO pay) throws ApiException{
         FinanceSettleAccounts financeSettleAccounts = new FinanceSettleAccounts();
         try {

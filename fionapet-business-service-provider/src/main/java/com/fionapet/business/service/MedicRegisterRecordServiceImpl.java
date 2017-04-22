@@ -98,10 +98,16 @@ public class MedicRegisterRecordServiceImpl extends CURDServiceBase<MedicRegiste
 //    }
 
     @Override
+    @Transactional
     public MedicRegisterRecord createOrUpdte(MedicRegisterRecord entity) {
         if (entity.getId() == null){
             DictTypeDetail dictTypeDetail = dictTypeDetailDao.findByDictDetailCode("SM00034");
             entity.setStatus(dictTypeDetail);
+        }else{
+            MedicRegisterRecord medicRegisterRecordOld = super.detail(entity.getId());
+            if (null != medicRegisterRecordOld && "SM00051".equalsIgnoreCase(medicRegisterRecordOld.getPaidStatus())) {
+                entity.setPaidStatus("SM00051");
+            }
         }
 
         return super.createOrUpdte(entity);
