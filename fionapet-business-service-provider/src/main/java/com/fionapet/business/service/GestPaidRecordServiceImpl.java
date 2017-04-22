@@ -57,6 +57,11 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
     @Autowired
     private InHospitalRecordService inHospitalRecordService;
 
+    @Autowired
+    private ServiceService serviceService;
+    @Autowired
+    private ServiceDetailService serviceDetailService;
+
 
     @Autowired
     private ItemCountService itemCountService;
@@ -202,6 +207,22 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
 
                     medicPrescriptionDetailService.createOrUpdte(medicPrescriptionDetail);
 
+                }
+
+                if ("美容服务".equals(settleAccountsView.getBusinessType())) {
+                    ServiceDetail serviceDetail = serviceDetailService.detail(settleAccountsView.getRelationDetailId());
+                    serviceDetail.setPaidStatus(dictTypeDetail.getDictDetailCode());
+                    serviceDetail.setPaidTime(new Date());
+
+                    serviceDetailService.createOrUpdte(serviceDetail);
+
+                    Service service = serviceService.detail(settleAccountsView.getRelationId());
+                    if (null != service){
+                        service.setPaidStatus(dictTypeDetail.getDictDetailCode());
+                        service.setPaidTime(new Date());
+
+                        serviceService.createOrUpdte(service);
+                    }
                 }
 
                 //减少 存款

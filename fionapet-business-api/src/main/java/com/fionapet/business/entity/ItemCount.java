@@ -16,7 +16,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "t_item_count")
-@ApiModel("种类数量更改原因表")
+@ApiModel("种类数量")
 public class ItemCount extends CMSEntity {
     
     /**
