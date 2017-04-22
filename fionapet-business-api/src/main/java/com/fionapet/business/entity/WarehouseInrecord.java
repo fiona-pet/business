@@ -243,6 +243,16 @@ public class WarehouseInrecord extends CMSEntity {
     public void setRemark(String remark) {
         this.remark = remark;
     }
-    
+
+    /**
+     * 支付状态
+     */
+    private String paidStatus;
+    public String getPaidStatus() {
+        return paidStatus;
+    }
+    public void setPaidStatus(String paidStatus) {
+        this.paidStatus = paidStatus;
+    }
 }
 
