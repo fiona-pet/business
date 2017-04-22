@@ -104,6 +104,12 @@ SELECT  uuid() id,sum(sdsd.sell_price*sdsd.item_num) total, p.person_name name, 
 FROM t_store_direct_sell_detail sdsd
   JOIN t_persons p ON sdsd.create_user_id = p.id
 GROUP BY sdsd.create_user_id,create_date,type
+UNION ALL
+SELECT  uuid() id,sum(sd.sell_price*sd.input_count) total, p.person_name name, "美容服务" type, substr(sd.create_date, 1,10) create_date
+FROM t_service_detail sd
+  JOIN t_service s ON s.id=sd.service_id
+  JOIN t_persons p ON s.hairdresser_id = p.id
+GROUP BY s.hairdresser_id,create_date
 
 -- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --
 -- --- Table structure for v_report_by_item  商品统计报表
