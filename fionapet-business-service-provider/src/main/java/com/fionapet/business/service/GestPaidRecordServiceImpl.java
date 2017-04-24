@@ -61,10 +61,14 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
     private ServiceService serviceService;
     @Autowired
     private ServiceDetailService serviceDetailService;
+    @Autowired
+    private InputMoneyRecordService inputMoneyRecordService;
 
 
     @Autowired
     private ItemCountService itemCountService;
+    @Autowired
+    private ItemTypeDao itemTypeDao;
 
     @Override
     public DaoBase<GestPaidRecord> getDao() {
@@ -153,6 +157,10 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
                     gest.setPrepayMoney(gest.getPrepayMoney() - financeSettleAccounts.getShouldPaidMoney());
                     gestDao.save(gest);
                     financeSettleAccounts.setChangeMoney(gest.getPrepayMoney());
+
+                    inputMoneyRecordService.setCurrentUser(getCurrentUser());
+                    inputMoneyRecordService.setToken(getToken());
+                    inputMoneyRecordService.newRecord(gest, -financeSettleAccounts.getShouldPaidMoney());
                 } else {
                     throw new ApiException(101, "余额不足");
                 }
@@ -169,11 +177,12 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
 
             for (SettleAccountsView settleAccountsView : payList) {
                 FinanceSettleAccountsDetail financeSettleAccountsDetail = new FinanceSettleAccountsDetail();
+                ItemType itemType = itemTypeDao.findByItemCode(settleAccountsView.getItemCode());
 
                 financeSettleAccountsDetail.setStatus(CMSEntity.DEFAULT());
                 financeSettleAccountsDetail.setSettleAccountsDetailId(financeSettleAccountsId);
                 try {
-                    financeSettleAccountsDetail.setBusiTypeId(Integer.parseInt(settleAccountsView.getBusiTypeId()));
+                    financeSettleAccountsDetail.setBusiTypeId(settleAccountsView.getBusiTypeId());
                 } catch (Exception e) {
 
                 }
@@ -185,6 +194,17 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
                 financeSettleAccountsDetail.setTotalNum(Double.parseDouble(settleAccountsView.getItemNum()));
                 financeSettleAccountsDetail.setRelationDetailId(settleAccountsView.getRelationDetailId());
                 financeSettleAccountsDetail.setRelationId(settleAccountsView.getRelationId());
+                if (null != itemType) {
+                    financeSettleAccountsDetail.setSellPrice(itemType.getRecipePrice());
+                    financeSettleAccountsDetail.setBusiTypeId(itemType.getBusiTypeId());
+                    financeSettleAccountsDetail.setInfactPrice(itemType.getRecipePrice()*dis);
+                    financeSettleAccountsDetail.setDiscountMoney(financeSettleAccountsDetail.getSellPrice()-financeSettleAccountsDetail.getInfactPrice());
+
+                    financeSettleAccountsDetail.setSumOriginalMoney(financeSettleAccountsDetail.getSellPrice()*financeSettleAccountsDetail.getTotalNum());
+                    financeSettleAccountsDetail.setTotalCost(financeSettleAccountsDetail.getInfactPrice() * financeSettleAccountsDetail.getTotalNum());
+
+                    financeSettleAccountsDetail.setSumDiscountMoney(financeSettleAccountsDetail.getSumOriginalMoney() - financeSettleAccountsDetail.getTotalCost());
+                }
 
 
                 financeSettleAccountsDetailService.createOrUpdte(financeSettleAccountsDetail);

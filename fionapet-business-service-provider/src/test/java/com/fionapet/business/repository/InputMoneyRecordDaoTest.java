@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,5 +27,11 @@ public class InputMoneyRecordDaoTest extends SpringTransactionalTestCase {
         Assert.assertNotNull(inputMoneyRecords);
 
         Assert.assertEquals(inputMoneyRecords.size(), 0);
+    }
+
+    @Test
+    public void countInputMoneyByCreateAndIsInput(){
+        Long total = inputMoneyRecordDao.countInputMoneyByCreateAndIsInput(new Date(), new Date(), 0);
+        Assert.assertNotNull(total);
     }
 }

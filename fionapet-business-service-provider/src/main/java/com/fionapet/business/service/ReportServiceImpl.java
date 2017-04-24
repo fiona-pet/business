@@ -1,10 +1,13 @@
 package com.fionapet.business.service;
 
+import com.fionapet.business.entity.InputMoneyRecord;
 import com.fionapet.business.entity.ReportByItemVO;
 import com.fionapet.business.entity.ReportByPersonVO;
 import com.fionapet.business.repository.*;
 import org.apache.catalina.startup.Catalina;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
@@ -13,9 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  *  报表统计
@@ -33,6 +34,11 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
     private GestPaidRecordDao gestPaidRecordDao;
     @Autowired
     private MedicRegisterRecordDao medicRegisterRecordDao;
+    @Autowired
+    private GestDao gestDao;
+    @Autowired
+    private InputMoneyRecordDao inputMoneyRecordDao;
+
     @Override
     public DaoBase<ReportByPersonVO> getDao() {
         return reportDao;
@@ -113,4 +119,38 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
         }
         return medicRegisterRecordDao.getByPaidStatusAndCreateDateBetweenGroupByDoctor("SM00051", start, end);
     }
+
+    @Override
+    public Map<String, Long> gestVip(String month, String day) {
+        Date start = new Date();
+        Date end = new Date();
+
+        try {
+            start = DateUtils.parseDate(getDate(month, day, "01") + " 00:00:00", "yyyy-MM-dd hh:mm:ss");
+            end = getEndDate(month, day);
+        } catch (ParseException e) {
+            LOGGER.warn("Data Format ERROR!",e);
+
+        }
+
+        Long gestCount = gestDao.count();
+        Long vipCount = gestDao.countByLevel(new String[]{"美容会员","医疗会员","美容和医疗会员"});
+
+        Long vipMoneyTotal = gestDao.countVipMoneyByLevel(new String[]{"美容会员","医疗会员","美容和医疗会员"});
+
+        Long inputMoneyTotal = ObjectUtils.defaultIfNull(inputMoneyRecordDao.countInputMoneyByCreateAndIsInput(start,end,1), 0l);
+        Long outputMoneyTotal = ObjectUtils.defaultIfNull(inputMoneyRecordDao.countInputMoneyByCreateAndIsInput(start,end,0), 0l);
+
+
+        Map<String, Long> result = new HashMap<String, Long>();
+        result.put("gestCount", gestCount);
+        result.put("vipCount", vipCount);
+        result.put("vipMoneyTotal", vipMoneyTotal);
+        result.put("inputMoneyTotal", inputMoneyTotal);
+        result.put("outputMoneyTotal", outputMoneyTotal);
+
+        return result;
+    }
+
+
 }

@@ -181,11 +181,11 @@ public class FinanceSettleAccountsDetail extends CMSEntity {
     @ApiModelProperty(value = "业务类型ID", required = false)
     
     @Column(columnDefinition = "业务类型ID")
-    private Integer busiTypeId;
-    public Integer getBusiTypeId() {
+    private String busiTypeId;
+    public String getBusiTypeId() {
         return busiTypeId;
     }
-    public void setBusiTypeId(Integer busiTypeId) {
+    public void setBusiTypeId(String busiTypeId) {
         this.busiTypeId = busiTypeId;
     }
     

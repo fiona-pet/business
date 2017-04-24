@@ -1,5 +1,6 @@
 package com.fionapet.business.service;
 
+import com.fionapet.business.entity.Gest;
 import com.fionapet.business.entity.InputMoneyRecord;
 import org.dubbo.x.service.CURDService;
 /**
@@ -8,4 +9,5 @@ import org.dubbo.x.service.CURDService;
  */
 public interface InputMoneyRecordService extends CURDService<InputMoneyRecord> {
 
+    void newRecord(Gest gest, Double money);
 }

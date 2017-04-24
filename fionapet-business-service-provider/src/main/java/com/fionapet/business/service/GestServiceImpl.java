@@ -1,12 +1,17 @@
 package com.fionapet.business.service;
 
 import com.fionapet.business.entity.Gest;
+import com.fionapet.business.entity.InputMoneyRecord;
 import com.fionapet.business.facade.vo.RechargeVO;
+import com.fionapet.business.repository.InputMoneyRecordDao;
 import org.dubbo.x.exception.ApiException;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
 import com.fionapet.business.repository.GestDao;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.transaction.Transactional;
+import java.util.Date;
 
 /**
  *  会员
@@ -15,6 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class GestServiceImpl extends CURDServiceBase<Gest> implements GestService {
     @Autowired
     private GestDao gestDao;
+    @Autowired
+    private InputMoneyRecordDao inputMoneyRecordDao;
+    @Autowired
+    private InputMoneyRecordService inputMoneyRecordService;
 
     @Override
     public DaoBase<Gest> getDao() {
@@ -23,6 +32,7 @@ public class GestServiceImpl extends CURDServiceBase<Gest> implements GestServic
 
 
     @Override
+    @Transactional
     public RechargeVO recharge(String id, Double money) throws ApiException{
         Gest gest = gestDao.findOne(id);
 
@@ -39,6 +49,11 @@ public class GestServiceImpl extends CURDServiceBase<Gest> implements GestServic
         gest.setPrepayMoney(rechargeVO.getMoney());
 
         gestDao.save(gest);
+
+        inputMoneyRecordService.setCurrentUser(getCurrentUser());
+        inputMoneyRecordService.setToken(getToken());
+
+        inputMoneyRecordService.newRecord(gest, money);
 
         return rechargeVO;
     }

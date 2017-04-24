@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.QueryParam;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 报表统计
@@ -59,5 +60,8 @@ public class ReportRestServiceImpl extends RestServiceBase<ReportByPersonVO> imp
         return RestResult.OK(reportService.medicRegisterRecord(month,day));
     }
 
-
+    @Override
+    public RestResult<Map<String, Long>> gestVip(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") String month, @ApiParam("day") String day) {
+        return RestResult.OK(reportService.gestVip(month,day));
+    }
 }

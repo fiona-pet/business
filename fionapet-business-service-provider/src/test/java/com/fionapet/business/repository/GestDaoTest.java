@@ -49,4 +49,12 @@ public class GestDaoTest extends SpringTransactionalTestCase {
 
         LOGGER.info("find :{}", data);
     }
+
+    @Test
+    public void countByLevel(){
+        Long vipCount = gestDao.countByLevel(new String[]{"美容会员","医疗会员","美容和医疗会员"});
+
+        Assert.assertNotNull(vipCount);
+        Assert.assertTrue(vipCount>0);
+    }
 }

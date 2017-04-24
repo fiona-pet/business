@@ -5,6 +5,7 @@ import com.fionapet.business.entity.ReportByPersonVO;
 import org.dubbo.x.service.CURDService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 报表统计
@@ -19,4 +20,6 @@ public interface ReportService extends CURDService<ReportByPersonVO> {
     List<String[]> gestPaidAction(String month, String day);
 
     List<String[]> medicRegisterRecord(String month, String day);
+
+    Map<String, Long> gestVip(String month, String day);
 }

@@ -13,6 +13,7 @@ import org.dubbo.x.util.ConstantVariable;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 统计报表 接口
@@ -63,6 +64,16 @@ public interface ReportRestService extends CURDRestService<ReportByPersonVO>{
     @ApiOperation(value = "统计报表-挂号",
             notes = "统计报表列表-挂号.")
     RestResult<List<String[]>> medicRegisterRecord(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") @QueryParam("month") String month, @ApiParam("day") @QueryParam("day") String day);
+
+    /**
+     * 统计报表-会员信息
+     * @return
+     */
+    @GET
+    @Path("/gest/vip")
+    @ApiOperation(value = "统计报表-会员信息",
+            notes = "统计报表列表-会员信息.")
+    RestResult<Map<String, Long>> gestVip(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") @QueryParam("month") String month, @ApiParam("day") @QueryParam("day") String day);
 
 
     /**
