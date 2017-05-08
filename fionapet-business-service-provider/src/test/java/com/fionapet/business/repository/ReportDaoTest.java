@@ -46,12 +46,22 @@ public class ReportDaoTest extends SpringTransactionalTestCase {
     }
 
     @Test
+    public void findByNameAndCreateDateLike(){
+        List<ReportByPersonVO> reportByPersonVOs = reportDao.findByNameAndCreateDateLike("席雨明", "2017-04%");
+        Assert.assertNotNull(reportByPersonVOs);
+
+        Assert.assertEquals(reportByPersonVOs.size(), 22);
+    }
+
+    @Test
     public void findByCreateDateBetweenOrderByTotalDesc(){
         List<ReportByItemVO> reportByItemVOs = reportByItemDao.findByCreateDateOrderByTotalDesc("2017-03");
         Assert.assertNotNull(reportByItemVOs);
 
         Assert.assertEquals(reportByItemVOs.size(), 6);
     }
+
+
 
 
 //    @Test

@@ -152,5 +152,50 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
         return result;
     }
 
+    @Override
+    public Map<String, List> doctor(String month, String user) {
+        int lastDay = getLastDayOfMonth(month);
+
+        if (month.length() == 1){
+            month = "0" + month;
+        }
+
+        String date = DateFormatUtils.format(System.currentTimeMillis(), "yyyy-") + month;
+        LOGGER.debug("date:{} of lastDay:{}", date, lastDay);
+
+        List<ReportByPersonVO> reportByPersonVOs = reportDao.findByNameAndCreateDateLike(user, date+"%");
+
+        List<Double> totals = new ArrayList<Double>();
+        boolean hasData = false;
+        for (int i = 1; i < lastDay+1;i++){
+            hasData = false;
+            for(ReportByPersonVO reportByPersonVO: reportByPersonVOs){
+                if (reportByPersonVO.getCreateDate().equals(date + "-" + (i<10?"0"+i:i))){
+                    totals.add(reportByPersonVO.getTotal());
+                    hasData = true;
+                }
+            }
+
+            if (!hasData){
+                totals.add(0d);
+            }
+        }
+
+        Map<String, List> result = new HashMap<String, List>();
+
+        result.put(user, totals);
+
+        return result;
+    }
+
+    private int getLastDayOfMonth(String month) {
+        int m = Integer.parseInt(month);
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.MONTH, m-1);
+        // 某年某月的最后一天
+        return cal.getActualMaximum(Calendar.DATE);
+    }
+
 
 }

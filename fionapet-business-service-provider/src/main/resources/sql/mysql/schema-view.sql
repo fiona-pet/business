@@ -100,9 +100,10 @@ FROM t_medic_prescription_detail mpd
   JOIN v_report_by_item_infact_price vrbiip on mpd.id = vrbiip.relation_detail_id
 GROUP BY mpd.create_user_id,substr(mpd.create_date, 1,10)
 UNION ALL
-SELECT  uuid() id,sum(sdsd.sell_price*sdsd.item_num) total, p.person_name name, case when locate("CEX" ,item_code)>0 then "美容销售" when locate("BC" ,item_code)>0 then "商品销售" end type, substr(sdsd.create_date, 1,10) create_date
+SELECT  uuid() id,sum(fsad.total_cost) total, p.person_name name, case when locate("CEX" ,item_code)>0 then "美容销售" when locate("BC" ,item_code)>0 then "商品销售" end type, substr(sdsd.create_date, 1,10) create_date
 FROM t_store_direct_sell_detail sdsd
   JOIN t_persons p ON sdsd.create_user_id = p.id
+  join t_finance_settle_accounts_detail fsad on sdsd.id=fsad.relation_detail_id
 GROUP BY sdsd.create_user_id,create_date,type
 UNION ALL
 SELECT  uuid() id,sum(sd.sell_price*sd.input_count) total, p.person_name name, "美容服务" type, substr(sd.create_date, 1,10) create_date

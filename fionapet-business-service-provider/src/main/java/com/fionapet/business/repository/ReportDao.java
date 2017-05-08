@@ -13,4 +13,6 @@ import java.util.List;
 public interface ReportDao extends DaoBase<ReportByPersonVO> {
     @Query("select new ReportByPersonVO(name,type,sum(total)) from ReportByPersonVO where createDate >= ?1 and createDate <= ?2 group by name, type")
     List<ReportByPersonVO> findCreateDateBetween(String start, String end);
+
+    List<ReportByPersonVO> findByNameAndCreateDateLike(String user, String date);
 }

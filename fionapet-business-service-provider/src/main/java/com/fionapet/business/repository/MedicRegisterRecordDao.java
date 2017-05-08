@@ -25,6 +25,6 @@ public interface MedicRegisterRecordDao extends DaoBase<MedicRegisterRecord> {
     @Query("update MedicRegisterRecord set status ='SM00037' where status <> 'SM00037'")
     void over();
 
-    @Query(value = "select sum(register_price),doctor,count(doctor) from t_medic_register_record where paid_status=?1 and create_date>=?2 and create_date<=?3 GROUP BY doctor",nativeQuery = true)
+    @Query(value = "select sum(case when register_price <> 0 then fsad.total_cost when register_price = 0 then 0 end),doctor,count(doctor) from t_medic_register_record tmrr JOIN t_finance_settle_accounts_detail fsad on fsad.relation_detail_id=tmrr.id where tmrr.paid_status=?1 and tmrr.create_date>=?2 and tmrr.create_date<=?3 GROUP BY doctor",nativeQuery = true)
     List<String[]> getByPaidStatusAndCreateDateBetweenGroupByDoctor(String paidStatus, Date start, Date end);
 }
