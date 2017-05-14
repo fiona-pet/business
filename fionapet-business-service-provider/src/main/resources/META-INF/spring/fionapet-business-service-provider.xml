@@ -535,7 +535,7 @@
     <bean id="gestPaidRecordService" class="com.fionapet.business.service.GestPaidRecordServiceImpl"/>
 
     <dubbo:service interface="com.fionapet.business.service.GestPaidRecordService" ref="gestPaidRecordService"
-                   protocol="dubbo" validation="true" timeout="5000" />
+                   protocol="dubbo" validation="true" timeout="10000" />
     <!-- 顾客影像记录表 api -->
 
 

@@ -7,6 +7,13 @@ delete from t_finance_settle_accounts_detail where settle_accounts_detail_id in 
 delete from t_finance_settle_accounts where settle_code='JS2017042102807';
 
 -- 清除结算数据
+update t_medic_prescription_detail mpd set mpd.paid_status='SM00051', mpd.paid_time=now() where mpd.paid_status is null and prescription_id in (select id from t_medic_prescription where gest_name = 'sunny') and mpd.id in (select relation_detail_id
+                                                                          FROM t_finance_settle_accounts_detail
+                                                                            JOIN t_finance_settle_accounts fsa ON settle_accounts_detail_id=fsa.id
+                                                                          WHERE fsa.settle_code= 'JS2017051403635')
+update t_medic_prescription set paid_status='SM00051' where gest_name = 'sunny';
+
+-- 清除结算数据
 update t_medic_prescription_detail set paid_status='SM00051'  where prescription_id in (select id from t_medic_prescription where gest_name = '刑志红');
 update t_medic_register_record set paid_status='SM00051' where gest_name = '刑志红';
 

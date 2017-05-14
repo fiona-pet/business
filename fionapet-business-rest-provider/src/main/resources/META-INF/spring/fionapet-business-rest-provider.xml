@@ -788,7 +788,7 @@
 
 	<!--顾客影像记录表 api -->
     <dubbo:service interface="com.fionapet.business.facade.GestPaidRecordRestService" ref="gestPaidRecordRestService"
-                   protocol="rest" validation="true" timeout="5000" />
+                   protocol="rest" validation="true" timeout="10000" />
 
     <bean id="gestPaidRecordRestService" class="com.fionapet.business.facade.GestPaidRecordRestServiceImpl">
         <property name="gestPaidRecordService" ref="gestPaidRecordService"/>

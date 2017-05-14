@@ -20,62 +20,193 @@ INNER JOIN t_item_type it on reg.item_code = it.item_code
 -- -- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 drop view if exists v_settle_accounts_view;
 create view v_settle_accounts_view as
-  --   select uuid() id, sds.gest_id, sdsd.item_code, sdsd.item_name, sdsd.sell_price item_cost,
-  --     sdsd.item_num, sdsd.busi_type_id, '直接销售' business_type, sds.id relation_id,
-  --     it.is_vip_discount, sdsd.sell_unit item_unit, sdsd.id relation_detail_id
-  --   from  t_store_direct_sell sds
-  --     INNER JOIN t_store_direct_sell_detail sdsd on sds.id = sdsd.direct_sell_id
-  --     LEFT JOIN t_gest g on sds.gest_id=g.id
-  --     LEFT JOIN t_item_type it on sdsd.item_code = it.item_code
-  --   where sdsd.paid_status <> 'SM00051' or sdsd.paid_status is null
-  --
-  --   UNION ALL
-
-  select uuid() id,gpr.gest_id, gpr.item_code,gpr.item_name,gpr.register_price item_cost,
-         1 item_num, 10 busi_type_id,'挂号费用' business_type, gpr.relation_id, gpr.is_vip_discount, '次' item_unit,
-         gpr.relation_id relation_detail_id
-  from v_gest_pet_register gpr
-    LEFT JOIN t_item_type it on gpr.item_code=it.item_code
-  where gpr.register_paid_status is null or gpr.register_paid_status <> 'SM00051'
-
-  UNION ALL
-
-  select uuid() id,p.gest_id, mpd.item_code,mpd.item_name,mpd.item_cost,mpd.item_num,
-    it.busi_type_id, '处置处方' business_type, mp.id relation_id,
-    it.is_vip_discount, mpd.recipe_unit item_unit,mpd.id relation_detail_id
-  from t_medic_prescription_detail mpd
-    INNER JOIN t_medic_prescription mp on mp.id = mpd.prescription_id
-    INNER JOIN t_medic_medictreat_record mmt on mp.medic_record_code = mmt.medi_treatment_code
-    LEFT JOIN t_pet p on mmt.pet_id = p.id
-    LEFT JOIN t_gest g on p.gest_id = g.id
-    LEFT JOIN t_item_type it on mpd.item_code = it.item_code
-  WHERE mpd.paid_status is null or mpd.paid_status <> 'SM00051'
-
-  UNION ALL
-
-  select uuid() id,p.gest_id, mpd.item_code,mpd.item_name,mpd.item_cost,mpd.item_num,
-    it.busi_type_id, '住院处置处方' business_type, mp.id relation_id,
-    it.is_vip_discount, udd.value_name_cn item_unit,mpd.id relation_detail_id
-  from t_in_hospital_prescription_detail mpd
-    INNER JOIN t_in_hospital_prescription mp on mp.id = mpd.prescription_id
-    INNER JOIN t_in_hospital_record mmt on mp.in_hospital_no = mmt.in_hospital_no
-    LEFT JOIN t_user_dict_detail udd on mpd.recipe_unit = udd.dict_detail_code
-    LEFT JOIN t_pet p on mmt.pet_id = p.id
-    LEFT JOIN t_gest g on p.gest_id = g.id
-    LEFT JOIN t_item_type it on mpd.item_code = it.item_code
-  WHERE mpd.paid_status is null or mpd.paid_status <> 'SM00051'
-
-  UNION ALL
-
-  select uuid() id,p.gest_id, sd.item_code,sd.item_name,sd.total_cost,sd.input_count,
-  it.busi_type_id, '美容服务' business_type, s.id relation_id,
-  it.is_vip_discount, sd.package_unit item_unit,sd.id relation_detail_id
-from t_service_detail sd
-  INNER JOIN t_service s on s.id = sd.service_id
-  LEFT JOIN t_pet p on s.pet_id = p.id
-  LEFT JOIN t_gest g on p.gest_id = g.id
-  LEFT JOIN t_item_type it on sd.item_code = it.item_code
-WHERE sd.paid_status is null or sd.paid_status <> 'SM00051'
+  SELECT
+  uuid() AS `id`,
+  `gpr`.`gest_id` AS `gest_id`,
+  `gpr`.`item_code` AS `item_code`,
+  `gpr`.`item_name` AS `item_name`,
+  `gpr`.`register_price` AS `item_cost`,
+  1 AS `item_num`,
+  10 AS `busi_type_id`,
+  '挂号费用' AS `business_type`,
+  `gpr`.`relation_id` AS `relation_id`,
+  `gpr`.`is_vip_discount` AS `is_vip_discount`,
+  '次' AS `item_unit`,
+  `gpr`.`relation_id` AS `relation_detail_id`,
+  itc.cate_name
+FROM
+  (
+      `v_gest_pet_register` `gpr`
+      LEFT JOIN `t_item_type` `it` ON (
+      (
+        `gpr`.`item_code` = `it`.`item_code`
+      )
+      )
+      left JOIN  t_item_cate itc on it.cate_no=itc.cate_no
+  )
+WHERE
+  (
+    isnull(
+        `gpr`.`register_paid_status`
+    )
+    OR (
+      `gpr`.`register_paid_status` <> 'SM00051'
+    )
+  )
+UNION ALL
+	SELECT
+  uuid() AS `id`,
+  `p`.`gest_id` AS `gest_id`,
+  `mpd`.`item_code` AS `item_code`,
+  `mpd`.`item_name` AS `item_name`,
+  `mpd`.`item_cost` AS `item_cost`,
+  `mpd`.`item_num` AS `item_num`,
+  `it`.`busi_type_id` AS `busi_type_id`,
+  '处置处方' AS `business_type`,
+  `mp`.`id` AS `relation_id`,
+  `it`.`is_vip_discount` AS `is_vip_discount`,
+  `mpd`.`recipe_unit` AS `item_unit`,
+  `mpd`.`id` AS `relation_detail_id`,
+  itc.cate_name
+FROM
+  (
+      (
+          (
+              (
+                  (
+                      `t_medic_prescription_detail` `mpd`
+                      JOIN `t_medic_prescription` `mp` ON (
+                      (
+                        `mp`.`id` = `mpd`.`prescription_id`
+                      )
+                      )
+                    )
+                  JOIN `t_medic_medictreat_record` `mmt` ON (
+                  (
+                    `mp`.`medic_record_code` = `mmt`.`medi_treatment_code`
+                  )
+                  )
+                )
+              JOIN `t_pet` `p` ON ((`mmt`.`pet_id` = `p`.`id`))
+            )
+          JOIN `t_gest` `g` ON ((`p`.`gest_id` = `g`.`id`))
+        )
+      LEFT JOIN `t_item_type` `it` ON (
+      (
+        `mpd`.`item_code` = `it`.`item_code`
+      )
+      )
+    LEFT JOIN t_item_cate itc on it.cate_no=itc.cate_no
+  )
+WHERE
+  (
+    isnull(`mpd`.`paid_status`)
+    OR (
+      `mpd`.`paid_status` <> 'SM00051'
+    )
+  )
+	UNION ALL
+		SELECT
+  uuid() AS `id`,
+  `p`.`gest_id` AS `gest_id`,
+  `mpd`.`item_code` AS `item_code`,
+  `mpd`.`item_name` AS `item_name`,
+  `mpd`.`item_cost` AS `item_cost`,
+  `mpd`.`item_num` AS `item_num`,
+  `it`.`busi_type_id` AS `busi_type_id`,
+  '住院处置处方' AS `business_type`,
+  `mp`.`id` AS `relation_id`,
+  `it`.`is_vip_discount` AS `is_vip_discount`,
+  `udd`.`value_name_cn` AS `item_unit`,
+  `mpd`.`id` AS `relation_detail_id`,
+  itc.cate_name
+FROM
+  (
+      (
+          (
+              (
+                  (
+                      (
+                          `t_in_hospital_prescription_detail` `mpd`
+                          JOIN `t_in_hospital_prescription` `mp` ON (
+                          (
+                            `mp`.`id` = `mpd`.`prescription_id`
+                          )
+                          )
+                        )
+                      JOIN `t_in_hospital_record` `mmt` ON (
+                      (
+                        `mp`.`in_hospital_no` = `mmt`.`in_hospital_no`
+                      )
+                      )
+                    )
+                  LEFT JOIN `t_user_dict_detail` `udd` ON (
+                  (
+                    `mpd`.`recipe_unit` = `udd`.`dict_detail_code`
+                  )
+                  )
+                )
+              JOIN `t_pet` `p` ON ((`mmt`.`pet_id` = `p`.`id`))
+            )
+          JOIN `t_gest` `g` ON ((`p`.`gest_id` = `g`.`id`))
+        )
+      LEFT JOIN `t_item_type` `it` ON (
+      (
+        `mpd`.`item_code` = `it`.`item_code`
+      )
+      )
+      LEFT JOIN t_item_cate itc on it.cate_no=itc.cate_no
+  )
+WHERE
+  (
+    isnull(`mpd`.`paid_status`)
+    OR (
+      `mpd`.`paid_status` <> 'SM00051'
+    )
+  )
+		UNION ALL
+			SELECT
+				uuid() AS `id`,
+				`p`.`gest_id` AS `gest_id`,
+				`sd`.`item_code` AS `item_code`,
+				`sd`.`item_name` AS `item_name`,
+				`sd`.`sell_price` AS `total_cost`,
+				`sd`.`input_count` AS `input_count`,
+				`it`.`busi_type_id` AS `busi_type_id`,
+				'美容服务' AS `business_type`,
+				`s`.`id` AS `relation_id`,
+				`it`.`is_vip_discount` AS `is_vip_discount`,
+				`sd`.`package_unit` AS `item_unit`,
+				`sd`.`id` AS `relation_detail_id`,
+  itc.cate_name
+			FROM
+				(
+					(
+						(
+							(
+								`t_service_detail` `sd`
+								JOIN `t_service` `s` ON (
+									(`s`.`id` = `sd`.`service_id`)
+								)
+							)
+							 JOIN `t_pet` `p` ON ((`s`.`pet_id` = `p`.`id`))
+						)
+						 JOIN `t_gest` `g` ON ((`p`.`gest_id` = `g`.`id`))
+					)
+					LEFT JOIN `t_item_type` `it` ON (
+						(
+							`sd`.`item_code` = `it`.`item_code`
+						)
+					)
+					LEFT JOIN t_item_cate itc on it.cate_no=itc.cate_no
+				)
+			WHERE
+				(
+					isnull(`sd`.`paid_status`)
+					OR (
+						`sd`.`paid_status` <> 'SM00051'
+					)
+				)
 ;
 
 -- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --

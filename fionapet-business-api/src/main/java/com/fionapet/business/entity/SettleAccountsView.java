@@ -57,6 +57,11 @@ public class SettleAccountsView {
      */
     String relationDetailId;
 
+    /**
+     * 所属分类
+     */
+    String cateName;
+
     public String getGestId() {
         return gestId;
     }
@@ -153,5 +158,13 @@ public class SettleAccountsView {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getCateName() {
+        return cateName;
+    }
+
+    public void setCateName(String cateName) {
+        this.cateName = cateName;
     }
 }
