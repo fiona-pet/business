@@ -131,5 +131,12 @@ select (1-fsa.dis_count_money/fsa.total_money)*fsad.total_cost discount_money,fs
 from t_finance_settle_accounts fsa
   JOIN t_finance_settle_accounts_detail fsad on fsa.id=fsad.settle_accounts_detail_id
 
+-- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --
+-- --- Table structure for v_pet  宠物视图
+-- -- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+drop view if EXISTS v_pet;
+create view v_pet as
+  select p.*, g.mobile_phone from t_pet p JOIN t_gest g ON p.gest_id=g.id;
+
 
 

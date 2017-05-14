@@ -1,5 +1,6 @@
 package com.fionapet.business.facade;
 
+import com.fionapet.business.entity.PetView;
 import org.dubbo.x.entity.PageSearch;
 import org.dubbo.x.facade.CURDRestService;
 import org.dubbo.x.facade.RestResult;
@@ -36,11 +37,16 @@ public interface PetRestService extends CURDRestService<Pet>{
             notes = "宠物列表.")
     RestResult<List<Pet>> list(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token);
 
-    @Override
     @POST
     @Path("/page")
     @ApiOperation(value = "分页")
-    RestResult<Page<Pet>> page(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, PageSearch pageSearch);
+    RestResult<Page<PetView>> pageView(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, PageSearch pageSearch);
+
+    @Override
+    @POST
+    @Path("/pageold")
+    @ApiOperation(value = "分页")
+    RestResult<Page<Pet>> page(@HeaderParam("authorization") String token, PageSearch pageSearch);
 
     /**
      * 宠物 详细信息

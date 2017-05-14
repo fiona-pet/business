@@ -355,6 +355,11 @@
 
     <dubbo:service interface="com.fionapet.business.service.PetService" ref="petService"
                    protocol="dubbo" validation="true" timeout="5000" />
+
+    <bean id="petViewService" class="com.fionapet.business.service.PetViewServiceImpl"/>
+
+    <dubbo:service interface="com.fionapet.business.service.PetViewService" ref="petViewService"
+                   protocol="dubbo" validation="true" timeout="5000" />
     <!-- 宠物 api -->
 
 

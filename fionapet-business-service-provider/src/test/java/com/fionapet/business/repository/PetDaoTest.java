@@ -2,6 +2,7 @@ package com.fionapet.business.repository;
 
 import com.alibaba.fastjson.JSON;
 import com.fionapet.business.entity.Pet;
+import com.fionapet.business.entity.PetView;
 import com.fionapet.business.test.DataBuilder;
 import com.fionapet.business.test.PetData;
 import org.junit.Assert;
@@ -28,6 +29,8 @@ public class PetDaoTest extends SpringTransactionalTestCase {
     private static final Logger LOGGER = LoggerFactory.getLogger(PetDaoTest.class);
     @Autowired
     private PetDao petDao;
+    @Autowired
+    private PetViewDao petViewDao;
 
     @Test
     @Rollback(false)
@@ -73,4 +76,15 @@ public class PetDaoTest extends SpringTransactionalTestCase {
 
         System.out.println(JSON.toJSON(page));
     }
+
+
+    @Test
+    public void findPageView(){
+        Pageable pageable = new PageRequest(1, 1);
+        Page<PetView> page = petViewDao.findAll(pageable);
+
+        System.out.println(JSON.toJSON(page));
+    }
+
+
 }

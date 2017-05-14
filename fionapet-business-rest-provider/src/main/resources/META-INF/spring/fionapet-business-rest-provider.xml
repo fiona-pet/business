@@ -524,9 +524,13 @@
 
     <bean id="petRestService" class="com.fionapet.business.facade.PetRestServiceImpl">
         <property name="petService" ref="petService"/>
+        <property name="petViewService" ref="petViewService"/>
+
     </bean>
 
+
     <dubbo:reference id="petService" interface="com.fionapet.business.service.PetService"/>
+    <dubbo:reference id="petViewService" interface="com.fionapet.business.service.PetViewService"/>
     <!--宠物 api -->
 
 

@@ -15,6 +15,7 @@ import java.util.Date;
 @Entity
 @Table(name = "t_pet")
 @ApiModel("宠物")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Pet extends CMSEntity {
 
     /**
