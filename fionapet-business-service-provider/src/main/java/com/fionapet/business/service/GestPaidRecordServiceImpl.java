@@ -207,15 +207,24 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
                 }
 
 
-                financeSettleAccountsDetailService.createOrUpdte(financeSettleAccountsDetail);
+
 
 
                 if ("挂号费用".equals(settleAccountsView.getBusinessType())) {
                     MedicRegisterRecord medicRegisterRecord = medicRegisterRecordService.detail(settleAccountsView.getRelationId());
                     medicRegisterRecord.setPaidStatus(dictTypeDetail.getDictDetailCode());
                     medicRegisterRecord.setPaidTime(new Date());
+
+                    financeSettleAccountsDetail.setInfactPrice(medicRegisterRecord.getRegisterPrice());
+                    financeSettleAccountsDetail.setDiscountMoney(financeSettleAccountsDetail.getSellPrice()-medicRegisterRecord.getRegisterPrice());
+                    financeSettleAccountsDetail.setSumOriginalMoney(financeSettleAccountsDetail.getSellPrice()*financeSettleAccountsDetail.getTotalNum());
+                    financeSettleAccountsDetail.setTotalCost(financeSettleAccountsDetail.getInfactPrice() * financeSettleAccountsDetail.getTotalNum());
+                    financeSettleAccountsDetail.setSumDiscountMoney(financeSettleAccountsDetail.getSumOriginalMoney() - financeSettleAccountsDetail.getTotalCost());
+
                     medicRegisterRecordService.createOrUpdte(medicRegisterRecord);
                 }
+
+                financeSettleAccountsDetailService.createOrUpdte(financeSettleAccountsDetail);
 
                 if ("处置处方".equals(settleAccountsView.getBusinessType())) {
                     MedicPrescriptionDetail medicPrescriptionDetail = medicPrescriptionDetailService.detail(settleAccountsView.getRelationDetailId());
