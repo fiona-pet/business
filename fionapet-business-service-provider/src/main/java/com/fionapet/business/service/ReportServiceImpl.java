@@ -134,9 +134,10 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
         }
 
         Long gestCount = gestDao.count();
-        Long vipCount = gestDao.countByLevel(new String[]{"美容会员","医疗会员","美容和医疗会员"});
 
-        Long vipMoneyTotal = gestDao.countVipMoneyByLevel(new String[]{"美容会员","医疗会员","美容和医疗会员"});
+        Long vipCount = gestDao.countByLevel(new String[]{"美容(1000)","美容(2000)","美容(5000)","美容(1000)和医疗","美容(2000)和医疗","美容(5000)和医疗"});
+
+        Long vipMoneyTotal = gestDao.countVipMoneyByLevel(new String[]{"美容(1000)","美容(2000)","美容(5000)","美容(1000)和医疗","美容(2000)和医疗","美容(5000)和医疗"});
 
         Long inputMoneyTotal = ObjectUtils.defaultIfNull(inputMoneyRecordDao.countInputMoneyByCreateAndIsInput(start,end,1), 0l);
         Long outputMoneyTotal = ObjectUtils.defaultIfNull(inputMoneyRecordDao.countInputMoneyByCreateAndIsInput(start,end,0), 0l);
