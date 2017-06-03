@@ -1,6 +1,7 @@
 package com.fionapet.business.repository;
 
 import com.fionapet.business.entity.Pet;
+import com.fionapet.business.entity.PetView;
 import org.dubbo.x.repository.DaoBase;
 
 import java.util.List;

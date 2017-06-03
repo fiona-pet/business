@@ -44,7 +44,7 @@ public class PetDaoTest extends SpringTransactionalTestCase {
         LOGGER.info("create pet:{}", pet);
 
 
-        pet = petDao.findOne(pet.getId());
+        pet = petDao.findOne("ff8080815c576a16015c68b5aa74091e");
 
         Assert.assertNotNull(pet);
 

@@ -3,6 +3,9 @@ package com.fionapet.business.service;
 import com.fionapet.business.entity.Pet;
 import com.fionapet.business.entity.PetView;
 import com.fionapet.business.repository.PetViewDao;
+import org.apache.commons.beanutils.BeanUtilsBean;
+import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.commons.beanutils.converters.DateConverter;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -19,7 +22,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
+import javax.transaction.Transactional;
 import javax.xml.crypto.Data;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -40,29 +45,29 @@ public class PetServiceImpl extends CURDServiceBase<Pet> implements PetService {
         return petDao;
     }
 
-    @Override
-    public Pet detail(String uuid) {
-        Pet pet = super.detail(uuid);
-
-        if (null != pet.getPetBirthday()) {
-            pet.setAge(Math.abs(DateUtils.truncatedCompareTo(new Date(), pet.getPetBirthday(), Calendar.YEAR)));
-            petDao.save(pet);
-        }
-
-        return super.detail(uuid);
-    }
 
     @Override
+    @Transactional
     public Pet createOrUpdte(Pet entity) {
+
+        LOGGER.debug("create or update:{}", entity);
+
         if (null == entity.getId()){
             entity.setSickFileCode(appConfigService.genNumberByName(AppConfigService.NUMBER_KEY_BLBH));
         }
 
-        if (null != entity.getPetBirthday()){
-            entity.setAge(Math.abs(DateUtils.truncatedCompareTo(new Date(), entity.getPetBirthday(), Calendar.YEAR)));
+        Pet pet = getDao().findOne(entity.getId());
+
+        try {
+            ConvertUtils.register(new DateConverter(null), java.util.Date.class);
+            BeanUtilsBean.getInstance().copyProperties(pet, entity);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
         }
 
-        return super.createOrUpdte(entity);
+        return super.createOrUpdte(pet);
     }
 
 }

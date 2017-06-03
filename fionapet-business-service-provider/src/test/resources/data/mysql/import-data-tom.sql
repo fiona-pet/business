@@ -10,3 +10,7 @@ insert into t_member_level (id, name,is_credit,is_discount,discount_rate, create
 insert into t_member_level (id, name,is_credit,is_discount,discount_rate, create_user_id, update_user_id) values(uuid(), '银卡会员',FALSE ,TRUE ,95, 'fc5db3b3-4063-4a12-a511-880ba19e4b58','fc5db3b3-4063-4a12-a511-880ba19e4b58');
 insert into t_member_level (id, name,is_credit,is_discount,discount_rate, create_user_id, update_user_id) values(uuid(), '金卡会员',FALSE ,TRUE ,92, 'fc5db3b3-4063-4a12-a511-880ba19e4b58','fc5db3b3-4063-4a12-a511-880ba19e4b58');
 -- t_member_level --
+
+
+-- scp fiona@192.168.1.254:~/dbback/fiona_pet_business-2017-05-30_124838.sql.gz ~/Downloads/
+--

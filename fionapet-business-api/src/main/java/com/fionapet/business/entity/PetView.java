@@ -2,8 +2,7 @@ package com.fionapet.business.entity;
 
 import io.swagger.annotations.ApiModel;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * 宠物
@@ -13,6 +12,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "v_pet")
 @ApiModel("宠物视图")
+@PrimaryKeyJoinColumn(name = "pet_id")
 public class PetView extends Pet {
     private String mobilePhone;
 

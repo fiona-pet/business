@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.transaction.Transactional;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
@@ -43,6 +44,7 @@ public class MedicPrescriptionServiceImpl extends CURDServiceBase<MedicPrescript
     }
 
     @Override
+    @Transactional
     public MedicPrescription copy(String id, String medicRecordCode) throws ApiException {
 
         ConvertUtils.register(new DateConverter(null), java.util.Date.class);
@@ -75,7 +77,8 @@ public class MedicPrescriptionServiceImpl extends CURDServiceBase<MedicPrescript
         createOrUpdte(medicPrescription);
 
         //处方明细 复制
-        Set<MedicPrescriptionDetail> medicPrescriptionDetailList = new HashSet<MedicPrescriptionDetail>();
+//        Set<MedicPrescriptionDetail> medicPrescriptionDetailList = new HashSet<MedicPrescriptionDetail>();
+        Map<String, MedicPrescriptionDetail> medicPrescriptionDetailMap = new HashMap<String, MedicPrescriptionDetail>();
         List<MedicPrescriptionDetail> medicPrescriptionDetails = medicPrescriptionDetailDao.findByPrescriptionId(medicPrescriptionOrgi.getId());
 
         //状态
@@ -102,10 +105,11 @@ public class MedicPrescriptionServiceImpl extends CURDServiceBase<MedicPrescript
             medicPrescriptionDetailDest.setStatus(status);
             medicPrescriptionDetailDest.setPaidStatus(null);
 
-            medicPrescriptionDetailList.add(medicPrescriptionDetailDest);
+            medicPrescriptionDetailMap.put(medicPrescriptionDetailDest.getItemCode()+":" + medicPrescriptionDetailDest.getGroupName(), medicPrescriptionDetailDest);
+//            medicPrescriptionDetailList.add(medicPrescriptionDetailDest);
         }
 
-        medicPrescriptionDetailDao.save(medicPrescriptionDetailList);
+        medicPrescriptionDetailDao.save(medicPrescriptionDetailMap.values());
 
         return medicPrescription;
     }

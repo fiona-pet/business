@@ -213,12 +213,8 @@ WHERE
 -- --- Table structure for v_gest_bill  会员待支付
 -- -- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 drop view if exists v_gest_bill;
-create view v_gest_bill as
-select uuid() id, gs.gest_id, g.gest_code gest_no, gest_name,g.mobile_phone phone, gs.total from t_gest g
-INNER JOIN (select gest_id, sum(item_cost * item_num) total from v_settle_accounts_view
-  group by gest_id) gs
-  on g.id = gs.gest_id
-;
+create view v_settle_accounts_view_total as select gest_id, sum(item_cost*item_num) total from v_settle_accounts_view group by gest_id;
+create view v_gest_bill as select id, gest_id, gest_code gest_no, gest_name,mobile_phone phone, total from t_gest JOIN v_settle_accounts_view_total vt on id=vt.gest_id;
 
 -- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --
 -- --- Table structure for v_report_by_person  医生业绩报表
@@ -267,7 +263,7 @@ from t_finance_settle_accounts fsa
 -- -- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 drop view if EXISTS v_pet;
 create view v_pet as
-  select p.*, g.mobile_phone from t_pet p JOIN t_gest g ON p.gest_id=g.id;
+  select p.id pet_id, g.mobile_phone from t_pet p JOIN t_gest g ON p.gest_id=g.id;
 
 
 
