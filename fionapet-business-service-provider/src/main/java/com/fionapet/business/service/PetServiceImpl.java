@@ -56,18 +56,21 @@ public class PetServiceImpl extends CURDServiceBase<Pet> implements PetService {
             entity.setSickFileCode(appConfigService.genNumberByName(AppConfigService.NUMBER_KEY_BLBH));
         }
 
-        Pet pet = getDao().findOne(entity.getId());
+        if (null != entity.getId()) {
+            Pet pet = getDao().findOne(entity.getId());
 
-        try {
-            ConvertUtils.register(new DateConverter(null), java.util.Date.class);
-            BeanUtilsBean.getInstance().copyProperties(pet, entity);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            try {
+                ConvertUtils.register(new DateConverter(null), java.util.Date.class);
+                BeanUtilsBean.getInstance().copyProperties(pet, entity);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            super.createOrUpdte(pet);
         }
 
-        return super.createOrUpdte(pet);
+        return super.createOrUpdte(entity);
     }
 
 }
