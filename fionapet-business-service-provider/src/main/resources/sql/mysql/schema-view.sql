@@ -219,25 +219,129 @@ create view v_gest_bill as select id, gest_id, gest_code gest_no, gest_name,mobi
 -- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --
 -- --- Table structure for v_report_by_person  医生业绩报表
 -- -- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-drop view if exists v_report_by_person;
-create view v_report_by_person as
-SELECT  uuid() id,sum(vrbiip.discount_money*mpd.item_num) total, p.person_name name, "门诊处方" type, substr(mpd.create_date, 1,10) create_date
-FROM t_medic_prescription_detail mpd
-  JOIN t_persons p ON mpd.create_user_id = p.id
-  JOIN v_report_by_item_infact_price vrbiip on mpd.id = vrbiip.relation_detail_id
-GROUP BY mpd.create_user_id,substr(mpd.create_date, 1,10)
-UNION ALL
-SELECT  uuid() id,sum(fsad.total_cost) total, p.person_name name, case when locate("CEX" ,item_code)>0 then "美容销售" when locate("BC" ,item_code)>0 then "商品销售" end type, substr(sdsd.create_date, 1,10) create_date
-FROM t_store_direct_sell_detail sdsd
-  JOIN t_persons p ON sdsd.create_user_id = p.id
-  join t_finance_settle_accounts_detail fsad on sdsd.id=fsad.relation_detail_id
-GROUP BY sdsd.create_user_id,create_date,type
-UNION ALL
-SELECT  uuid() id,sum(sd.sell_price*sd.input_count) total, p.person_name name, "美容服务" type, substr(sd.create_date, 1,10) create_date
-FROM t_service_detail sd
-  JOIN t_service s ON s.id=sd.service_id
-  JOIN t_persons p ON s.hairdresser_id = p.id
-GROUP BY s.hairdresser_id,create_date
+DROP VIEW IF EXISTS v_report_by_person;
+CREATE VIEW v_report_by_person AS
+  SELECT
+    uuid()                           AS `id`,
+    sum(`vrbiip`.`discount_money`)   AS `total`,
+    `p`.`person_name`                AS `name`,
+    '门诊处方'                           AS `type`,
+    substr(`mpd`.`paid_time`, 1, 10) AS `create_date`
+  FROM
+    (
+        (
+            `t_medic_prescription_detail` `mpd`
+            JOIN `t_persons` `p` ON (
+            (
+              `mpd`.`create_user_id` = `p`.`id`
+            )
+            )
+          )
+        JOIN `v_report_by_item_infact_price` `vrbiip` ON (
+        (
+          `mpd`.`id` = `vrbiip`.`relation_detail_id`
+        )
+        )
+    )
+  WHERE
+    (
+      `mpd`.`paid_status` = 'SM00051'
+    )
+  GROUP BY
+    `mpd`.`create_user_id`,
+    substr(`mpd`.`paid_time`, 1, 10)
+  UNION ALL
+  SELECT
+    uuid()                              AS `id`,
+    sum(
+        (
+          `sdsd`.`sell_price` * `sdsd`.`item_num`
+        )
+    )                                   AS `total`,
+    `p`.`person_name`                   AS `name`,
+    (
+      CASE
+      WHEN (
+        locate('CEX', `sdsd`.`item_code`) > 0
+      )
+        THEN
+          '美容销售'
+      WHEN (
+        locate('BC', `sdsd`.`item_code`) > 0
+      )
+        THEN
+          '商品销售'
+      END
+    )                                   AS `type`,
+    substr(`sdsd`.`create_date`, 1, 10) AS `create_date`
+  FROM
+    (
+        `t_store_direct_sell_detail` `sdsd`
+        JOIN `t_persons` `p` ON (
+        (
+          `sdsd`.`create_user_id` = `p`.`id`
+        )
+        )
+    )
+  GROUP BY
+    `sdsd`.`create_user_id`,
+    substr(`sdsd`.`create_date`, 1, 10),
+    (
+      CASE
+      WHEN (
+        locate('CEX', `sdsd`.`item_code`) > 0
+      )
+        THEN
+          '美容销售'
+      WHEN (
+        locate('BC', `sdsd`.`item_code`) > 0
+      )
+        THEN
+          '商品销售'
+      END
+    )
+  UNION ALL
+  SELECT
+    uuid()                          AS `id`,
+    sum(`fsad`.`total_cost`)        AS `total`,
+    `p`.`person_name`               AS `name`,
+    '美容服务'                          AS `type`,
+    substr(`sd`.`paid_time`, 1, 10) AS `create_date`
+  FROM
+    (
+        (
+            (
+                `t_service_detail` `sd`
+                JOIN `t_service` `s` ON (
+                (`s`.`id` = `sd`.`service_id`)
+                )
+              )
+            JOIN `t_finance_settle_accounts_detail` `fsad` ON (
+            (
+              `sd`.`id` = `fsad`.`relation_detail_id`
+            )
+            )
+          )
+        JOIN `t_persons` `p` ON (
+        (
+          `s`.`hairdresser_id` = `p`.`id`
+        )
+        )
+    )
+  GROUP BY
+    `s`.`hairdresser_id`,
+    `sd`.`paid_time`
+  UNION ALL
+  SELECT
+    uuid()                                    id,
+    sum(vrbiip.discount_money) total,
+    p.person_name                             name,
+    "住院处方"                                    type,
+    substr(mpd.create_date, 1, 10)            create_date
+  FROM t_in_hospital_prescription_detail mpd
+    JOIN t_persons p ON mpd.create_user_id = p.id
+    JOIN v_report_by_item_infact_price vrbiip ON mpd.id = vrbiip.relation_detail_id
+  GROUP BY mpd.create_user_id, substr(mpd.create_date, 1, 10)
 
 -- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --
 -- --- Table structure for v_report_by_item  商品统计报表
