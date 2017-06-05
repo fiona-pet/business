@@ -21,149 +21,167 @@ INNER JOIN t_item_type it on reg.item_code = it.item_code
 drop view if exists v_settle_accounts_view;
 create view v_settle_accounts_view as
   SELECT
-  uuid() AS `id`,
-  `gpr`.`gest_id` AS `gest_id`,
-  `gpr`.`item_code` AS `item_code`,
-  `gpr`.`item_name` AS `item_name`,
-  `gpr`.`register_price` AS `item_cost`,
-  1 AS `item_num`,
-  10 AS `busi_type_id`,
-  '挂号费用' AS `business_type`,
-  `gpr`.`relation_id` AS `relation_id`,
-  `gpr`.`is_vip_discount` AS `is_vip_discount`,
-  '次' AS `item_unit`,
-  `gpr`.`relation_id` AS `relation_detail_id`,
-  itc.cate_name
+	uuid() AS `id`,
+	`gpr`.`gest_id` AS `gest_id`,
+	`gpr`.`item_code` AS `item_code`,
+	`gpr`.`item_name` AS `item_name`,
+	`gpr`.`register_price` AS `item_cost`,
+	1 AS `item_num`,
+	10 AS `busi_type_id`,
+	'挂号费用' AS `business_type`,
+	`gpr`.`relation_id` AS `relation_id`,
+	`gpr`.`is_vip_discount` AS `is_vip_discount`,
+	'次' AS `item_unit`,
+	`gpr`.`relation_id` AS `relation_detail_id`,
+	`itc`.`cate_name` AS `cate_name`
 FROM
-  (
-      `v_gest_pet_register` `gpr`
-      LEFT JOIN `t_item_type` `it` ON (
-      (
-        `gpr`.`item_code` = `it`.`item_code`
-      )
-      )
-      left JOIN  t_item_cate itc on it.cate_no=itc.cate_no
-  )
+	(
+		(
+			`v_gest_pet_register` `gpr`
+			LEFT JOIN `t_item_type` `it` ON (
+				(
+					`gpr`.`item_code` = `it`.`item_code`
+				)
+			)
+		)
+		LEFT JOIN `t_item_cate` `itc` ON (
+			(
+				`it`.`cate_no` = `itc`.`cate_no`
+			)
+		)
+	)
 WHERE
-  (
-    isnull(
-        `gpr`.`register_paid_status`
-    )
-    OR (
-      `gpr`.`register_paid_status` <> 'SM00051'
-    )
-  )
+	(
+		isnull(
+			`gpr`.`register_paid_status`
+		)
+		OR (
+			`gpr`.`register_paid_status` <> 'SM00051'
+		)
+	)
 UNION ALL
 	SELECT
-  uuid() AS `id`,
-  `p`.`gest_id` AS `gest_id`,
-  `mpd`.`item_code` AS `item_code`,
-  `mpd`.`item_name` AS `item_name`,
-  `mpd`.`item_cost` AS `item_cost`,
-  `mpd`.`item_num` AS `item_num`,
-  `it`.`busi_type_id` AS `busi_type_id`,
-  '处置处方' AS `business_type`,
-  `mp`.`id` AS `relation_id`,
-  `it`.`is_vip_discount` AS `is_vip_discount`,
-  `mpd`.`recipe_unit` AS `item_unit`,
-  `mpd`.`id` AS `relation_detail_id`,
-  itc.cate_name
-FROM
-  (
-      (
-          (
-              (
-                  (
-                      `t_medic_prescription_detail` `mpd`
-                      JOIN `t_medic_prescription` `mp` ON (
-                      (
-                        `mp`.`id` = `mpd`.`prescription_id`
-                      )
-                      )
-                    )
-                  JOIN `t_medic_medictreat_record` `mmt` ON (
-                  (
-                    `mp`.`medic_record_code` = `mmt`.`medi_treatment_code`
-                  )
-                  )
-                )
-              JOIN `t_pet` `p` ON ((`mmt`.`pet_id` = `p`.`id`))
-            )
-          JOIN `t_gest` `g` ON ((`p`.`gest_id` = `g`.`id`))
-        )
-      LEFT JOIN `t_item_type` `it` ON (
-      (
-        `mpd`.`item_code` = `it`.`item_code`
-      )
-      )
-    LEFT JOIN t_item_cate itc on it.cate_no=itc.cate_no
-  )
-WHERE
-  (
-    isnull(`mpd`.`paid_status`)
-    OR (
-      `mpd`.`paid_status` <> 'SM00051'
-    )
-  )
+		uuid() AS `id`,
+		`p`.`gest_id` AS `gest_id`,
+		`mpd`.`item_code` AS `item_code`,
+		`mpd`.`item_name` AS `item_name`,
+		`mpd`.`item_cost` AS `item_cost`,
+		`mpd`.`item_num` AS `item_num`,
+		`it`.`busi_type_id` AS `busi_type_id`,
+		'处置处方' AS `business_type`,
+		`mp`.`id` AS `relation_id`,
+		`it`.`is_vip_discount` AS `is_vip_discount`,
+		`mpd`.`recipe_unit` AS `item_unit`,
+		`mpd`.`id` AS `relation_detail_id`,
+		`itc`.`cate_name` AS `cate_name`
+	FROM
+		(
+			(
+				(
+					(
+						(
+							(
+								`t_medic_prescription_detail` `mpd`
+								JOIN `t_medic_prescription` `mp` ON (
+									(
+										`mp`.`id` = `mpd`.`prescription_id`
+									)
+								)
+							)
+							JOIN `t_medic_medictreat_record` `mmt` ON (
+								(
+									`mp`.`medic_record_code` = `mmt`.`medi_treatment_code`
+								)
+							)
+						)
+						JOIN `t_pet` `p` ON ((`mmt`.`pet_id` = `p`.`id`))
+					)
+					JOIN `t_gest` `g` ON ((`p`.`gest_id` = `g`.`id`))
+				)
+				LEFT JOIN `t_item_type` `it` ON (
+					(
+						`mpd`.`item_code` = `it`.`item_code`
+					)
+				)
+			)
+			LEFT JOIN `t_item_cate` `itc` ON (
+				(
+					`it`.`cate_no` = `itc`.`cate_no`
+				)
+			)
+		)
+	WHERE
+		(
+			isnull(`mpd`.`paid_status`)
+			OR (
+				`mpd`.`paid_status` <> 'SM00051'
+			)
+		)
 	UNION ALL
 		SELECT
-  uuid() AS `id`,
-  `p`.`gest_id` AS `gest_id`,
-  `mpd`.`item_code` AS `item_code`,
-  `mpd`.`item_name` AS `item_name`,
-  `mpd`.`item_cost` AS `item_cost`,
-  `mpd`.`item_num` AS `item_num`,
-  `it`.`busi_type_id` AS `busi_type_id`,
-  '住院处置处方' AS `business_type`,
-  `mp`.`id` AS `relation_id`,
-  `it`.`is_vip_discount` AS `is_vip_discount`,
-  `udd`.`value_name_cn` AS `item_unit`,
-  `mpd`.`id` AS `relation_detail_id`,
-  itc.cate_name
-FROM
-  (
-      (
-          (
-              (
-                  (
-                      (
-                          `t_in_hospital_prescription_detail` `mpd`
-                          JOIN `t_in_hospital_prescription` `mp` ON (
-                          (
-                            `mp`.`id` = `mpd`.`prescription_id`
-                          )
-                          )
-                        )
-                      JOIN `t_in_hospital_record` `mmt` ON (
-                      (
-                        `mp`.`in_hospital_no` = `mmt`.`in_hospital_no`
-                      )
-                      )
-                    )
-                  LEFT JOIN `t_user_dict_detail` `udd` ON (
-                  (
-                    `mpd`.`recipe_unit` = `udd`.`dict_detail_code`
-                  )
-                  )
-                )
-              JOIN `t_pet` `p` ON ((`mmt`.`pet_id` = `p`.`id`))
-            )
-          JOIN `t_gest` `g` ON ((`p`.`gest_id` = `g`.`id`))
-        )
-      LEFT JOIN `t_item_type` `it` ON (
-      (
-        `mpd`.`item_code` = `it`.`item_code`
-      )
-      )
-      LEFT JOIN t_item_cate itc on it.cate_no=itc.cate_no
-  )
-WHERE
-  (
-    isnull(`mpd`.`paid_status`)
-    OR (
-      `mpd`.`paid_status` <> 'SM00051'
-    )
-  )
+			uuid() AS `id`,
+			`p`.`gest_id` AS `gest_id`,
+			`mpd`.`item_code` AS `item_code`,
+			`mpd`.`item_name` AS `item_name`,
+			`mpd`.`item_cost` AS `item_cost`,
+			`mpd`.`item_num` AS `item_num`,
+			`it`.`busi_type_id` AS `busi_type_id`,
+			'住院处置处方' AS `business_type`,
+			`mp`.`id` AS `relation_id`,
+			`it`.`is_vip_discount` AS `is_vip_discount`,
+			`udd`.`value_name_cn` AS `item_unit`,
+			`mpd`.`id` AS `relation_detail_id`,
+			`itc`.`cate_name` AS `cate_name`
+		FROM
+			(
+				(
+					(
+						(
+							(
+								(
+									(
+										`t_in_hospital_prescription_detail` `mpd`
+										JOIN `t_in_hospital_prescription` `mp` ON (
+											(
+												`mp`.`id` = `mpd`.`prescription_id`
+											)
+										)
+									)
+									JOIN `t_in_hospital_record` `mmt` ON (
+										(
+											`mp`.`in_hospital_no` = `mmt`.`in_hospital_no`
+										)
+									)
+								)
+								LEFT JOIN `t_user_dict_detail` `udd` ON (
+									(
+										`mpd`.`recipe_unit` = `udd`.`dict_detail_code`
+									)
+								)
+							)
+							JOIN `t_pet` `p` ON ((`mmt`.`pet_id` = `p`.`id`))
+						)
+						JOIN `t_gest` `g` ON ((`p`.`gest_id` = `g`.`id`))
+					)
+					LEFT JOIN `t_item_type` `it` ON (
+						(
+							`mpd`.`item_code` = `it`.`item_code`
+						)
+					)
+				)
+				LEFT JOIN `t_item_cate` `itc` ON (
+					(
+						`it`.`cate_no` = `itc`.`cate_no`
+					)
+				)
+			)
+		WHERE
+			(
+				isnull(`mpd`.`paid_status`)
+				OR (
+					`mpd`.`paid_status` <> 'SM00051'
+				)
+			)
 		UNION ALL
 			SELECT
 				uuid() AS `id`,
@@ -178,27 +196,33 @@ WHERE
 				`it`.`is_vip_discount` AS `is_vip_discount`,
 				`sd`.`package_unit` AS `item_unit`,
 				`sd`.`id` AS `relation_detail_id`,
-  itc.cate_name
+				`itc`.`cate_name` AS `cate_name`
 			FROM
 				(
 					(
 						(
 							(
-								`t_service_detail` `sd`
-								JOIN `t_service` `s` ON (
-									(`s`.`id` = `sd`.`service_id`)
+								(
+									`t_service_detail` `sd`
+									JOIN `t_service` `s` ON (
+										(`s`.`id` = `sd`.`service_id`)
+									)
 								)
+								JOIN `t_pet` `p` ON ((`s`.`pet_id` = `p`.`id`))
 							)
-							 JOIN `t_pet` `p` ON ((`s`.`pet_id` = `p`.`id`))
+							JOIN `t_gest` `g` ON ((`p`.`gest_id` = `g`.`id`))
 						)
-						 JOIN `t_gest` `g` ON ((`p`.`gest_id` = `g`.`id`))
+						LEFT JOIN `t_item_type` `it` ON (
+							(
+								`sd`.`item_code` = `it`.`item_code`
+							)
+						)
 					)
-					LEFT JOIN `t_item_type` `it` ON (
+					LEFT JOIN `t_item_cate` `itc` ON (
 						(
-							`sd`.`item_code` = `it`.`item_code`
+							`it`.`cate_no` = `itc`.`cate_no`
 						)
 					)
-					LEFT JOIN t_item_cate itc on it.cate_no=itc.cate_no
 				)
 			WHERE
 				(
@@ -207,13 +231,68 @@ WHERE
 						`sd`.`paid_status` <> 'SM00051'
 					)
 				)
+
+				UNION ALL
+				SELECT
+  uuid() AS `id`,
+  `p`.`gest_id` AS `gest_id`,
+  `frd`.`item_code` AS `item_code`,
+  `frd`.`item_name` AS `item_name`,
+  `frd`.`sell_price` AS `total_cost`,
+  `frd`.`item_num` AS `input_count`,
+  `it`.`busi_type_id` AS `busi_type_id`,
+  '寄养消费' AS `business_type`,
+  `fr`.`id` AS `relation_id`,
+  `it`.`is_vip_discount` AS `is_vip_discount`,
+  `udd`.`value_name_cn` AS `item_unit`,
+  `frd`.`id` AS `relation_detail_id`,
+  `itc`.`cate_name` AS `cate_name`
+FROM
+  (
+      (
+          (
+              (
+                  (
+                      `t_foster_record_detail` `frd`
+                      JOIN `t_foster_record` `fr` ON (
+                      (`fr`.`id` = `frd`.`foster_id`)
+                      )
+                    )
+                  JOIN `t_pet` `p` ON ((`fr`.`pet_id` = `p`.`id`))
+                )
+              JOIN `t_gest` `g` ON ((`p`.`gest_id` = `g`.`id`))
+            )
+          LEFT JOIN `t_item_type` `it` ON (
+          (
+            `frd`.`item_code` = `it`.`item_code`
+          )
+          )
+            LEFT JOIN `t_user_dict_detail` `udd` ON (
+          (
+            `frd`.`recipe_unit` = `udd`.`dict_detail_code`
+          )
+          )
+        )
+      LEFT JOIN `t_item_cate` `itc` ON (
+      (
+        `it`.`cate_no` = `itc`.`cate_no`
+      )
+      )
+  )
+WHERE
+  (
+    isnull(`frd`.`paid_status`)
+    OR (
+      `frd`.`paid_status` <> 'SM00051'
+    )
+  )
 ;
 
 -- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --
 -- --- Table structure for v_gest_bill  会员待支付
 -- -- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 drop view if exists v_gest_bill;
-create view v_settle_accounts_view_total as select gest_id, sum(item_cost*item_num) total from v_settle_accounts_view group by gest_id;
+create view v_settle_accounts_view_total as select gest_id, sum(item_cost) total from v_settle_accounts_view group by gest_id;
 create view v_gest_bill as select id, gest_id, gest_code gest_no, gest_name,mobile_phone phone, total from t_gest JOIN v_settle_accounts_view_total vt on id=vt.gest_id;
 
 -- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --

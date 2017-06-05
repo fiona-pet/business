@@ -67,7 +67,7 @@ public class PetServiceImpl extends CURDServiceBase<Pet> implements PetService {
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
             }
-            super.createOrUpdte(pet);
+            return super.createOrUpdte(pet);
         }
 
         return super.createOrUpdte(entity);

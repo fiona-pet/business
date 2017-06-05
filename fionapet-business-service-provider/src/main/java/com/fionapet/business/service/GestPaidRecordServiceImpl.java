@@ -1,6 +1,7 @@
 package com.fionapet.business.service;
 
 import com.fionapet.business.entity.*;
+import com.fionapet.business.event.PayEvent;
 import com.fionapet.business.exception.ApiException;
 import com.fionapet.business.facade.vo.PayVO;
 import com.fionapet.business.repository.*;
@@ -9,6 +10,8 @@ import org.dubbo.x.service.CURDServiceBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
 
 import javax.transaction.Transactional;
 import java.util.Date;
@@ -19,8 +22,10 @@ import java.util.UUID;
  *  顾客支付记录表
 * Created by tom on 2016-07-25 09:32:34.
  */
-public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> implements GestPaidRecordService {
+public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> implements GestPaidRecordService,ApplicationEventPublisherAware {
     private static final Logger LOGGER = LoggerFactory.getLogger(GestPaidRecordServiceImpl.class);
+
+    private ApplicationEventPublisher publisher;
 
     @Autowired
     private GestPaidRecordDao gestPaidRecordDao;
@@ -235,7 +240,6 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
                     itemCountService.decrease(medicPrescriptionDetail);
 
                     medicPrescriptionDetailService.createOrUpdte(medicPrescriptionDetail);
-
                 }
 
                 if ("美容服务".equals(settleAccountsView.getBusinessType())) {
@@ -273,7 +277,11 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
                     }
                 }
 
+                publisher.publishEvent(new PayEvent(settleAccountsView, settleAccountsView.getBusinessType(), getToken()));
+
             }
+
+
 
             GestPaidRecord gestPaidRecord = new GestPaidRecord();
             gestPaidRecord.setGestId(gest.getId());
@@ -295,5 +303,10 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
     public GestPaidRecord getPaidType(String id) {
         GestPaidRecord gestPaidRecord = gestPaidRecordDao.findBySettleAccountsId(id);
         return gestPaidRecord;
+    }
+
+    @Override
+    public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+        publisher = applicationEventPublisher;
     }
 }
