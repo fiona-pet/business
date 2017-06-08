@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+
 /**
  *  顾客支付记录表
 * Created by tom on 2016-07-25 09:32:34.
