@@ -164,11 +164,11 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
         String date = DateFormatUtils.format(System.currentTimeMillis(), "yyyy-") + month;
         LOGGER.debug("date:{} of lastDay:{}", date, lastDay);
 
-        List<ReportByPersonVO> reportByPersonVOs = reportDao.findByNameAndCreateDateLike(user, date+"%");
+        List<ReportByPersonVO> reportByPersonVOs = reportDao.findByNameAndCreateDateLikeAndType(user, date+"%","门诊处方");
 
         List<Double> totals = new ArrayList<Double>();
         boolean hasData = false;
-        for (int i = 1; i < lastDay+1;i++){
+        for (int i = 0; i < lastDay+1;i++){
             hasData = false;
             for(ReportByPersonVO reportByPersonVO: reportByPersonVOs){
                 if (reportByPersonVO.getCreateDate().equals(date + "-" + (i<10?"0"+i:i))){

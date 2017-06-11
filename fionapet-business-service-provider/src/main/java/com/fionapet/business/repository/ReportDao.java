@@ -15,4 +15,6 @@ public interface ReportDao extends DaoBase<ReportByPersonVO> {
     List<ReportByPersonVO> findCreateDateBetween(String start, String end);
 
     List<ReportByPersonVO> findByNameAndCreateDateLike(String user, String date);
+
+    List<ReportByPersonVO> findByNameAndCreateDateLikeAndType(String user, String date,String type);
 }
