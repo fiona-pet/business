@@ -113,4 +113,16 @@ public class MedicPrescriptionServiceImpl extends CURDServiceBase<MedicPrescript
 
         return medicPrescription;
     }
+
+    @Override
+    @Transactional
+    public void delete(String uuid) {
+        List<MedicPrescriptionDetail> medicPrescriptionDetails = medicPrescriptionDetailDao.findByPrescriptionId(uuid);
+        for(MedicPrescriptionDetail medicPrescriptionDetail: medicPrescriptionDetails){
+            if ("SM00051".equals(medicPrescriptionDetail.getPaidStatus())){
+                return;
+            }
+        }
+        super.delete(uuid);
+    }
 }
