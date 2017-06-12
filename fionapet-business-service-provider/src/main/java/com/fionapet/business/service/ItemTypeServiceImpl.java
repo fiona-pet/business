@@ -1,7 +1,10 @@
 package com.fionapet.business.service;
 
+import com.fionapet.business.entity.ItemCount;
 import com.fionapet.business.entity.ItemType;
+import com.fionapet.business.entity.ItemtypeChemicalexam;
 import com.fionapet.business.facade.vo.ItemTypeVO;
+import com.fionapet.business.repository.ItemCountDao;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.lang.StringUtils;
 import org.dubbo.x.repository.DaoBase;
@@ -22,6 +25,9 @@ public class ItemTypeServiceImpl extends CURDServiceBase<ItemType> implements It
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemTypeServiceImpl.class);
     @Autowired
     private ItemTypeDao itemTypeDao;
+
+    @Autowired
+    private ItemCountDao itemCountDao;
 
     @Override
     public DaoBase<ItemType> getDao() {
@@ -55,4 +61,16 @@ public class ItemTypeServiceImpl extends CURDServiceBase<ItemType> implements It
 
         return result;
     }
+
+//    public List<ItemType> listAll() {
+//        List<ItemType> itemTypes = new ArrayList<ItemType>();
+//        for (ItemType itemType: super.listAll()){
+//            ItemCount itemCount = itemCountDao.findByItemCode(itemType.getItemCode());
+//            if (null !=itemCount){
+//                itemType.setItemName(itemType.getItemName() +"[" +  itemCount.getItemCountNum() + "/" + itemCount.getScatteredCountNum()+ "]");
+//            }
+//            itemTypes.add(itemType);
+//        }
+//        return itemTypes;
+//    }
 }
