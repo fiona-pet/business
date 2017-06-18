@@ -1,5 +1,6 @@
 package com.fionapet.business.facade;
 
+import com.fionapet.business.entity.OrderVO;
 import org.dubbo.x.facade.CURDRestService;
 import org.dubbo.x.facade.RestResult;
 import org.dubbo.x.util.ConstantVariable;
@@ -33,6 +34,17 @@ public interface ItemCountRestService extends CURDRestService<ItemCount>{
     @ApiOperation(value = "种类数量表",
             notes = "种类数量表列表.")
     RestResult<List<ItemCount>> list(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token);
+
+    /**
+     * 种类数量表
+     * @return
+     */
+    @GET
+    @Path("/order")
+    @ApiOperation(value = "种类数量表",
+            notes = "种类数量表列表.")
+    RestResult<List<OrderVO>> order(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token);
+
 
     /**
      * 种类数量表 详细信息

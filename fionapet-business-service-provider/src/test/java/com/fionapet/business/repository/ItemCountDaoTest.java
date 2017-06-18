@@ -1,6 +1,7 @@
 package com.fionapet.business.repository;
 
 import com.fionapet.business.entity.ItemCount;
+import com.fionapet.business.entity.OrderVO;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -25,13 +26,22 @@ import java.util.List;
  * 种类数量更改原因表
 * Created by tom on 2016-07-25 09:32:32.
  */
-@ContextConfiguration(locations = {"/META-INF/spring/applicationContext.xml"})
+@ContextConfiguration(locations = {"/META-INF/spring/applicationContext.xml","/META-INF/spring/fionapet-business-service-provider.xml"})
 public class ItemCountDaoTest extends SpringTransactionalTestCase {
     private final static String WHERE_TYPE_AND = "AND";
     private final static String WHERE_TYPE_OR = "OR";
 
     @Autowired
     private ItemCountDao itemCountDao;
+
+    @Test
+    public void order(){
+        List<OrderVO> itemCounts = itemCountDao.genOrder();
+
+        Assert.assertNotNull(itemCounts);
+
+        Assert.assertEquals(itemCounts.size(), 2);
+    }
 
     @Test
     public void findAll(){

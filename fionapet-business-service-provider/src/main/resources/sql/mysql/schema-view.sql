@@ -598,5 +598,18 @@ GROUP BY
   `s`.`assistant_id`,
   `sd`.`paid_time`
 
+-- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --
+-- --- Table structure for v_input_order_by_item_count  根据库存情况生成进货订单
+-- -- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+drop view if exists v_input_order_by_item_count;
+create view v_input_order_by_item_count as
+select ic.item_code,ic.item_name,ic.item_bulk,ic.item_count_num, ic.scattered_count_num,
+it.dealer_name, d.mobile_phone,d.tel_phone,
+ic.update_date
+from t_item_count ic
+JOIN t_item_type it ON ic.item_code=it.item_code
+LEFT JOIN t_dealer d on it.dealer_code=d.code
+where ic.item_count_num*ic.item_bulk+ic.scattered_count_num < 0
+ORDER BY ic.update_date desc
 
 

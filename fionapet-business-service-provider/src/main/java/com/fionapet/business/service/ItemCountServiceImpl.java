@@ -205,4 +205,9 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
 
         decrease(medicPrescriptionDetail);
     }
+
+    @Override
+    public List<OrderVO> order() {
+        return ((ItemCountDao)this.getDao()).genOrder();
+    }
 }
