@@ -155,6 +155,15 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
 
     @Override
     public Map<String, List> doctor(String month, String user) {
+        return doctorByType(month,user,"门诊处方");
+    }
+
+    @Override
+    public Map<String, List> doctorInHospital(String month, String user) {
+        return doctorByType(month, user, "住院处方");
+    }
+
+    private Map<String, List> doctorByType(String month, String user, String type) {
         int lastDay = getLastDayOfMonth(month);
 
         if (month.length() == 1){
@@ -164,7 +173,7 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
         String date = DateFormatUtils.format(System.currentTimeMillis(), "yyyy-") + month;
         LOGGER.debug("date:{} of lastDay:{}", date, lastDay);
 
-        List<ReportByPersonVO> reportByPersonVOs = reportDao.findByNameAndCreateDateLikeAndType(user, date+"%","门诊处方");
+        List<ReportByPersonVO> reportByPersonVOs = reportDao.findByNameAndCreateDateLikeAndType(user, date+"%",type);
 
         List<Double> totals = new ArrayList<Double>();
         boolean hasData = false;

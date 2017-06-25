@@ -46,6 +46,15 @@ public interface ReportRestService extends CURDRestService<ReportByPersonVO>{
     @ApiOperation(value = "统计报表-大夫",
             notes = "统计报表-大夫.")
     RestResult<Map<String, List>> doctor(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") @QueryParam("month") String month, @ApiParam("user") @QueryParam("user") String user);
+    /**
+     * 统计报表-大夫
+     * @return
+     */
+    @GET
+    @Path("/doctor/inhospital")
+    @ApiOperation(value = "统计报表-大夫",
+            notes = "统计报表-大夫.")
+    RestResult<Map<String, List>> doctorInHospital(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") @QueryParam("month") String month, @ApiParam("user") @QueryParam("user") String user);
 
     /**
      * 统计报表

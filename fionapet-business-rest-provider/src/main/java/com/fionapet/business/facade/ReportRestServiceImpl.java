@@ -51,6 +51,11 @@ public class ReportRestServiceImpl extends RestServiceBase<ReportByPersonVO> imp
     }
 
     @Override
+    public RestResult<Map<String, List>> doctorInHospital(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") String month, @ApiParam("user") String user) {
+        return RestResult.OK(reportService.doctorInHospital(month,user));
+    }
+
+    @Override
     public RestResult<List<String[]>> gestPaidAction(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") String month, @ApiParam("day") String day) {
         return RestResult.OK(reportService.gestPaidAction(month,day));
     }
