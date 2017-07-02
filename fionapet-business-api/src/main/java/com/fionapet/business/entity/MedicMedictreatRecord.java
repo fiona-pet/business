@@ -59,7 +59,22 @@ public class MedicMedictreatRecord extends CMSEntity {
     public void setRegisterNo(String registerNo) {
         this.registerNo = registerNo;
     }
-    
+
+
+
+    /**
+     * 体重
+     */
+    @ApiModelProperty(value = "体重")
+    @Column(columnDefinition = "体重")
+    private float weight;
+    public float getWeight() {
+        return weight;
+    }
+    public void setWeight(float weight) {
+        this.weight = weight;
+    }
+
     /**
      * 温度
      */

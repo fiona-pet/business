@@ -1,0 +1,1 @@
+ALTER TABLE fiona_pet_business.t_medic_medictreat_record ADD weight FLOAT DEFAULT 0 NOT NULL;
