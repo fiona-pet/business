@@ -1,6 +1,9 @@
 package com.fionapet.business.service;
 
+import com.fionapet.business.entity.Gest;
 import com.fionapet.business.entity.MedicVaccine;
+import com.fionapet.business.repository.GestDao;
+import com.fionapet.business.repository.PetDao;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.dubbo.x.entity.PageSearch;
@@ -23,6 +26,8 @@ import java.util.Date;
 public class MedicVaccineServiceImpl extends CURDServiceBase<MedicVaccine> implements MedicVaccineService {
     @Autowired
     private MedicVaccineDao medicVaccineDao;
+    @Autowired
+    private GestDao gestDao;
 
     @Override
     public DaoBase<MedicVaccine> getDao() {
@@ -47,6 +52,15 @@ public class MedicVaccineServiceImpl extends CURDServiceBase<MedicVaccine> imple
 
         pageSearch.getAndFilters().add(filter);
 
-        return super.page(pageSearch);
+        Page<MedicVaccine> page = super.page(pageSearch);
+
+        for (MedicVaccine medicVaccine: page.getContent()){
+            Gest gest = gestDao.findOne(medicVaccine.getGestId());
+            if (null != gest){
+                medicVaccine.setGestName(medicVaccine.getGestName() + "[" + gest.getMobilePhone() + "]");
+            }
+        }
+
+        return page;
     }
 }

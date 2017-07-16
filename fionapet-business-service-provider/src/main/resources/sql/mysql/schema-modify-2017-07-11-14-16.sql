@@ -1,0 +1,3 @@
+ALTER TABLE fiona_pet_business.t_medic_medictreat_record ADD is_pay_return_visit BOOLEAN DEFAULT FALSE;
+ALTER TABLE fiona_pet_business.t_medic_medictreat_record ADD pay_return_visit_remark TEXT;
+ALTER TABLE fiona_pet_business.t_medic_medictreat_record ADD pay_return_visit_date timestamp DEFAULT current_timestamp;

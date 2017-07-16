@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.util.Date;
 
 /**
  * 医生处理记录-就诊记录
@@ -270,6 +271,48 @@ public class MedicMedictreatRecord extends CMSEntity {
     public void setAssistantDoctorId(String assistantDoctorId) {
         this.assistantDoctorId = assistantDoctorId;
     }
-    
+
+    /**
+     * 是否回访
+     */
+    @ApiModelProperty(value = "是否回访")
+    @Column(columnDefinition = "是否回访")
+    private boolean isPayReturnVisit;
+    /**
+     * 回访记录内容
+     */
+    @ApiModelProperty(value = "回访记录内容")
+    @Column(columnDefinition = "回访记录内容")
+    private String payReturnVisitRemark;
+    /**
+     *  回访日期
+     */
+    @ApiModelProperty(value = "回访日期")
+    @Column(columnDefinition = "回访日期")
+    private Date payReturnVisitDate;
+
+    public boolean isPayReturnVisit() {
+        return isPayReturnVisit;
+    }
+
+    public void setPayReturnVisit(boolean payReturnVisit) {
+        isPayReturnVisit = payReturnVisit;
+    }
+
+    public String getPayReturnVisitRemark() {
+        return payReturnVisitRemark;
+    }
+
+    public void setPayReturnVisitRemark(String payReturnVisitRemark) {
+        this.payReturnVisitRemark = payReturnVisitRemark;
+    }
+
+    public Date getPayReturnVisitDate() {
+        return payReturnVisitDate;
+    }
+
+    public void setPayReturnVisitDate(Date payReturnVisitDate) {
+        this.payReturnVisitDate = payReturnVisitDate;
+    }
 }
 
