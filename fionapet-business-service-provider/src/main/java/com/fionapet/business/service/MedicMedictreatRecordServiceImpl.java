@@ -3,8 +3,12 @@ package com.fionapet.business.service;
 import com.fionapet.business.entity.CMSEntity;
 import com.fionapet.business.entity.MedicMedictreatRecord;
 import com.fionapet.business.entity.MedicRegisterRecord;
+import com.fionapet.business.entity.Pet;
+import com.fionapet.business.event.PayEvent;
+import com.fionapet.business.event.PetEvent;
 import com.fionapet.business.repository.MedicMedictreatRecordDao;
 import com.fionapet.business.repository.MedicRegisterRecordDao;
+import com.fionapet.business.repository.PetDao;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
@@ -13,6 +17,8 @@ import org.dubbo.x.service.CURDServiceBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +28,7 @@ import java.lang.reflect.InvocationTargetException;
  * 医生处理记录
  * Created by tom on 2016-07-18 11:56:10.
  */
-public class MedicMedictreatRecordServiceImpl extends CURDServiceBase<MedicMedictreatRecord> implements MedicMedictreatRecordService {
+public class MedicMedictreatRecordServiceImpl extends CURDServiceBase<MedicMedictreatRecord> implements MedicMedictreatRecordService ,ApplicationEventPublisherAware {
     private final static Logger LOGGER = LoggerFactory.getLogger(MedicMedictreatRecordServiceImpl.class);
 
     @Autowired
@@ -33,8 +39,12 @@ public class MedicMedictreatRecordServiceImpl extends CURDServiceBase<MedicMedic
     @Autowired
     private AppConfigService appConfigService;
 
+    @Autowired
+    private PetDao petDao;
+
     private static final String CURD_KEY = "CURD";
 
+    private ApplicationEventPublisher publisher;
 
 
     @Override
@@ -84,8 +94,16 @@ public class MedicMedictreatRecordServiceImpl extends CURDServiceBase<MedicMedic
                     entity.setId(medicMedictreatRecord.getId());
                 }
             }
+
+            publisher.publishEvent(new PetEvent(entity, entity.getPetId(), getToken()));
+
             return super.createOrUpdte(entity);
         }
 
+    }
+
+    @Override
+    public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+        this.publisher = applicationEventPublisher;
     }
 }
