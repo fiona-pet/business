@@ -8,6 +8,7 @@ import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.dubbo.x.entity.PageSearch;
 import org.dubbo.x.repository.DaoBase;
@@ -52,6 +53,10 @@ public class PetServiceImpl extends CURDServiceBase<Pet> implements PetService {
 
         LOGGER.debug("create or update:{}", entity);
 
+        if (null != entity.getPetBirthday()){
+            entity.setAge(getAge(entity.getPetBirthday()));
+        }
+
         if (null == entity.getId()){
             entity.setSickFileCode(appConfigService.genNumberByName(AppConfigService.NUMBER_KEY_BLBH));
         }
@@ -71,6 +76,29 @@ public class PetServiceImpl extends CURDServiceBase<Pet> implements PetService {
         }
 
         return super.createOrUpdte(entity);
+    }
+
+    //由出生日期获得年龄
+    public float getAge(Date birthDay) {
+        Calendar cal = Calendar.getInstance();
+
+        if (cal.before(birthDay)) {
+            throw new IllegalArgumentException(
+                    "The birthDay is before Now.It's unbelievable!");
+        }
+        int yearNow = cal.get(Calendar.YEAR);
+        int monthNow = cal.get(Calendar.MONTH);
+        cal.setTime(birthDay);
+
+        int yearBirth = cal.get(Calendar.YEAR);
+        int monthBirth = cal.get(Calendar.MONTH);
+
+        int age = yearNow - yearBirth;
+
+        LOGGER.debug("yearNow:{}, yearBirth:{}", yearNow, yearBirth);
+        LOGGER.debug("month:{}",(Math.abs(monthBirth-monthNow)/12.0));
+
+        return (float)(age + Math.abs(monthBirth-monthNow)/12.0);
     }
 
 }
