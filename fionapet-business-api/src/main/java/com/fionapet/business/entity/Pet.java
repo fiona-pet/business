@@ -355,5 +355,16 @@ public class Pet extends CMSEntity {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    private String mobilePhone;
+
+    @Transient
+    public String getMobilePhone() {
+        return mobilePhone;
+    }
+
+    public void setMobilePhone(String mobilePhone) {
+        this.mobilePhone = mobilePhone;
+    }
 }
 
