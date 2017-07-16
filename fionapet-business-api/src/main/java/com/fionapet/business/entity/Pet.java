@@ -118,7 +118,7 @@ public class Pet extends CMSEntity {
     @Column(columnDefinition = "宠物生日")
     private Date petBirthday;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     public Date getPetBirthday() {
         return petBirthday;
     }
