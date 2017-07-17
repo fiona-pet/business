@@ -221,11 +221,12 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
                     medicRegisterRecord.setPaidStatus(dictTypeDetail.getDictDetailCode());
                     medicRegisterRecord.setPaidTime(new Date());
 
-                    financeSettleAccountsDetail.setInfactPrice(medicRegisterRecord.getRegisterPrice());
-                    financeSettleAccountsDetail.setDiscountMoney(financeSettleAccountsDetail.getSellPrice()-medicRegisterRecord.getRegisterPrice());
-                    financeSettleAccountsDetail.setSumOriginalMoney(financeSettleAccountsDetail.getSellPrice()*financeSettleAccountsDetail.getTotalNum());
-                    financeSettleAccountsDetail.setTotalCost(financeSettleAccountsDetail.getInfactPrice() * financeSettleAccountsDetail.getTotalNum());
-                    financeSettleAccountsDetail.setSumDiscountMoney(financeSettleAccountsDetail.getSumOriginalMoney() - financeSettleAccountsDetail.getTotalCost());
+                    financeSettleAccountsDetail.setSellPrice(medicRegisterRecord.getRegisterPrice());
+                    financeSettleAccountsDetail.setInfactPrice(medicRegisterRecord.getRegisterPrice()*dis);
+                    financeSettleAccountsDetail.setDiscountMoney(financeSettleAccountsDetail.getSellPrice()-financeSettleAccountsDetail.getInfactPrice());
+                    financeSettleAccountsDetail.setSumOriginalMoney(financeSettleAccountsDetail.getSellPrice()*1);
+                    financeSettleAccountsDetail.setTotalCost(financeSettleAccountsDetail.getInfactPrice() * 1);
+                    financeSettleAccountsDetail.setSumDiscountMoney(financeSettleAccountsDetail.getSellPrice()-financeSettleAccountsDetail.getInfactPrice());
 
                     medicRegisterRecordService.createOrUpdte(medicRegisterRecord);
                 }
