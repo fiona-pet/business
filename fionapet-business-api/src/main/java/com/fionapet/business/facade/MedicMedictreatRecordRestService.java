@@ -54,4 +54,17 @@ public interface MedicMedictreatRecordRestService extends CURDRestService<MedicM
     @Path("/{id}")
     @ApiOperation(value = "删除医生处理记录", notes = "删除医生处理记录")
     RestResult<String> delete(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("id") @PathParam("id") String uuid);
+
+    /**
+     * 回访记录 详细信息
+     *
+     * @return
+     */
+    @GET
+    @Path("/payReturnVisit/{id}")
+    @ApiOperation(value = "回访记录",
+            notes = "回访记录.")
+    RestResult<MedicMedictreatRecord> payReturnVisit(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token,
+                                                     @ApiParam("id") @PathParam("id") String uuid,
+                                                     @ApiParam("remark") @QueryParam("remark") String remark);
 }

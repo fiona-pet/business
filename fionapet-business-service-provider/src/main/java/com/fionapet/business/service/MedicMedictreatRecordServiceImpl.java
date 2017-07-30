@@ -12,6 +12,7 @@ import com.fionapet.business.repository.PetDao;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
+import org.dubbo.x.facade.RestResult;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
 import org.slf4j.Logger;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
 
 /**
  * 医生处理记录
@@ -105,5 +107,16 @@ public class MedicMedictreatRecordServiceImpl extends CURDServiceBase<MedicMedic
     @Override
     public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
         this.publisher = applicationEventPublisher;
+    }
+
+    @Override
+    public MedicMedictreatRecord payReturnVisit(String uuid, String remark) {
+        MedicMedictreatRecord medicMedictreatRecord = this.detail(uuid);
+        if (null != medicMedictreatRecord){
+            medicMedictreatRecord.setPayReturnVisit(true);
+            medicMedictreatRecord.setPayReturnVisitDate(new Date());
+            medicMedictreatRecord.setPayReturnVisitRemark(remark);
+        }
+        return this.createOrUpdte(medicMedictreatRecord);
     }
 }

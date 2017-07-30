@@ -1,11 +1,16 @@
 package com.fionapet.business.facade;
 
 import com.fionapet.business.entity.MedicMedictreatRecord;
+import io.swagger.annotations.ApiParam;
+import org.dubbo.x.facade.RestResult;
 import org.dubbo.x.service.CURDService;
 import org.dubbo.x.facade.RestServiceBase;
 import com.fionapet.business.service.MedicMedictreatRecordService;
+import org.dubbo.x.util.ConstantVariable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.ws.rs.HeaderParam;
 
 /**
  * 医生处理记录
@@ -30,4 +35,8 @@ public class MedicMedictreatRecordRestServiceImpl extends RestServiceBase<MedicM
         return medicMedictreatRecordService;
     }
 
+    @Override
+    public RestResult<MedicMedictreatRecord> payReturnVisit(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("id") String uuid, @ApiParam("remark") String remark) {
+        return RestResult.OK(this.medicMedictreatRecordService.payReturnVisit(uuid, remark));
+    }
 }

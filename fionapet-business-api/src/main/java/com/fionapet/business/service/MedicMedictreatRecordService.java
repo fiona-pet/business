@@ -1,6 +1,7 @@
 package com.fionapet.business.service;
 
 import com.fionapet.business.entity.MedicMedictreatRecord;
+import org.dubbo.x.facade.RestResult;
 import org.dubbo.x.service.CURDService;
 /**
  * 医生处理记录
@@ -9,4 +10,5 @@ import org.dubbo.x.service.CURDService;
 public interface MedicMedictreatRecordService extends CURDService<MedicMedictreatRecord> {
 
 
+    MedicMedictreatRecord payReturnVisit(String uuid, String remark);
 }
