@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 /**
@@ -105,5 +106,17 @@ public class InHospitalPrescriptionServiceImpl extends CURDServiceBase<InHospita
         inHospitalPrescriptionDetailDao.save(inHospitalPrescriptionDetailList);
 
         return inHospitalPrescription;
+    }
+
+    @Override
+    @Transactional
+    public void delete(String uuid) {
+        List<InHospitalPrescriptionDetail> inHospitalPrescriptionDetails = inHospitalPrescriptionDetailDao.findByPrescriptionId(uuid);
+        for(InHospitalPrescriptionDetail inHospitalPrescriptionDetail: inHospitalPrescriptionDetails){
+            if ("SM00051".equals(inHospitalPrescriptionDetail.getPaidStatus())){
+                return;
+            }
+        }
+        super.delete(uuid);
     }
 }
