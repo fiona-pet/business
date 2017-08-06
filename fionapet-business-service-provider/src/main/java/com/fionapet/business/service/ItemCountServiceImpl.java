@@ -211,4 +211,50 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
     public List<OrderVO> order() {
         return ((ItemCountDao)this.getDao()).genOrder();
     }
+
+    @Override
+    @Transactional
+    public void decrease(int itemNum, ItemCountChangeReason itemCountChangeReason) {
+        ItemCount itemCount = itemCountDao.findByItemCode(itemCountChangeReason.getItemCode());
+        //无库存
+        if (null == itemCount){
+            LOGGER.error("{}[{}]: 商品没有库存！", itemCountChangeReason.getItemCode(), itemCountChangeReason.getItemName());
+
+            return;
+        }else {
+            if (null == itemCount.getItemBulk()|| itemCount.getItemBulk()==0){
+                itemCount.setItemBulk(1);
+            }
+            itemCountChangeReason.setItemCountId(itemCount.getId());
+            itemCountChangeReason.setWarehouseCode(itemCount.getWarehouseId());
+            itemCountChangeReason.setWarehouseName(itemCount.getWarehouseName());
+            itemCountChangeReason.setSourceCount(itemCount.getItemCountNum());
+            itemCountChangeReason.setSourceScatteredCount(itemCount.getScatteredCountNum());
+            itemCountChangeReason.setSourceBatchNumber(itemCount.getBatchNumber());
+            itemCountChangeReason.setSourceOutDateTime(itemCount.getUpdateDate());
+
+            if ("1".equals(itemCount.getItemBulk())){
+                itemCount.setItemCountNum(itemCount.getItemCountNum()-itemNum);
+            }else {
+                //库存不足
+                if (itemCount.getScatteredCountNum() < itemNum) {
+                    int count = (itemNum - (int) itemCount.getScatteredCountNum()) / itemCount.getItemBulk() + 1;
+                    itemCount.setItemCountNum(itemCount.getItemCountNum() - count);
+
+                    itemCount.setScatteredCountNum(count * itemCount.getItemBulk() + itemCount.getScatteredCountNum() - itemNum);
+                } else {
+                    itemCount.setScatteredCountNum(itemCount.getScatteredCountNum() - itemNum);
+                }
+            }
+
+            itemCountChangeReason.setNewCount(itemCount.getItemCountNum());
+            itemCountChangeReason.setNewScatteredCount(itemCount.getScatteredCountNum());
+            itemCountChangeReason.setNewBatchNumber(itemCount.getBatchNumber());
+            itemCountChangeReason.setNewOutDateTime(new Date());
+
+            itemCountChangeReasonDao.save(itemCountChangeReason);
+        }
+
+        itemCountDao.save(itemCount);
+    }
 }

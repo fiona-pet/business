@@ -4,6 +4,7 @@ import cn.fiona.pet.account.entity.User;
 import cn.fiona.pet.account.exception.ApiException;
 import cn.fiona.pet.account.exception.AuthorizationException;
 import cn.fiona.pet.account.service.AccountService;
+import com.fionapet.business.service.Auth;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -28,6 +29,8 @@ import java.util.Set;
 @Aspect
 public class AuthInterceptor {
     private final static Logger LOGGER = LoggerFactory.getLogger(AuthInterceptor.class);
+    @Autowired
+    private Auth auth;
     @Autowired
     private AccountService accountService;
 
@@ -69,6 +72,8 @@ public class AuthInterceptor {
                 restServiceBase.getService().setCurrentUser(currentUser);
 
                 setCurrentUser(restServiceBase.getService(), currentUser);
+
+                auth.setCurrentUser(currentUser);
             }
         } catch (Exception e) {
             LOGGER.warn("Request filter invoked:Token validate fail!");

@@ -32,4 +32,6 @@ public interface ItemCountService extends CURDService<ItemCount> {
      * @return
      */
     List<OrderVO> order();
+
+    void decrease(int itemNum, ItemCountChangeReason itemCountChangeReason);
 }

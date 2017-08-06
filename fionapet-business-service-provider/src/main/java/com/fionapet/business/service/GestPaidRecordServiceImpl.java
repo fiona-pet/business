@@ -5,6 +5,7 @@ import com.fionapet.business.event.PayEvent;
 import com.fionapet.business.exception.ApiException;
 import com.fionapet.business.facade.vo.PayVO;
 import com.fionapet.business.repository.*;
+import org.dubbo.x.entity.IdEntity;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
 import org.slf4j.Logger;
@@ -23,10 +24,8 @@ import java.util.UUID;
  *  顾客支付记录表
 * Created by tom on 2016-07-25 09:32:34.
  */
-public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> implements GestPaidRecordService,ApplicationEventPublisherAware {
+public class GestPaidRecordServiceImpl extends CURDEServiceBase<GestPaidRecord> implements GestPaidRecordService {
     private static final Logger LOGGER = LoggerFactory.getLogger(GestPaidRecordServiceImpl.class);
-
-    private ApplicationEventPublisher publisher;
 
     @Autowired
     private GestPaidRecordDao gestPaidRecordDao;
@@ -279,7 +278,8 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
                     }
                 }
 
-                publisher.publishEvent(new PayEvent(settleAccountsView, settleAccountsView.getBusinessType(), getToken()));
+
+                this.publishEvent(new PayEvent(settleAccountsView, settleAccountsView.getBusinessType(), getToken()));
 
             }
 
@@ -305,10 +305,5 @@ public class GestPaidRecordServiceImpl extends CURDServiceBase<GestPaidRecord> i
     public GestPaidRecord getPaidType(String id) {
         GestPaidRecord gestPaidRecord = gestPaidRecordDao.findBySettleAccountsId(id);
         return gestPaidRecord;
-    }
-
-    @Override
-    public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
-        publisher = applicationEventPublisher;
     }
 }
