@@ -63,8 +63,6 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
 
             if (null == itemCount){
                 itemCount = new ItemCount();
-                itemCount.setWarehouseId(warehouseInrecord.getWarehouseId());
-                itemCount.setWarehouseName(warehouseInrecord.getInWarehouse());
 
                 try {
                     ConvertUtils.register(new DateLocaleConverter(Locale.SIMPLIFIED_CHINESE,"yyyy-MM-dd hh:mm:ss"), Date.class);
@@ -104,6 +102,9 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
                 itemCount.setPackageUnit(warehouseInrecordDetail.getPackageUnit());
                 itemCount.setInputPrice(warehouseInrecordDetail.getInputPrice());
             }
+
+            itemCount.setWarehouseId(warehouseInrecord.getWarehouseId());
+            itemCount.setWarehouseName(warehouseInrecord.getInWarehouse());
 
             itemCount.setItemCountNum(itemCount.getItemCountNum() + warehouseInrecordDetail.getInputCount());
 

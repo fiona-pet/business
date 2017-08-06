@@ -5,6 +5,8 @@ import com.fionapet.business.entity.DictTypeDetail;
 import com.fionapet.business.entity.ItemCount;
 import com.fionapet.business.entity.WarehouseInrecord;
 import com.fionapet.business.entity.WarehouseInrecordDetail;
+import com.fionapet.business.event.PayEvent;
+import com.fionapet.business.event.WarehouseChangeEvent;
 import com.fionapet.business.jms.NoticeInfoBuilder;
 import com.fionapet.business.jms.QueueMessageProducer;
 import com.fionapet.business.jms.WarehouseNoticeInfo;
@@ -17,6 +19,8 @@ import org.dubbo.x.entity.PageSearch;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.data.domain.Page;
 
 import javax.transaction.Transactional;
@@ -28,15 +32,13 @@ import java.util.List;
  *  进库记录
 * Created by tom on 2016-07-18 11:56:10.
  */
-public class WarehouseInrecordServiceImpl extends CURDServiceBase<WarehouseInrecord> implements WarehouseInrecordService {
+public class WarehouseInrecordServiceImpl extends CURDEServiceBase<WarehouseInrecord> implements WarehouseInrecordService{
     @Autowired
     private WarehouseInrecordDao warehouseInrecordDao;
     @Autowired
     private WarehouseInrecordDetailDao warehouseInrecordDetailDao;
     @Autowired
     private DictTypeDetailDao dictTypeDetailDao;
-    @Autowired
-    private QueueMessageProducer queueMessageProducer;
 
     @Override
     public DaoBase<WarehouseInrecord> getDao() {
@@ -70,13 +72,8 @@ public class WarehouseInrecordServiceImpl extends CURDServiceBase<WarehouseInrec
         }
 
         // 发送 审核 更新库存消息
-        IdEntity idEntity = new User();
-        idEntity.setId(getCurrentUser().getId());
-        WarehouseNoticeInfo warehouseNoticeInfo = NoticeInfoBuilder.instance().setCurrentUser(idEntity).setWarehouseOpType(WarehouseOpType.CHECK).setWarehouseRecordId(uuid).build();
-        queueMessageProducer.sendQueue(warehouseNoticeInfo);
+        this.publishEvent(new WarehouseChangeEvent(warehouseInrecord, WarehouseOpType.CHECK,warehouseInrecord.getId()));
 
         return true;
     }
-
-
 }

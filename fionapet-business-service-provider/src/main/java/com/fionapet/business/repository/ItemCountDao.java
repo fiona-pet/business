@@ -16,4 +16,6 @@ public interface ItemCountDao extends DaoBase<ItemCount> {
 
     @Query(value = "select * from v_input_order_by_item_count", nativeQuery = true)
     List<OrderVO> genOrder();
+
+    ItemCount findByItemCodeAndWarehouseId(String itemCode, String warehouseId);
 }
