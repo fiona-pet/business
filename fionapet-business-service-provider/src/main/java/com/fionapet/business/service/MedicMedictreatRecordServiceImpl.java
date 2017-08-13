@@ -12,6 +12,7 @@ import com.fionapet.business.repository.PetDao;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
+import org.apache.commons.lang.StringUtils;
 import org.dubbo.x.facade.RestResult;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
@@ -112,7 +113,7 @@ public class MedicMedictreatRecordServiceImpl extends CURDServiceBase<MedicMedic
     @Override
     public MedicMedictreatRecord payReturnVisit(String uuid, String remark) {
         MedicMedictreatRecord medicMedictreatRecord = this.detail(uuid);
-        if (null != medicMedictreatRecord){
+        if (null != medicMedictreatRecord && StringUtils.isNotBlank(remark)){
             medicMedictreatRecord.setPayReturnVisit(true);
             medicMedictreatRecord.setPayReturnVisitDate(new Date());
             medicMedictreatRecord.setPayReturnVisitRemark(remark);
