@@ -13,4 +13,6 @@ public interface PersonsDao extends DaoBase<Persons> {
     Persons findByPersonName(String name);
 
     List<Persons> findByRoleId(String code);
+
+    List<Persons> findByStatusDictDetailCode(String code);
 }

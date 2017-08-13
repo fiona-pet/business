@@ -4,12 +4,14 @@ import cn.fiona.pet.account.entity.Role;
 import cn.fiona.pet.account.entity.User;
 import cn.fiona.pet.account.service.AccountService;
 import com.fionapet.business.entity.Persons;
+import com.fionapet.business.entity.StatusEntity;
 import com.fionapet.business.repository.PersonsDao;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -60,5 +62,10 @@ public class PersonsServiceImpl extends CURDServiceBase<Persons> implements Pers
 
 
         return persons;
+    }
+
+    @Override
+    public List<Persons> listAll() {
+        return personsDao.findByStatusDictDetailCode(StatusEntity.DEFAULT().getDictDetailCode());
     }
 }
