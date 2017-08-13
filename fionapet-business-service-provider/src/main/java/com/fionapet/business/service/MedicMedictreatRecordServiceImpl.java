@@ -113,7 +113,7 @@ public class MedicMedictreatRecordServiceImpl extends CURDServiceBase<MedicMedic
     @Override
     public MedicMedictreatRecord payReturnVisit(String uuid, String remark) {
         MedicMedictreatRecord medicMedictreatRecord = this.detail(uuid);
-        if (null != medicMedictreatRecord && StringUtils.isNotBlank(remark)){
+        if (null != medicMedictreatRecord && StringUtils.isNotBlank(remark) && StringUtils.isNotEmpty(remark)){
             medicMedictreatRecord.setPayReturnVisit(true);
             medicMedictreatRecord.setPayReturnVisitDate(new Date());
             medicMedictreatRecord.setPayReturnVisitRemark(remark);
