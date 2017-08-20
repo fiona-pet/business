@@ -12,8 +12,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "v_pet")
 @ApiModel("宠物视图")
-@PrimaryKeyJoinColumn(name = "pet_id")
-public class PetView extends Pet {
+public class PetView extends PetBase {
     private String mobilePhone;
 
     public String getMobilePhone() {
