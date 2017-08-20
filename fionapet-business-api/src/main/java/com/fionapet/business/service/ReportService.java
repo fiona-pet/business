@@ -26,4 +26,6 @@ public interface ReportService extends CURDService<ReportByPersonVO> {
     Map<String, List> doctor(String month, String user);
 
     Map<String, List> doctorInHospital(String month, String user);
+
+    Map<String, String> foster(String month, String day);
 }

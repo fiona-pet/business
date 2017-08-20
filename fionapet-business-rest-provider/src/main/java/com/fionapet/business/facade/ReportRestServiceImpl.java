@@ -2,7 +2,6 @@ package com.fionapet.business.facade;
 
 import com.fionapet.business.entity.ReportByItemVO;
 import com.fionapet.business.entity.ReportByPersonVO;
-import com.fionapet.business.service.AppConfigService;
 import com.fionapet.business.service.ReportService;
 import io.swagger.annotations.ApiParam;
 import org.dubbo.x.facade.RestResult;
@@ -13,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.HeaderParam;
-import javax.ws.rs.QueryParam;
 import java.util.List;
 import java.util.Map;
 
@@ -73,5 +71,10 @@ public class ReportRestServiceImpl extends RestServiceBase<ReportByPersonVO> imp
     @Override
     public RestResult<Map<String, Long>> gestVip(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") String month, @ApiParam("day") String day) {
         return RestResult.OK(reportService.gestVip(month,day));
+    }
+
+    @Override
+    public RestResult<Map<String, String>> foster(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") String month, @ApiParam("day") String day) {
+        return RestResult.OK(reportService.foster(month,day));
     }
 }

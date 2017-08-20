@@ -1,11 +1,7 @@
 package com.fionapet.business.service;
 
-import com.fionapet.business.entity.InputMoneyRecord;
-import com.fionapet.business.entity.ReportByItemVO;
-import com.fionapet.business.entity.ReportByPersonVO;
+import com.fionapet.business.entity.*;
 import com.fionapet.business.repository.*;
-import org.apache.catalina.startup.Catalina;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -38,6 +34,8 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
     private GestDao gestDao;
     @Autowired
     private InputMoneyRecordDao inputMoneyRecordDao;
+    @Autowired
+    private FosterRecordDao fosterRecordDao;
 
     @Override
     public DaoBase<ReportByPersonVO> getDao() {
@@ -161,6 +159,34 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
     @Override
     public Map<String, List> doctorInHospital(String month, String user) {
         return doctorByType(month, user, "住院处方");
+    }
+
+    @Override
+    public Map<String, String> foster(String month, String day) {
+        Date start = new Date();
+        Date end = new Date();
+
+        try {
+            start = DateUtils.parseDate(getDate(month, day, "01") + " 00:00:00", "yyyy-MM-dd hh:mm:ss");
+            end = getEndDate(month, day);
+        } catch (ParseException e) {
+            LOGGER.warn("Data Format ERROR!",e);
+
+        }
+
+        Map<String, String> result = new HashMap<String, String>();
+
+        List<FosterRecord> fosterRecords = fosterRecordDao.findByStatusDictDetailCodeAndCreateDateBetween(StatusEntity.DEFAULT().getDictDetailCode(), start, end);
+
+        result.put("fosterCount", fosterRecords.size()+"");
+        Double total = 0d;
+        for (FosterRecord fosterRecord:fosterRecords){
+            total += fosterRecord.getInputMoney();
+        }
+        result.put("fosterMoneyTotal", total+"");
+
+
+        return result;
     }
 
     private Map<String, List> doctorByType(String month, String user, String type) {

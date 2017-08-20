@@ -94,6 +94,15 @@ public interface ReportRestService extends CURDRestService<ReportByPersonVO>{
     @ApiOperation(value = "统计报表-会员信息",
             notes = "统计报表列表-会员信息.")
     RestResult<Map<String, Long>> gestVip(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") @QueryParam("month") String month, @ApiParam("day") @QueryParam("day") String day);
+    /**
+     * 统计报表-寄养信息
+     * @return
+     */
+    @GET
+    @Path("/foster")
+    @ApiOperation(value = "统计报表-寄养信息",
+            notes = "统计报表列表-寄养信息.")
+    RestResult<Map<String, String>> foster(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") @QueryParam("month") String month, @ApiParam("day") @QueryParam("day") String day);
 
 
     /**
