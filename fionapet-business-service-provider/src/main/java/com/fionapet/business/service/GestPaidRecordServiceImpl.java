@@ -279,7 +279,7 @@ public class GestPaidRecordServiceImpl extends CURDEServiceBase<GestPaidRecord> 
                 }
 
 
-                this.publishEvent(new PayEvent(settleAccountsView, settleAccountsView.getBusinessType(), getToken()));
+                this.publishEvent(new PayEvent(settleAccountsView, pay.getGestPaidRecord().getOperateAction(), settleAccountsView.getBusinessType(), getToken()));
 
             }
 

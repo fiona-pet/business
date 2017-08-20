@@ -51,9 +51,11 @@ public class PayNotifier implements ApplicationListener<PayEvent> {
 
             fosterRecordDetailService.createOrUpdte(fosterRecordDetail);
 
-            FosterRecord fosterRecord = fosterRecordService.detail(fosterRecordDetail.getFosterId());
-            fosterRecord.setInputMoney(fosterRecord.getInputMoney() - fosterRecordDetail.getTotalCost());
-            fosterRecordService.createOrUpdte(fosterRecord);
+            if (!"会员".equals(payEvent.getOperateAction())) {
+                FosterRecord fosterRecord = fosterRecordService.detail(fosterRecordDetail.getFosterId());
+                fosterRecord.setInputMoney(fosterRecord.getInputMoney() - fosterRecordDetail.getTotalCost());
+                fosterRecordService.createOrUpdte(fosterRecord);
+            }
         }
         if ("直接销售".equals(payEvent.getType())){
             pay = new StoreDirectSellPay();
