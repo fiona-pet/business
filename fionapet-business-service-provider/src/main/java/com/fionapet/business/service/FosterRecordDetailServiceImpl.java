@@ -18,4 +18,14 @@ public class FosterRecordDetailServiceImpl extends CURDServiceBase<FosterRecordD
     public DaoBase<FosterRecordDetail> getDao() {
         return fosterRecordDetailDao;
     }
+
+    @Override
+    public FosterRecordDetail createOrUpdte(FosterRecordDetail entity) {
+        return super.createOrUpdte(entity);
+    }
+
+    @Override
+    public void delete(String uuid) {
+        super.delete(uuid);
+    }
 }

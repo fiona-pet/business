@@ -8,11 +8,14 @@ import org.dubbo.x.service.CURDServiceBase;
 import com.fionapet.business.repository.PrepayMoneyDao;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 /**
  *  提前付费表
 * Created by tom on 2016-07-18 11:56:10.
  */
-public class PrepayMoneyServiceImpl extends CURDServiceBase<PrepayMoney> implements PrepayMoneyService {
+public class
+PrepayMoneyServiceImpl extends CURDServiceBase<PrepayMoney> implements PrepayMoneyService {
     @Autowired
     private PrepayMoneyDao prepayMoneyDao;
     @Autowired
@@ -46,5 +49,10 @@ public class PrepayMoneyServiceImpl extends CURDServiceBase<PrepayMoney> impleme
         }
 
         return super.createOrUpdte(entity);
+    }
+
+    @Override
+    public List<PrepayMoney> findByRelationId(String uuid) {
+        return this.prepayMoneyDao.findByRelationId(uuid);
     }
 }

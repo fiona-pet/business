@@ -1,11 +1,16 @@
 package com.fionapet.business.facade;
 
 import com.fionapet.business.entity.FosterRecord;
+import io.swagger.annotations.ApiParam;
+import org.dubbo.x.facade.RestResult;
 import org.dubbo.x.service.CURDService;
 import org.dubbo.x.facade.RestServiceBase;
 import com.fionapet.business.service.FosterRecordService;
+import org.dubbo.x.util.ConstantVariable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.ws.rs.HeaderParam;
 
 /**
  * 养育记录主表
@@ -30,4 +35,8 @@ public class FosterRecordRestServiceImpl extends RestServiceBase<FosterRecord> i
         return fosterRecordService;
     }
 
+    @Override
+    public RestResult<FosterRecord> over(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("id") String uuid) {
+        return RestResult.OK(fosterRecordService.over(uuid));
+    }
 }

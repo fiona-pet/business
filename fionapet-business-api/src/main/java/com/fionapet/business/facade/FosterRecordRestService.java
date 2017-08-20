@@ -45,6 +45,18 @@ public interface FosterRecordRestService extends CURDRestService<FosterRecord>{
             notes = "养育记录主表详细信息.")
     RestResult<FosterRecord> detail(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("id") @PathParam("id") String uuid);
 
+    /**
+     * 寄养出院
+     *
+     * @return
+     */
+    @GET
+    @Path("/over/{id}")
+    @ApiOperation(value = "寄养出院",
+            notes = "寄养出院.")
+    RestResult<FosterRecord> over(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("id") @PathParam("id") String uuid);
+
+
     @POST
     @Path("")
     @ApiOperation(value = "添加/修改养育记录主表", notes = "添加/修改养育记录主表")

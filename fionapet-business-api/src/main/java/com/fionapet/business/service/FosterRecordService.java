@@ -8,4 +8,5 @@ import org.dubbo.x.service.CURDService;
  */
 public interface FosterRecordService extends CURDService<FosterRecord> {
 
+    FosterRecord over(String uuid);
 }
