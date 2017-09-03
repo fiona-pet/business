@@ -76,4 +76,14 @@ public class WarehouseInrecordServiceImpl extends CURDEServiceBase<WarehouseInre
 
         return true;
     }
+
+    @Override
+    public Boolean paystatus(String uuid) {
+        WarehouseInrecord warehouseInrecord = warehouseInrecordDao.findOne(uuid);
+        if (null != warehouseInrecord){
+            warehouseInrecord.setPaidStatus("已付款");
+            createOrUpdte(warehouseInrecord);
+        }
+        return true;
+    }
 }

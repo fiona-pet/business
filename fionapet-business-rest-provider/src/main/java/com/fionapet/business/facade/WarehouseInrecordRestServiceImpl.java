@@ -40,4 +40,9 @@ public class WarehouseInrecordRestServiceImpl extends RestServiceBase<WarehouseI
     public RestResult<String> audit(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("id") String uuid) {
         return RestResult.OK(warehouseInrecordService.audit(uuid)+"");
     }
+
+    @Override
+    public RestResult<String> paystatus(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("id") String uuid) {
+        return RestResult.OK(warehouseInrecordService.paystatus(uuid)+"");
+    }
 }

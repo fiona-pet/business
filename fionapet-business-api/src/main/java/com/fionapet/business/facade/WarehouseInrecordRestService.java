@@ -59,4 +59,11 @@ public interface WarehouseInrecordRestService extends CURDRestService<WarehouseI
     @Path("/audit/{id}")
     @ApiOperation(value = "审核进库记录", notes = "审核进库记录")
     RestResult<String> audit(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("id") @PathParam("id") String uuid);
+
+    @GET
+    @Path("/paystatus/{id}")
+    @ApiOperation(value = "更新支付状态", notes = "更新支付状态")
+    RestResult<String> paystatus(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("id") @PathParam("id") String uuid);
+
+
 }

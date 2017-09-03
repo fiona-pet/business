@@ -14,4 +14,11 @@ public interface WarehouseInrecordService extends CURDService<WarehouseInrecord>
      * @return
      */
     Boolean audit(String uuid);
+
+    /**
+     * 支付状态
+     * @param uuid
+     * @return
+     */
+    Boolean paystatus(String uuid);
 }
