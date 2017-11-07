@@ -331,53 +331,31 @@ GROUP BY
 	substr(`mpd`.`paid_time`, 1, 10)
 UNION ALL
 	SELECT
-		uuid() AS `id`,
-		sum(`fsad`.`total_cost`) AS `total`,
-		`p`.`person_name` AS `name`,
-		(
-			CASE
-			WHEN (
-				locate('CEX', `fsad`.`item_code`) > 0
-			) THEN
-				'美容销售'
-			WHEN (
-				locate('BC', `fsad`.`item_code`) > 0
-			) THEN
-				'商品销售'
-			END
-		) AS `type`,
-		substr(`sdsd`.`create_date`, 1, 10) AS `create_date`
-	FROM
-		(
-			(
-				`t_store_direct_sell_detail` `sdsd`
-				JOIN `t_persons` `p` ON (
-					(
-						`sdsd`.`create_user_id` = `p`.`id`
-					)
-				)
-			)
-			JOIN `t_finance_settle_accounts_detail` `fsad` ON (
-				(
-					`sdsd`.`id` = `fsad`.`relation_detail_id`
-				)
-			)
-		)
-	GROUP BY
-		`sdsd`.`create_user_id`,
-		substr(`sdsd`.`create_date`, 1, 10),
-		(
-			CASE
-			WHEN (
-				locate('CEX', `fsad`.`item_code`) > 0
-			) THEN
-				'美容销售'
-			WHEN (
-				locate('BC', `fsad`.`item_code`) > 0
-			) THEN
-				'商品销售'
-			END
-		)
+  uuid() AS `id`,
+  sum(`fsad`.`total_cost`) AS `total`,
+  `p`.`person_name` AS `name`,
+  '商品销售' AS `type`,
+  substr(`sdsd`.`create_date`, 1, 10) AS `create_date`
+FROM
+  (
+      (
+          `t_store_direct_sell_detail` `sdsd`
+          JOIN `t_persons` `p` ON (
+          (
+            `sdsd`.`create_user_id` = `p`.`id`
+          )
+          )
+        )
+      JOIN `t_finance_settle_accounts_detail` `fsad` ON (
+      (
+        `sdsd`.`id` = `fsad`.`relation_detail_id`
+      )
+      )
+  )
+GROUP BY
+  `sdsd`.`create_user_id`,
+  substr(`sdsd`.`create_date`, 1, 10)
+
 	UNION ALL
 		SELECT
 			uuid() AS `id`,
@@ -460,37 +438,68 @@ UNION ALL
 				GROUP BY
 					`mpd`.`create_user_id`,
 					substr(`mpd`.`create_date`, 1, 10)
-			UNION ALL
-			SELECT
-      uuid() AS `id`,
-      sum(`fsad`.`total_cost`) AS `total`,
-      '美容部门' AS `name`,
-      '寄养服务' AS `type`,
-      substr(`frd`.`paid_time`, 1, 10) AS `create_date`
-    FROM
-      t_foster_record_detail frd
-      JOIN t_finance_settle_accounts_detail fsad on `frd`.`id` = `fsad`.`relation_detail_id`
-      JOIN t_item_type it on it.item_code = frd.item_code
-
-      where it.cate_no = 'ICate11'
-    GROUP BY
-      `frd`.`paid_time`
-		UNION ALL
-		SELECT
-      uuid() AS `id`,
-      sum(`fsad`.`total_cost`) AS `total`,
-      p.person_name AS `name`,
-      '寄养销售' AS `type`,
-      substr(`frd`.`paid_time`, 1, 10) AS `create_date`
-    FROM
-      t_foster_record_detail frd
-      JOIN t_finance_settle_accounts_detail fsad on `frd`.`id` = `fsad`.`relation_detail_id`
-      JOIN t_item_type it on it.item_code = frd.item_code
-      JOIN t_persons p ON p.id = frd.create_user_id
-      where it.cate_no <> 'ICate11'
-    GROUP BY
-      frd.create_user_id,
-      `frd`.`paid_time`
+				UNION ALL
+					SELECT
+						uuid() AS `id`,
+						sum(`fsad`.`total_cost`) AS `total`,
+						'美容部门' AS `name`,
+						'寄养服务' AS `type`,
+						substr(`frd`.`paid_time`, 1, 10) AS `create_date`
+					FROM
+						(
+							(
+								`t_foster_record_detail` `frd`
+								JOIN `t_finance_settle_accounts_detail` `fsad` ON (
+									(
+										`frd`.`id` = `fsad`.`relation_detail_id`
+									)
+								)
+							)
+							JOIN `t_item_type` `it` ON (
+								(
+									`it`.`item_code` = `frd`.`item_code`
+								)
+							)
+						)
+					WHERE
+						(`it`.`cate_no` = 'ICate11')
+					GROUP BY
+						`frd`.`paid_time`
+					UNION ALL
+						SELECT
+							uuid() AS `id`,
+							sum(`fsad`.`total_cost`) AS `total`,
+							`p`.`person_name` AS `name`,
+							'寄养销售' AS `type`,
+							substr(`frd`.`paid_time`, 1, 10) AS `create_date`
+						FROM
+							(
+								(
+									(
+										`t_foster_record_detail` `frd`
+										JOIN `t_finance_settle_accounts_detail` `fsad` ON (
+											(
+												`frd`.`id` = `fsad`.`relation_detail_id`
+											)
+										)
+									)
+									JOIN `t_item_type` `it` ON (
+										(
+											`it`.`item_code` = `frd`.`item_code`
+										)
+									)
+								)
+								JOIN `t_persons` `p` ON (
+									(
+										`p`.`id` = `frd`.`create_user_id`
+									)
+								)
+							)
+						WHERE
+							(`it`.`cate_no` <> 'ICate11')
+						GROUP BY
+							`frd`.`create_user_id`,
+							`frd`.`paid_time`
 
 
 -- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --

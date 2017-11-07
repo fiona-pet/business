@@ -5,6 +5,8 @@ import com.fionapet.business.event.PayEvent;
 import com.fionapet.business.exception.ApiException;
 import com.fionapet.business.facade.vo.PayVO;
 import com.fionapet.business.repository.*;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.dubbo.x.entity.IdEntity;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
@@ -15,6 +17,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 
 import javax.transaction.Transactional;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -270,11 +274,14 @@ public class GestPaidRecordServiceImpl extends CURDEServiceBase<GestPaidRecord> 
                         itemCountService.decrease(inHospitalPrescriptionDetail);
 
                         inHospitalPrescriptionDetailService.createOrUpdte(inHospitalPrescriptionDetail);
-
-                        InHospitalPrescription inHospitalPrescription = inHospitalPrescriptionService.detail(inHospitalPrescriptionDetail.getPrescriptionId());
+                    }
+                    InHospitalPrescription inHospitalPrescription = inHospitalPrescriptionService.detail(settleAccountsView.getRelationId());
+                    if (null != inHospitalPrescription) {
                         InHospitalRecord inHospitalRecord = inHospitalRecordService.detail(inHospitalPrescription.getInHospitalId());
-                        inHospitalRecord.setInputMoney(inHospitalRecord.getInputMoney() - inHospitalPrescriptionDetail.getItemNum() * inHospitalPrescriptionDetail.getItemCost());
-                        inHospitalRecordService.createOrUpdte(inHospitalRecord);
+                        if (null != inHospitalRecord) {
+                            inHospitalRecord.setInputMoney(inHospitalRecord.getInputMoney() - Double.parseDouble(String.format("%.2f", financeSettleAccountsDetail.getTotalCost())));
+                            inHospitalRecordService.createOrUpdte(inHospitalRecord);
+                        }
                     }
                 }
 
