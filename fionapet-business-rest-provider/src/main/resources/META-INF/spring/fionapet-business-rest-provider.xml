@@ -21,13 +21,13 @@
 	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
     <!--uncomment this if you want to test dubbo's monitor-->
-    <dubbo:monitor protocol="registry"/>
+    <!--<dubbo:monitor protocol="registry"/>-->
 
     <!-- here we demonstrate both annotation-based and xml-based configs -->
     <dubbo:annotation package="com.fionapet.business.facade"/>
 
     <!-- use tomcat server -->
-    <dubbo:protocol name="rest" threads="500" contextpath="api/v2" server="tomcat" accepts="500"
+    <dubbo:protocol name="rest" port="9818" threads="500" contextpath="api/v2" server="tomcat" accepts="500"
                     extension="com.fionapet.business.extension.TraceInterceptor,
                     com.fionapet.business.extension.TraceFilter,
                     com.fionapet.business.extension.ClientTraceFilter,
@@ -44,10 +44,10 @@
         <property name="petSmallRaceService" ref="petSmallRaceService"/>
     </bean>
 
-    <dubbo:reference id="petSmallRaceService" interface="com.fionapet.business.service.PetSmallRaceService"/>
+    <dubbo:reference id="petSmallRaceService" injvm="true" interface="com.fionapet.business.service.PetSmallRaceService"/>
     <!-- pet race api -->
 
-    <dubbo:reference id="accountService" interface="cn.fiona.pet.account.service.AccountService"/>
+    <!--<dubbo:reference id="accountService" interface="cn.fiona.pet.account.service.AccountService"/>-->
 
 
 	<!--应用配置 api -->
@@ -58,7 +58,7 @@
         <property name="appConfigService" ref="appConfigService"/>
     </bean>
 
-    <dubbo:reference id="appConfigService" interface="com.fionapet.business.service.AppConfigService"/>
+    <dubbo:reference id="appConfigService" injvm="true" interface="com.fionapet.business.service.AppConfigService"/>
     <!--应用配置 api -->
 
 
@@ -70,7 +70,7 @@
         <property name="phoneMessageService" ref="phoneMessageService"/>
     </bean>
 
-    <dubbo:reference id="phoneMessageService" interface="com.fionapet.business.service.PhoneMessageService"/>
+    <dubbo:reference id="phoneMessageService" injvm="true" interface="com.fionapet.business.service.PhoneMessageService"/>
     <!--电话信息表 api -->
 
 
@@ -82,7 +82,7 @@
         <property name="warehouseMoverecordService" ref="warehouseMoverecordService"/>
     </bean>
 
-    <dubbo:reference id="warehouseMoverecordService" interface="com.fionapet.business.service.WarehouseMoverecordService"/>
+    <dubbo:reference id="warehouseMoverecordService" injvm="true" interface="com.fionapet.business.service.WarehouseMoverecordService"/>
     <!--移库记录 api -->
 
 
@@ -94,7 +94,7 @@
         <property name="warehouseInventoryService" ref="warehouseInventoryService"/>
     </bean>
 
-    <dubbo:reference id="warehouseInventoryService" interface="com.fionapet.business.service.WarehouseInventoryService"/>
+    <dubbo:reference id="warehouseInventoryService" injvm="true" interface="com.fionapet.business.service.WarehouseInventoryService"/>
     <!--仓库存货清单 api -->
 
 
@@ -106,7 +106,7 @@
         <property name="medicChemicalExamtypeDetailService" ref="medicChemicalExamtypeDetailService"/>
     </bean>
 
-    <dubbo:reference id="medicChemicalExamtypeDetailService" interface="com.fionapet.business.service.MedicChemicalExamtypeDetailService"/>
+    <dubbo:reference id="medicChemicalExamtypeDetailService" injvm="true" interface="com.fionapet.business.service.MedicChemicalExamtypeDetailService"/>
     <!--医生化验实例类型细节表 api -->
 
 
@@ -118,7 +118,7 @@
         <property name="warehouseBackrecordService" ref="warehouseBackrecordService"/>
     </bean>
 
-    <dubbo:reference id="warehouseBackrecordService" interface="com.fionapet.business.service.WarehouseBackrecordService"/>
+    <dubbo:reference id="warehouseBackrecordService" injvm="true" interface="com.fionapet.business.service.WarehouseBackrecordService"/>
     <!--退回记录 api -->
 
 
@@ -130,7 +130,7 @@
         <property name="storeDirectSellService" ref="storeDirectSellService"/>
     </bean>
 
-    <dubbo:reference id="storeDirectSellService" interface="com.fionapet.business.service.StoreDirectSellService"/>
+    <dubbo:reference id="storeDirectSellService" injvm="true" interface="com.fionapet.business.service.StoreDirectSellService"/>
     <!--仓库直销主表 api -->
 
 
@@ -142,7 +142,7 @@
         <property name="medicVaccineService" ref="medicVaccineService"/>
     </bean>
 
-    <dubbo:reference id="medicVaccineService" interface="com.fionapet.business.service.MedicVaccineService"/>
+    <dubbo:reference id="medicVaccineService" injvm="true" interface="com.fionapet.business.service.MedicVaccineService"/>
     <!--育苗表 api -->
 
 
@@ -154,7 +154,7 @@
         <property name="medicPrescriptionService" ref="medicPrescriptionService"/>
     </bean>
 
-    <dubbo:reference id="medicPrescriptionService" interface="com.fionapet.business.service.MedicPrescriptionService"/>
+    <dubbo:reference id="medicPrescriptionService" injvm="true" interface="com.fionapet.business.service.MedicPrescriptionService"/>
     <!--医生处方明细 api -->
 
 
@@ -166,7 +166,7 @@
         <property name="medicSuppliesService" ref="medicSuppliesService"/>
     </bean>
 
-    <dubbo:reference id="medicSuppliesService" interface="com.fionapet.business.service.MedicSuppliesService"/>
+    <dubbo:reference id="medicSuppliesService" injvm="true" interface="com.fionapet.business.service.MedicSuppliesService"/>
     <!--医生供应量表 api -->
 
 
@@ -178,7 +178,7 @@
         <property name="rewardPointLogService" ref="rewardPointLogService"/>
     </bean>
 
-    <dubbo:reference id="rewardPointLogService" interface="com.fionapet.business.service.RewardPointLogService"/>
+    <dubbo:reference id="rewardPointLogService" injvm="true" interface="com.fionapet.business.service.RewardPointLogService"/>
     <!--序列号 api -->
 
 
@@ -190,7 +190,7 @@
         <property name="warehouseBackrecordDetailService" ref="warehouseBackrecordDetailService"/>
     </bean>
 
-    <dubbo:reference id="warehouseBackrecordDetailService" interface="com.fionapet.business.service.WarehouseBackrecordDetailService"/>
+    <dubbo:reference id="warehouseBackrecordDetailService" injvm="true" interface="com.fionapet.business.service.WarehouseBackrecordDetailService"/>
     <!--退回记录明细 api -->
 
 
@@ -202,7 +202,7 @@
         <property name="returnCommodityService" ref="returnCommodityService"/>
     </bean>
 
-    <dubbo:reference id="returnCommodityService" interface="com.fionapet.business.service.ReturnCommodityService"/>
+    <dubbo:reference id="returnCommodityService" injvm="true" interface="com.fionapet.business.service.ReturnCommodityService"/>
     <!--返回商品主表 api -->
 
 
@@ -214,7 +214,7 @@
         <property name="medicPrescriptionDetailService" ref="medicPrescriptionDetailService"/>
     </bean>
 
-    <dubbo:reference id="medicPrescriptionDetailService" interface="com.fionapet.business.service.MedicPrescriptionDetailService"/>
+    <dubbo:reference id="medicPrescriptionDetailService" injvm="true" interface="com.fionapet.business.service.MedicPrescriptionDetailService"/>
     <!--医生处方明细 api -->
 
 
@@ -226,7 +226,7 @@
         <property name="microSmsConfigService" ref="microSmsConfigService"/>
     </bean>
 
-    <dubbo:reference id="microSmsConfigService" interface="com.fionapet.business.service.MicroSmsConfigService"/>
+    <dubbo:reference id="microSmsConfigService" injvm="true" interface="com.fionapet.business.service.MicroSmsConfigService"/>
     <!--消息提醒配置表 api -->
 
 
@@ -238,7 +238,7 @@
         <property name="warehouseInrecordService" ref="warehouseInrecordService"/>
     </bean>
 
-    <dubbo:reference id="warehouseInrecordService" interface="com.fionapet.business.service.WarehouseInrecordService"/>
+    <dubbo:reference id="warehouseInrecordService" injvm="true" interface="com.fionapet.business.service.WarehouseInrecordService"/>
     <!--进库记录 api -->
 
 
@@ -250,7 +250,7 @@
         <property name="medicRegisterRecordService" ref="medicRegisterRecordService"/>
     </bean>
 
-    <dubbo:reference id="medicRegisterRecordService" interface="com.fionapet.business.service.MedicRegisterRecordService"/>
+    <dubbo:reference id="medicRegisterRecordService" injvm="true" interface="com.fionapet.business.service.MedicRegisterRecordService"/>
     <!--医生登记记录明细 api -->
 
 
@@ -262,7 +262,7 @@
         <property name="prepayMoneyService" ref="prepayMoneyService"/>
     </bean>
 
-    <dubbo:reference id="prepayMoneyService" interface="com.fionapet.business.service.PrepayMoneyService"/>
+    <dubbo:reference id="prepayMoneyService" injvm="true" interface="com.fionapet.business.service.PrepayMoneyService"/>
     <!--提前付费表 api -->
 
 
@@ -274,7 +274,7 @@
         <property name="warehouseInrecordDetailService" ref="warehouseInrecordDetailService"/>
     </bean>
 
-    <dubbo:reference id="warehouseInrecordDetailService" interface="com.fionapet.business.service.WarehouseInrecordDetailService"/>
+    <dubbo:reference id="warehouseInrecordDetailService" injvm="true" interface="com.fionapet.business.service.WarehouseInrecordDetailService"/>
     <!--进库记录明细 api -->
 
 
@@ -286,7 +286,7 @@
         <property name="promptService" ref="promptService"/>
     </bean>
 
-    <dubbo:reference id="promptService" interface="com.fionapet.business.service.PromptService"/>
+    <dubbo:reference id="promptService" injvm="true" interface="com.fionapet.business.service.PromptService"/>
     <!--急诊表 api -->
 
 
@@ -298,7 +298,7 @@
         <property name="serviceDetailService" ref="serviceDetailService"/>
     </bean>
 
-    <dubbo:reference id="serviceDetailService" interface="com.fionapet.business.service.ServiceDetailService"/>
+    <dubbo:reference id="serviceDetailService" injvm="true" interface="com.fionapet.business.service.ServiceDetailService"/>
     <!--服务明细 api -->
 
 
@@ -310,7 +310,7 @@
         <property name="checkProcessSheetService" ref="checkProcessSheetService"/>
     </bean>
 
-    <dubbo:reference id="checkProcessSheetService" interface="com.fionapet.business.service.CheckProcessSheetService"/>
+    <dubbo:reference id="checkProcessSheetService" injvm="true" interface="com.fionapet.business.service.CheckProcessSheetService"/>
     <!--检查处理单据 api -->
 
 
@@ -322,7 +322,7 @@
         <property name="warehouseOutrecordService" ref="warehouseOutrecordService"/>
     </bean>
 
-    <dubbo:reference id="warehouseOutrecordService" interface="com.fionapet.business.service.WarehouseOutrecordService"/>
+    <dubbo:reference id="warehouseOutrecordService" injvm="true" interface="com.fionapet.business.service.WarehouseOutrecordService"/>
     <!--出库记录 api -->
 
 
@@ -334,7 +334,7 @@
         <property name="medicChemicalExamtypeService" ref="medicChemicalExamtypeService"/>
     </bean>
 
-    <dubbo:reference id="medicChemicalExamtypeService" interface="com.fionapet.business.service.MedicChemicalExamtypeService"/>
+    <dubbo:reference id="medicChemicalExamtypeService" injvm="true" interface="com.fionapet.business.service.MedicChemicalExamtypeService"/>
     <!--医生化验实例类型细节表 api -->
 
 
@@ -346,7 +346,7 @@
         <property name="medicMedictreatRecordService" ref="medicMedictreatRecordService"/>
     </bean>
 
-    <dubbo:reference id="medicMedictreatRecordService" interface="com.fionapet.business.service.MedicMedictreatRecordService"/>
+    <dubbo:reference id="medicMedictreatRecordService" injvm="true" interface="com.fionapet.business.service.MedicMedictreatRecordService"/>
     <!--医生处理记录 api -->
 
 
@@ -358,7 +358,7 @@
         <property name="rewardpointExchangeDetailService" ref="rewardpointExchangeDetailService"/>
     </bean>
 
-    <dubbo:reference id="rewardpointExchangeDetailService" interface="com.fionapet.business.service.RewardpointExchangeDetailService"/>
+    <dubbo:reference id="rewardpointExchangeDetailService" injvm="true" interface="com.fionapet.business.service.RewardpointExchangeDetailService"/>
     <!--赔偿交换细节 api -->
 
 
@@ -370,7 +370,7 @@
         <property name="warehouseOutrecordDetailService" ref="warehouseOutrecordDetailService"/>
     </bean>
 
-    <dubbo:reference id="warehouseOutrecordDetailService" interface="com.fionapet.business.service.WarehouseOutrecordDetailService"/>
+    <dubbo:reference id="warehouseOutrecordDetailService" injvm="true" interface="com.fionapet.business.service.WarehouseOutrecordDetailService"/>
     <!--出库记录明细 api -->
 
 
@@ -382,7 +382,7 @@
         <property name="rewardpointExchangeService" ref="rewardpointExchangeService"/>
     </bean>
 
-    <dubbo:reference id="rewardpointExchangeService" interface="com.fionapet.business.service.RewardpointExchangeService"/>
+    <dubbo:reference id="rewardpointExchangeService" injvm="true" interface="com.fionapet.business.service.RewardpointExchangeService"/>
     <!--赔偿交换 api -->
 
 
@@ -394,7 +394,7 @@
         <property name="serialNumberService" ref="serialNumberService"/>
     </bean>
 
-    <dubbo:reference id="serialNumberService" interface="com.fionapet.business.service.SerialNumberService"/>
+    <dubbo:reference id="serialNumberService" injvm="true" interface="com.fionapet.business.service.SerialNumberService"/>
     <!--序列号 api -->
 
 
@@ -406,7 +406,7 @@
         <property name="vipInputTemService" ref="vipInputTemService"/>
     </bean>
 
-    <dubbo:reference id="vipInputTemService" interface="com.fionapet.business.service.VipInputTemService"/>
+    <dubbo:reference id="vipInputTemService" injvm="true" interface="com.fionapet.business.service.VipInputTemService"/>
     <!--VIP信息 api -->
 
 
@@ -418,7 +418,7 @@
         <property name="approveStatusEntityService" ref="approveStatusEntityService"/>
     </bean>
 
-    <dubbo:reference id="approveStatusEntityService" interface="com.fionapet.business.service.ApproveStatusEntityService"/>
+    <dubbo:reference id="approveStatusEntityService" injvm="true" interface="com.fionapet.business.service.ApproveStatusEntityService"/>
     <!--审批状态实体 api -->
 
 
@@ -430,7 +430,7 @@
         <property name="warehouseMoverecordDetailService" ref="warehouseMoverecordDetailService"/>
     </bean>
 
-    <dubbo:reference id="warehouseMoverecordDetailService" interface="com.fionapet.business.service.WarehouseMoverecordDetailService"/>
+    <dubbo:reference id="warehouseMoverecordDetailService" injvm="true" interface="com.fionapet.business.service.WarehouseMoverecordDetailService"/>
     <!--移库记录明细 api -->
 
 
@@ -442,7 +442,7 @@
         <property name="storeDirectSellDetailService" ref="storeDirectSellDetailService"/>
     </bean>
 
-    <dubbo:reference id="storeDirectSellDetailService" interface="com.fionapet.business.service.StoreDirectSellDetailService"/>
+    <dubbo:reference id="storeDirectSellDetailService" injvm="true" interface="com.fionapet.business.service.StoreDirectSellDetailService"/>
     <!--仓库直销明细 api -->
 
 
@@ -454,7 +454,7 @@
         <property name="returnCommodityDetailService" ref="returnCommodityDetailService"/>
     </bean>
 
-    <dubbo:reference id="returnCommodityDetailService" interface="com.fionapet.business.service.ReturnCommodityDetailService"/>
+    <dubbo:reference id="returnCommodityDetailService" injvm="true" interface="com.fionapet.business.service.ReturnCommodityDetailService"/>
     <!--返回商品明细 api -->
 
 
@@ -466,7 +466,7 @@
         <property name="serviceService" ref="serviceService"/>
     </bean>
 
-    <dubbo:reference id="serviceService" interface="com.fionapet.business.service.ServiceService"/>
+    <dubbo:reference id="serviceService" injvm="true" interface="com.fionapet.business.service.ServiceService"/>
     <!--服务主表 api -->
 
 
@@ -478,7 +478,7 @@
         <property name="inHospitalPrescriptionDetailService" ref="inHospitalPrescriptionDetailService"/>
     </bean>
 
-    <dubbo:reference id="inHospitalPrescriptionDetailService" interface="com.fionapet.business.service.InHospitalPrescriptionDetailService"/>
+    <dubbo:reference id="inHospitalPrescriptionDetailService" injvm="true" interface="com.fionapet.business.service.InHospitalPrescriptionDetailService"/>
     <!--住院处方明细 api -->
 
 
@@ -490,7 +490,7 @@
         <property name="inHospitalPrescriptionService" ref="inHospitalPrescriptionService"/>
     </bean>
 
-    <dubbo:reference id="inHospitalPrescriptionService" interface="com.fionapet.business.service.InHospitalPrescriptionService"/>
+    <dubbo:reference id="inHospitalPrescriptionService" injvm="true" interface="com.fionapet.business.service.InHospitalPrescriptionService"/>
     <!--住院处方 api -->
 
 
@@ -502,7 +502,7 @@
         <property name="baseMedicPrescriptionDetailService" ref="baseMedicPrescriptionDetailService"/>
     </bean>
 
-    <dubbo:reference id="baseMedicPrescriptionDetailService" interface="com.fionapet.business.service.BaseMedicPrescriptionDetailService"/>
+    <dubbo:reference id="baseMedicPrescriptionDetailService" injvm="true" interface="com.fionapet.business.service.BaseMedicPrescriptionDetailService"/>
     <!--处方明细 api -->
 
 
@@ -514,7 +514,7 @@
         <property name="baseMedicPrescriptionService" ref="baseMedicPrescriptionService"/>
     </bean>
 
-    <dubbo:reference id="baseMedicPrescriptionService" interface="com.fionapet.business.service.BaseMedicPrescriptionService"/>
+    <dubbo:reference id="baseMedicPrescriptionService" injvm="true" interface="com.fionapet.business.service.BaseMedicPrescriptionService"/>
     <!--处方 api -->
 
 
@@ -529,8 +529,8 @@
     </bean>
 
 
-    <dubbo:reference id="petService" interface="com.fionapet.business.service.PetService"/>
-    <dubbo:reference id="petViewService" interface="com.fionapet.business.service.PetViewService"/>
+    <dubbo:reference id="petService" injvm="true" interface="com.fionapet.business.service.PetService"/>
+    <dubbo:reference id="petViewService" injvm="true" interface="com.fionapet.business.service.PetViewService"/>
     <!--宠物 api -->
 
 
@@ -542,7 +542,7 @@
         <property name="gestService" ref="gestService"/>
     </bean>
 
-    <dubbo:reference id="gestService" interface="com.fionapet.business.service.GestService"/>
+    <dubbo:reference id="gestService" injvm="true" interface="com.fionapet.business.service.GestService"/>
     <!--会员 api -->
 
 
@@ -554,7 +554,7 @@
         <property name="inventoryLogService" ref="inventoryLogService"/>
     </bean>
 
-    <dubbo:reference id="inventoryLogService" interface="com.fionapet.business.service.InventoryLogService"/>
+    <dubbo:reference id="inventoryLogService" injvm="true" interface="com.fionapet.business.service.InventoryLogService"/>
     <!--存货清单日志表 api -->
 
 
@@ -566,7 +566,7 @@
         <property name="itemCountChangeReasonService" ref="itemCountChangeReasonService"/>
     </bean>
 
-    <dubbo:reference id="itemCountChangeReasonService" interface="com.fionapet.business.service.ItemCountChangeReasonService"/>
+    <dubbo:reference id="itemCountChangeReasonService" injvm="true" interface="com.fionapet.business.service.ItemCountChangeReasonService"/>
     <!--种类数量更改原因表 api -->
 
 
@@ -578,7 +578,7 @@
         <property name="enterpriseService" ref="enterpriseService"/>
     </bean>
 
-    <dubbo:reference id="enterpriseService" interface="com.fionapet.business.service.EnterpriseService"/>
+    <dubbo:reference id="enterpriseService" injvm="true" interface="com.fionapet.business.service.EnterpriseService"/>
     <!--企业信息表 api -->
 
 
@@ -590,7 +590,7 @@
         <property name="fosterRecordDetailService" ref="fosterRecordDetailService"/>
     </bean>
 
-    <dubbo:reference id="fosterRecordDetailService" interface="com.fionapet.business.service.FosterRecordDetailService"/>
+    <dubbo:reference id="fosterRecordDetailService" injvm="true" interface="com.fionapet.business.service.FosterRecordDetailService"/>
     <!--养育记录明细表 api -->
 
 
@@ -602,7 +602,7 @@
         <property name="inHospitalRecordDetailService" ref="inHospitalRecordDetailService"/>
     </bean>
 
-    <dubbo:reference id="inHospitalRecordDetailService" interface="com.fionapet.business.service.InHospitalRecordDetailService"/>
+    <dubbo:reference id="inHospitalRecordDetailService" injvm="true" interface="com.fionapet.business.service.InHospitalRecordDetailService"/>
     <!--医院记录明细表 api -->
 
 
@@ -614,7 +614,7 @@
         <property name="fifoLogService" ref="fifoLogService"/>
     </bean>
 
-    <dubbo:reference id="fifoLogService" interface="com.fionapet.business.service.FifoLogService"/>
+    <dubbo:reference id="fifoLogService" injvm="true" interface="com.fionapet.business.service.FifoLogService"/>
     <!--进库出库日志 api -->
 
 
@@ -626,7 +626,7 @@
         <property name="itemtypeChemicalexamService" ref="itemtypeChemicalexamService"/>
     </bean>
 
-    <dubbo:reference id="itemtypeChemicalexamService" interface="com.fionapet.business.service.ItemtypeChemicalexamService"/>
+    <dubbo:reference id="itemtypeChemicalexamService" injvm="true" interface="com.fionapet.business.service.ItemtypeChemicalexamService"/>
     <!--类型化验实例表 api -->
 
 
@@ -638,7 +638,7 @@
         <property name="itemSingleDetailService" ref="itemSingleDetailService"/>
     </bean>
 
-    <dubbo:reference id="itemSingleDetailService" interface="com.fionapet.business.service.ItemSingleDetailService"/>
+    <dubbo:reference id="itemSingleDetailService" injvm="true" interface="com.fionapet.business.service.ItemSingleDetailService"/>
     <!--类型化验实例明细表 api -->
 
 
@@ -650,7 +650,7 @@
         <property name="inHospitalRecordService" ref="inHospitalRecordService"/>
     </bean>
 
-    <dubbo:reference id="inHospitalRecordService" interface="com.fionapet.business.service.InHospitalRecordService"/>
+    <dubbo:reference id="inHospitalRecordService" injvm="true" interface="com.fionapet.business.service.InHospitalRecordService"/>
     <!--医院记录表 api -->
 
 
@@ -662,7 +662,7 @@
         <property name="fosterHealthService" ref="fosterHealthService"/>
     </bean>
 
-    <dubbo:reference id="fosterHealthService" interface="com.fionapet.business.service.FosterHealthService"/>
+    <dubbo:reference id="fosterHealthService" injvm="true" interface="com.fionapet.business.service.FosterHealthService"/>
     <!--养育健康状况表 api -->
 
 
@@ -674,7 +674,7 @@
         <property name="fosterRecordService" ref="fosterRecordService"/>
     </bean>
 
-    <dubbo:reference id="fosterRecordService" interface="com.fionapet.business.service.FosterRecordService"/>
+    <dubbo:reference id="fosterRecordService" injvm="true" interface="com.fionapet.business.service.FosterRecordService"/>
     <!--养育记录主表 api -->
 
 
@@ -686,7 +686,7 @@
         <property name="inputMoneyRecordService" ref="inputMoneyRecordService"/>
     </bean>
 
-    <dubbo:reference id="inputMoneyRecordService" interface="com.fionapet.business.service.InputMoneyRecordService"/>
+    <dubbo:reference id="inputMoneyRecordService" injvm="true" interface="com.fionapet.business.service.InputMoneyRecordService"/>
     <!--收款记录表 api -->
 
 
@@ -698,7 +698,7 @@
         <property name="itemCountService" ref="itemCountService"/>
     </bean>
 
-    <dubbo:reference id="itemCountService" interface="com.fionapet.business.service.ItemCountService"/>
+    <dubbo:reference id="itemCountService" injvm="true" interface="com.fionapet.business.service.ItemCountService"/>
     <!--种类数量更改原因表 api -->
 
 
@@ -710,7 +710,7 @@
         <property name="checkWarehouseService" ref="checkWarehouseService"/>
     </bean>
 
-    <dubbo:reference id="checkWarehouseService" interface="com.fionapet.business.service.CheckWarehouseService"/>
+    <dubbo:reference id="checkWarehouseService" injvm="true" interface="com.fionapet.business.service.CheckWarehouseService"/>
     <!--仓库检查主表 api -->
 
 
@@ -722,7 +722,7 @@
         <property name="checkWarehouseDetailService" ref="checkWarehouseDetailService"/>
     </bean>
 
-    <dubbo:reference id="checkWarehouseDetailService" interface="com.fionapet.business.service.CheckWarehouseDetailService"/>
+    <dubbo:reference id="checkWarehouseDetailService" injvm="true" interface="com.fionapet.business.service.CheckWarehouseDetailService"/>
     <!--检查仓库明细表 api -->
 
 
@@ -734,7 +734,7 @@
         <property name="financeSettleAccountsDetailService" ref="financeSettleAccountsDetailService"/>
     </bean>
 
-    <dubbo:reference id="financeSettleAccountsDetailService" interface="com.fionapet.business.service.FinanceSettleAccountsDetailService"/>
+    <dubbo:reference id="financeSettleAccountsDetailService" injvm="true" interface="com.fionapet.business.service.FinanceSettleAccountsDetailService"/>
     <!--资金账户明细表 api -->
 
 
@@ -746,7 +746,7 @@
         <property name="itemtypeSuppliesService" ref="itemtypeSuppliesService"/>
     </bean>
 
-    <dubbo:reference id="itemtypeSuppliesService" interface="com.fionapet.business.service.ItemtypeSuppliesService"/>
+    <dubbo:reference id="itemtypeSuppliesService" injvm="true" interface="com.fionapet.business.service.ItemtypeSuppliesService"/>
     <!--供应量表 api -->
 
 
@@ -758,7 +758,7 @@
         <property name="financeSettleAccountsService" ref="financeSettleAccountsService"/>
     </bean>
 
-    <dubbo:reference id="financeSettleAccountsService" interface="com.fionapet.business.service.FinanceSettleAccountsService"/>
+    <dubbo:reference id="financeSettleAccountsService" injvm="true" interface="com.fionapet.business.service.FinanceSettleAccountsService"/>
     <!--资金账号表 api -->
 
 
@@ -770,7 +770,7 @@
         <property name="medicApplianceService" ref="medicApplianceService"/>
     </bean>
 
-    <dubbo:reference id="medicApplianceService" interface="com.fionapet.business.service.MedicApplianceService"/>
+    <dubbo:reference id="medicApplianceService" injvm="true" interface="com.fionapet.business.service.MedicApplianceService"/>
     <!--医生器具表 api -->
 
 
@@ -782,7 +782,7 @@
         <property name="expensesExpendService" ref="expensesExpendService"/>
     </bean>
 
-    <dubbo:reference id="expensesExpendService" interface="com.fionapet.business.service.ExpensesExpendService"/>
+    <dubbo:reference id="expensesExpendService" injvm="true" interface="com.fionapet.business.service.ExpensesExpendService"/>
     <!--付出费用表 api -->
 
 
@@ -794,7 +794,7 @@
         <property name="gestPaidRecordService" ref="gestPaidRecordService"/>
     </bean>
 
-    <dubbo:reference id="gestPaidRecordService" interface="com.fionapet.business.service.GestPaidRecordService"/>
+    <dubbo:reference id="gestPaidRecordService" injvm="true" interface="com.fionapet.business.service.GestPaidRecordService"/>
     <!--顾客影像记录表 api -->
 
 
@@ -806,7 +806,7 @@
         <property name="userDictDetailService" ref="userDictDetailService"/>
     </bean>
 
-    <dubbo:reference id="userDictDetailService" interface="com.fionapet.business.service.UserDictDetailService"/>
+    <dubbo:reference id="userDictDetailService" injvm="true" interface="com.fionapet.business.service.UserDictDetailService"/>
     <!--数据字典 字典明细项 api -->
 
 
@@ -818,7 +818,7 @@
         <property name="userDictService" ref="userDictService"/>
     </bean>
 
-    <dubbo:reference id="userDictService" interface="com.fionapet.business.service.UserDictService"/>
+    <dubbo:reference id="userDictService" injvm="true" interface="com.fionapet.business.service.UserDictService"/>
     <!--用户字典 api -->
 
 
@@ -830,7 +830,7 @@
         <property name="trprescriptionTemplateService" ref="trprescriptionTemplateService"/>
     </bean>
 
-    <dubbo:reference id="trprescriptionTemplateService" interface="com.fionapet.business.service.TrprescriptionTemplateService"/>
+    <dubbo:reference id="trprescriptionTemplateService" injvm="true" interface="com.fionapet.business.service.TrprescriptionTemplateService"/>
     <!--药方模版 api -->
 
 
@@ -842,7 +842,7 @@
         <property name="gestLevelService" ref="gestLevelService"/>
     </bean>
 
-    <dubbo:reference id="gestLevelService" interface="com.fionapet.business.service.GestLevelService"/>
+    <dubbo:reference id="gestLevelService" injvm="true" interface="com.fionapet.business.service.GestLevelService"/>
     <!--会员等级管理 api -->
 
 
@@ -854,7 +854,7 @@
         <property name="personsCmAppService" ref="personsCmAppService"/>
     </bean>
 
-    <dubbo:reference id="personsCmAppService" interface="com.fionapet.business.service.PersonsCmAppService"/>
+    <dubbo:reference id="personsCmAppService" injvm="true" interface="com.fionapet.business.service.PersonsCmAppService"/>
     <!--宠物主人 api -->
 
 
@@ -866,7 +866,7 @@
         <property name="medicChemicalExamDetailService" ref="medicChemicalExamDetailService"/>
     </bean>
 
-    <dubbo:reference id="medicChemicalExamDetailService" interface="com.fionapet.business.service.MedicChemicalExamDetailService"/>
+    <dubbo:reference id="medicChemicalExamDetailService" injvm="true" interface="com.fionapet.business.service.MedicChemicalExamDetailService"/>
     <!--化验单明细 api -->
 
 
@@ -878,7 +878,7 @@
         <property name="medicVedioExamService" ref="medicVedioExamService"/>
     </bean>
 
-    <dubbo:reference id="medicVedioExamService" interface="com.fionapet.business.service.MedicVedioExamService"/>
+    <dubbo:reference id="medicVedioExamService" injvm="true" interface="com.fionapet.business.service.MedicVedioExamService"/>
     <!--医生影像样例 api -->
 
 
@@ -890,7 +890,7 @@
         <property name="businesCateService" ref="businesCateService"/>
     </bean>
 
-    <dubbo:reference id="businesCateService" interface="com.fionapet.business.service.BusinesCateService"/>
+    <dubbo:reference id="businesCateService" injvm="true" interface="com.fionapet.business.service.BusinesCateService"/>
     <!--业务类型表 api -->
 
 
@@ -902,7 +902,7 @@
         <property name="itemTypeService" ref="itemTypeService"/>
     </bean>
 
-    <dubbo:reference id="itemTypeService" interface="com.fionapet.business.service.ItemTypeService"/>
+    <dubbo:reference id="itemTypeService" injvm="true" interface="com.fionapet.business.service.ItemTypeService"/>
     <!--商品类型 api -->
 
 
@@ -914,7 +914,7 @@
         <property name="dealerService" ref="dealerService"/>
     </bean>
 
-    <dubbo:reference id="dealerService" interface="com.fionapet.business.service.DealerService"/>
+    <dubbo:reference id="dealerService" injvm="true" interface="com.fionapet.business.service.DealerService"/>
     <!--代理商 api -->
 
 
@@ -926,7 +926,7 @@
         <property name="prescriptionTemplateDetailService" ref="prescriptionTemplateDetailService"/>
     </bean>
 
-    <dubbo:reference id="prescriptionTemplateDetailService" interface="com.fionapet.business.service.PrescriptionTemplateDetailService"/>
+    <dubbo:reference id="prescriptionTemplateDetailService" injvm="true" interface="com.fionapet.business.service.PrescriptionTemplateDetailService"/>
     <!--处方模版明细 api -->
 
 
@@ -938,7 +938,7 @@
         <property name="itemDiscountRateService" ref="itemDiscountRateService"/>
     </bean>
 
-    <dubbo:reference id="itemDiscountRateService" interface="com.fionapet.business.service.ItemDiscountRateService"/>
+    <dubbo:reference id="itemDiscountRateService" injvm="true" interface="com.fionapet.business.service.ItemDiscountRateService"/>
     <!--业务类型打折率 api -->
 
 
@@ -950,7 +950,7 @@
         <property name="expensesCateService" ref="expensesCateService"/>
     </bean>
 
-    <dubbo:reference id="expensesCateService" interface="com.fionapet.business.service.ExpensesCateService"/>
+    <dubbo:reference id="expensesCateService" injvm="true" interface="com.fionapet.business.service.ExpensesCateService"/>
     <!--费用类型 api -->
 
 
@@ -962,7 +962,7 @@
         <property name="trprescriptionTemplateDetailService" ref="trprescriptionTemplateDetailService"/>
     </bean>
 
-    <dubbo:reference id="trprescriptionTemplateDetailService" interface="com.fionapet.business.service.TrprescriptionTemplateDetailService"/>
+    <dubbo:reference id="trprescriptionTemplateDetailService" injvm="true" interface="com.fionapet.business.service.TrprescriptionTemplateDetailService"/>
     <!--药方模版明细 api -->
 
 
@@ -974,7 +974,7 @@
         <property name="trprescriptionTemplateTypeService" ref="trprescriptionTemplateTypeService"/>
     </bean>
 
-    <dubbo:reference id="trprescriptionTemplateTypeService" interface="com.fionapet.business.service.TrprescriptionTemplateTypeService"/>
+    <dubbo:reference id="trprescriptionTemplateTypeService" injvm="true" interface="com.fionapet.business.service.TrprescriptionTemplateTypeService"/>
     <!--药方模版类型 api -->
 
 
@@ -986,7 +986,7 @@
         <property name="petRaceService" ref="petRaceService"/>
     </bean>
 
-    <dubbo:reference id="petRaceService" interface="com.fionapet.business.service.PetRaceService"/>
+    <dubbo:reference id="petRaceService" injvm="true" interface="com.fionapet.business.service.PetRaceService"/>
     <!--宠物种类 api -->
 
 
@@ -998,7 +998,7 @@
         <property name="personsAppointmentService" ref="personsAppointmentService"/>
     </bean>
 
-    <dubbo:reference id="personsAppointmentService" interface="com.fionapet.business.service.PersonsAppointmentService"/>
+    <dubbo:reference id="personsAppointmentService" injvm="true" interface="com.fionapet.business.service.PersonsAppointmentService"/>
     <!--宠物主人 api -->
 
 
@@ -1010,7 +1010,7 @@
         <property name="medicChemicalexamService" ref="medicChemicalexamService"/>
     </bean>
 
-    <dubbo:reference id="medicChemicalexamService" interface="com.fionapet.business.service.MedicChemicalexamService"/>
+    <dubbo:reference id="medicChemicalexamService" injvm="true" interface="com.fionapet.business.service.MedicChemicalexamService"/>
     <!--化验单明细 api -->
 
 
@@ -1022,7 +1022,7 @@
         <property name="itemCateService" ref="itemCateService"/>
     </bean>
 
-    <dubbo:reference id="itemCateService" interface="com.fionapet.business.service.ItemCateService"/>
+    <dubbo:reference id="itemCateService" injvm="true" interface="com.fionapet.business.service.ItemCateService"/>
     <!--商品服务种类 api -->
 
 
@@ -1034,7 +1034,7 @@
         <property name="prescriptionTemplateTypeService" ref="prescriptionTemplateTypeService"/>
     </bean>
 
-    <dubbo:reference id="prescriptionTemplateTypeService" interface="com.fionapet.business.service.PrescriptionTemplateTypeService"/>
+    <dubbo:reference id="prescriptionTemplateTypeService" injvm="true" interface="com.fionapet.business.service.PrescriptionTemplateTypeService"/>
     <!--处方模版类型 api -->
 
 
@@ -1046,7 +1046,7 @@
         <property name="personsService" ref="personsService"/>
     </bean>
 
-    <dubbo:reference id="personsService" interface="com.fionapet.business.service.PersonsService"/>
+    <dubbo:reference id="personsService" injvm="true" interface="com.fionapet.business.service.PersonsService"/>
     <!--宠物主人信息 api -->
 
 
@@ -1058,7 +1058,7 @@
         <property name="prescriptionTemplateService" ref="prescriptionTemplateService"/>
     </bean>
 
-    <dubbo:reference id="prescriptionTemplateService" interface="com.fionapet.business.service.PrescriptionTemplateService"/>
+    <dubbo:reference id="prescriptionTemplateService" injvm="true" interface="com.fionapet.business.service.PrescriptionTemplateService"/>
     <!--处方模版 api -->
 
 
@@ -1070,7 +1070,7 @@
         <property name="imagesService" ref="imagesService"/>
     </bean>
 
-    <dubbo:reference id="imagesService" interface="com.fionapet.business.service.ImagesService"/>
+    <dubbo:reference id="imagesService" injvm="true" interface="com.fionapet.business.service.ImagesService"/>
     <!--图片信息 api -->
 
 
@@ -1082,7 +1082,7 @@
         <property name="chemicalExamCateService" ref="chemicalExamCateService"/>
     </bean>
 
-    <dubbo:reference id="chemicalExamCateService" interface="com.fionapet.business.service.ChemicalExamCateService"/>
+    <dubbo:reference id="chemicalExamCateService" injvm="true" interface="com.fionapet.business.service.ChemicalExamCateService"/>
     <!--化验样例类型 api -->
 
 
@@ -1094,7 +1094,7 @@
         <property name="dictTypeService" ref="dictTypeService"/>
     </bean>
 
-    <dubbo:reference id="dictTypeService" interface="com.fionapet.business.service.DictTypeService"/>
+    <dubbo:reference id="dictTypeService" injvm="true" interface="com.fionapet.business.service.DictTypeService"/>
     <!--字典类型 api -->
 
 
@@ -1106,7 +1106,7 @@
         <property name="dictTypeDetailService" ref="dictTypeDetailService"/>
     </bean>
 
-    <dubbo:reference id="dictTypeDetailService" interface="com.fionapet.business.service.DictTypeDetailService"/>
+    <dubbo:reference id="dictTypeDetailService" injvm="true" interface="com.fionapet.business.service.DictTypeDetailService"/>
     <!--字典类型明细 api -->
 
 
@@ -1118,7 +1118,7 @@
         <property name="warehouseService" ref="warehouseService"/>
     </bean>
 
-    <dubbo:reference id="warehouseService" interface="com.fionapet.business.service.WarehouseService"/>
+    <dubbo:reference id="warehouseService" injvm="true" interface="com.fionapet.business.service.WarehouseService"/>
     <!--仓库信息表 api -->
 
     <!--报表 api -->
@@ -1129,6 +1129,6 @@
         <property name="reportService" ref="reportService"/>
     </bean>
 
-    <dubbo:reference id="reportService" interface="com.fionapet.business.service.ReportService"/>
+    <dubbo:reference id="reportService" injvm="true" interface="com.fionapet.business.service.ReportService"/>
     <!--报表 api -->
 </beans>
