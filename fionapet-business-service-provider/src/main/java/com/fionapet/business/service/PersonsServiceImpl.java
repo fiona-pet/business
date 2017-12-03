@@ -47,7 +47,8 @@ public class PersonsServiceImpl extends CURDServiceBase<Persons> implements Pers
         user.setLoginName(persons.getPersonName());
         user.setName(persons.getPersonName());
         user.setPlainPassword(entity.getPassword());
-        user.setId(persons.getId());
+        user.setPersonId(persons.getId());
+
         user.setSalt("6d65d24122c30500");
 
         Role role = new Role();
@@ -58,8 +59,6 @@ public class PersonsServiceImpl extends CURDServiceBase<Persons> implements Pers
         user.setRoles(roleSet);
 
         accountService.createUser(user);
-
-
 
         return persons;
     }

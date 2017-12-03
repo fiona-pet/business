@@ -27,7 +27,7 @@
     <dubbo:annotation package="com.fionapet.business.facade"/>
 
     <!-- use tomcat server -->
-    <dubbo:protocol name="rest" port="9818" threads="500" contextpath="api/v2" server="tomcat" accepts="500"
+    <dubbo:protocol name="rest" port="8818" threads="500" contextpath="api/v2" server="tomcat" accepts="500"
                     extension="com.fionapet.business.extension.TraceInterceptor,
                     com.fionapet.business.extension.TraceFilter,
                     com.fionapet.business.extension.ClientTraceFilter,
