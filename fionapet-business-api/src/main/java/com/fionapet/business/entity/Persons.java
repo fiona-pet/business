@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * 宠物主人信息
@@ -27,7 +28,17 @@ public class Persons extends CMSEntity {
     public void setPersonCode(String personCode) {
         this.personCode = personCode;
     }
-    
+
+
+    private String organizeCode;
+    @Transient
+    public String getOrganizeCode() {
+        return organizeCode;
+    }
+    public void setOrganizeCode(String organizeCode) {
+        this.organizeCode = organizeCode;
+    }
+
     /**
      * personName
      */

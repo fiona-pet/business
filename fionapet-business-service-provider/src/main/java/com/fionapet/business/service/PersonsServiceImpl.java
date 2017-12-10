@@ -1,5 +1,6 @@
 package com.fionapet.business.service;
 
+import cn.fiona.pet.account.entity.Organize;
 import cn.fiona.pet.account.entity.Role;
 import cn.fiona.pet.account.entity.User;
 import cn.fiona.pet.account.service.AccountService;
@@ -44,12 +45,19 @@ public class PersonsServiceImpl extends CURDServiceBase<Persons> implements Pers
         Persons persons = super.createOrUpdte(entity);
 
         User user = new User();
+
         user.setLoginName(persons.getPersonName());
         user.setName(persons.getPersonName());
         user.setPlainPassword(entity.getPassword());
         user.setPersonId(persons.getId());
 
         user.setSalt("6d65d24122c30500");
+
+        Organize organize = new Organize();
+        organize.setCode(entity.getOrganizeCode());
+        organize.setId(entity.getOrganizeCode());
+
+        user.setOrganize(organize);
 
         Role role = new Role();
         role.setCode(entity.getRoleId());
