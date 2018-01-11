@@ -76,7 +76,7 @@ public class AuthInterceptor {
                 auth.setCurrentUser(currentUser);
             }
         } catch (Exception e) {
-            LOGGER.warn("Request filter invoked:Token validate fail!");
+            LOGGER.warn("Request filter invoked:Token validate fail!",e);
             throw new AuthorizationException("token 验证失败!");
         }
     }

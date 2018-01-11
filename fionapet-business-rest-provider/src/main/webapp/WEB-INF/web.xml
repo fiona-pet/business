@@ -6,12 +6,17 @@
 
     <context-param>
         <param-name>spring.profiles.default</param-name>
-        <param-value>production</param-value>
+        <param-value>bj</param-value>
     </context-param>
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/classes/META-INF/spring/applicationContext.xml,/WEB-INF/classes/META-INF/spring/fionapet-business-rest-provider.xml</param-value>
+        <param-value>/WEB-INF/classes/META-INF/spring/applicationContext.xml,
+            /WEB-INF/classes/META-INF/spring/fionapet-business-rest-provider.xml,
+            classpath*:**/applicationContext-service.xml,
+            classpath*:**/applicationContext-quartz.xml,
+            classpath*:**/fionapet-business-service-provider.xml,
+            classpath*:**/fionapet-business-service-provider-tom.xml</param-value>
     </context-param>
 
     <context-param>
