@@ -24,8 +24,13 @@
                    value="[%d{MMdd HH:mm:ss SSS\} %-5p] [%t] %c{3\} - %m%n" />
         </layout>
     </appender>
+    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{dd/MM/yy hh:mm:ss:sss z}] %t %5p %c{2}: %m%n"/>
+        </layout>
+    </appender>
     <root>
         <level value="INFO"/>
-        <appender-ref ref="businessRestServiceAppender"/>
+        <appender-ref ref="CONSOLE"/>
     </root>
 </log4j:configuration>

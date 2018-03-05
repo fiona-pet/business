@@ -1131,4 +1131,7 @@
 
     <dubbo:reference id="reportService" injvm="true" interface="com.fionapet.business.service.ReportService"/>
     <!--报表 api -->
+    <dubbo:reference id="accountService" interface="cn.fiona.pet.account.service.AccountService" />
+
+
 </beans>
