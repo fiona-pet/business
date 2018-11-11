@@ -75,12 +75,24 @@ public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
             }
 
             // 复制诊疗信息
-            createMedicMedictreatRecord(registerRecord, medicMedictreatRecord);
+            MedicMedictreatRecord medicMedictreatRecordNew = createMedicMedictreatRecord(registerRecord, medicMedictreatRecord);
 
+            // 复制处方信息
+            createMedicPrescription(medicMedictreatRecord.getRegisterNo(), medicMedictreatRecordNew);
 
+            // 复制处方详情
+
+            // 复制结算信息
+
+            // 复制结算详情
+
+            // 复制支付记录
 
             return;
         }
+    }
+
+    private void createMedicPrescription(String registerNo, MedicMedictreatRecord medicMedictreatRecordNew) {
     }
 
     private MedicMedictreatRecord createMedicMedictreatRecord(MedicRegisterRecord registerRecord, MedicMedictreatRecord medicMedictreatRecord) {
