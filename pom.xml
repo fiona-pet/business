@@ -45,6 +45,5 @@
     <module>fionapet-business-api</module>
     <module>fionapet-business-rest-provider</module>
     <module>fionapet-business-service-provider</module>
-    <module>fionapet-business-consumer</module>
   </modules>
 </project>

@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * Created by tom on 2017/6/4.
  */
-@Component
+//@Component
 public class PayNotifier implements ApplicationListener<PayEvent> {
     @Autowired
     Auth auth;

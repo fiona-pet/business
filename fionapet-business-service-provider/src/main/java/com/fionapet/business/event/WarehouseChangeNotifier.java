@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 /**
  * Created by tom on 2017/6/4.
  */
-@Component
+//@Component
 public class WarehouseChangeNotifier implements ApplicationListener<WarehouseChangeEvent> {
     @Autowired
     private ItemCountService itemCountService;

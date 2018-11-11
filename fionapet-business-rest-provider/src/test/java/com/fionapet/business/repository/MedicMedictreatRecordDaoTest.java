@@ -13,7 +13,7 @@ import java.util.List;
  * 医生处理记录
 * Created by tom on 2016-07-18 11:09:24.
  */
-@ContextConfiguration(locations = {"/applicationContext-service.xml"})
+@ContextConfiguration(locations = {"/META-INF/spring/applicationContext-service.xml","/META-INF/spring/fionapet-business-service-provider.xml"})
 public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
 
     @Autowired
