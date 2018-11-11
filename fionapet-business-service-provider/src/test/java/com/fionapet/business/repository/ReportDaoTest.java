@@ -18,7 +18,7 @@ import java.util.List;
  * 报表统计
 * Created by tom on 2016-07-13 15:23:53.
  */
-@ContextConfiguration(locations = {"/META-INF/spring/applicationContext.xml"})
+@ContextConfiguration(locations = {"/applicationContext-service.xml"})
 public class ReportDaoTest extends SpringTransactionalTestCase {
 
     @Autowired
