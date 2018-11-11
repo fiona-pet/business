@@ -76,6 +76,12 @@ select count(1) from t_medic_register_record where create_date>='2018-03-01'
 and create_date<'2018-04-01';
 select * from t_medic_register_record where register_no='201801127319';
 
+-- 诊疗信息
+select count(1) from t_medic_medictreat_record where create_date>='2018-03-01'
+and create_date<'2018-04-01';
+select * from t_medic_medictreat_record where create_date>='2018-03-01'
+and create_date<'2018-04-01';
+
 -- 处方复制
 
 -- 收费信息

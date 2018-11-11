@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
 
@@ -49,6 +50,7 @@ public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
     }
 
     @Test
+    @Rollback(false)
     public void create3() throws ParseException {
         //2 173275
         //3 155966 old
@@ -66,10 +68,36 @@ public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
 
         for (MedicMedictreatRecord medicMedictreatRecord: medicMedictreatRecords){
             // 复制注册信息
-            createRegisterRecord(medicMedictreatRecord.getRegisterNo());
+            MedicRegisterRecord registerRecord = createRegisterRecord(medicMedictreatRecord.getRegisterNo());
+
+            if(null == registerRecord){
+                continue;
+            }
+
+            // 复制诊疗信息
+            createMedicMedictreatRecord(registerRecord, medicMedictreatRecord);
 
 
+
+            return;
         }
+    }
+
+    private MedicMedictreatRecord createMedicMedictreatRecord(MedicRegisterRecord registerRecord, MedicMedictreatRecord medicMedictreatRecord) {
+        MedicMedictreatRecord medicMedictreatRecordNew = new MedicMedictreatRecord();
+
+        BeanUtils.copyProperties(medicMedictreatRecord,medicMedictreatRecordNew,"id");
+
+        String endStr = StringUtils.leftPad(medicMedictreatRecord.getCreateDate().getDay()+"", 2, '0');
+
+        medicMedictreatRecordNew.setRegisterNo(registerRecord.getRegisterNo());
+        medicMedictreatRecordNew.setCreateDate(registerRecord.getCreateDate());
+        medicMedictreatRecordNew.setUpdateDate(registerRecord.getUpdateDate());
+        medicMedictreatRecordNew.setMediTreatmentCode(medicMedictreatRecordNew.getMediTreatmentCode() + endStr);
+
+        medicMedictreatRecordDao.save(medicMedictreatRecordNew);
+
+        return medicMedictreatRecordNew;
     }
 
     public MedicRegisterRecord createRegisterRecord(String registerRecord){
@@ -90,7 +118,7 @@ public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
         //添加挂号信息
         medicRegisterRecordDao.save(medicRegisterRecordNew);
 
-        return medicRegisterRecord;
+        return medicRegisterRecordNew;
     }
 
 
