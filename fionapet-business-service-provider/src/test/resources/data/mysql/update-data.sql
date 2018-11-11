@@ -71,7 +71,9 @@ and mmr.rheme not like '%疫%'
 and mmr.rheme not like '%新购%'
 and mmr.rheme not like '%老年%'
 
--- 挂号信息
+-- 挂号信息 393
+select count(1) from t_medic_register_record where create_date>='2018-03-01'
+and create_date<'2018-04-01';
 select * from t_medic_register_record where register_no='201801127319';
 
 -- 处方复制

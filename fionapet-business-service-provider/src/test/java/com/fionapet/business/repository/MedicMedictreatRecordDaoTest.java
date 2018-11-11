@@ -1,6 +1,7 @@
 package com.fionapet.business.repository;
 
 import com.fionapet.business.entity.MedicMedictreatRecord;
+import com.fionapet.business.entity.MedicRegisterRecord;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
@@ -10,6 +11,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.ContextConfiguration;
@@ -33,6 +35,9 @@ public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
 
     @Autowired
     private GestPaidRecordDao gestPaidRecordDao;
+
+    @Autowired
+    private MedicRegisterRecordDao medicRegisterRecordDao;
 
     @Test
     public void findAll(){
@@ -60,8 +65,32 @@ public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
         List<MedicMedictreatRecord> medicMedictreatRecords = findMonth3(DateUtils.addMonths(start, -1), DateUtils.addMonths(end, -1), ImmutableList.of("去势", "绝育", "免", "火化", "细小", "猫瘟"), ImmutableList.of("去势","绝育","去势","寄养","疫","新购","老年"));
 
         for (MedicMedictreatRecord medicMedictreatRecord: medicMedictreatRecords){
-            medicMedictreatRecord.getRegisterNo()
+            // 复制注册信息
+            createRegisterRecord(medicMedictreatRecord.getRegisterNo());
+
+
         }
+    }
+
+    public MedicRegisterRecord createRegisterRecord(String registerRecord){
+        MedicRegisterRecord medicRegisterRecord = medicRegisterRecordDao.findByRegisterNo(registerRecord);
+        if (null == medicRegisterRecord){
+            return null;
+        }
+
+        String endStr = StringUtils.leftPad(medicRegisterRecord.getCreateDate().getDay()+"", 2, '0');
+
+        MedicRegisterRecord medicRegisterRecordNew = new MedicRegisterRecord();
+        BeanUtils.copyProperties(medicRegisterRecord,medicRegisterRecordNew,"id");
+
+        medicRegisterRecordNew.setRegisterNo(medicRegisterRecord.getRegisterNo() + endStr);
+        medicRegisterRecordNew.setCreateDate(DateUtils.addMonths(medicRegisterRecord.getCreateDate(), 1));
+        medicRegisterRecordNew.setUpdateDate(DateUtils.addMonths(medicRegisterRecord.getUpdateDate(), 1));
+
+        //添加挂号信息
+        medicRegisterRecordDao.save(medicRegisterRecordNew);
+
+        return medicRegisterRecord;
     }
 
 
