@@ -165,8 +165,7 @@ public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
             medicPrescriptionDetailDest.setPrescriptionId(medicPrescription.getId());
             medicPrescriptionDetailDest.setCreateDate(medicPrescription.getCreateDate());
             medicPrescriptionDetailDest.setUpdateDate(medicPrescription.getUpdateDate());
-
-            medicPrescriptionDetailDest.setPaidStatus(null);
+            medicPrescriptionDetailDest.setPaidTime(medicPrescription.getUpdateDate());
 
             medicPrescriptionDetailMap.put(medicPrescriptionDetailDest.getItemCode()+":" + medicPrescriptionDetailDest.getGroupName(), medicPrescriptionDetailDest);
         }
