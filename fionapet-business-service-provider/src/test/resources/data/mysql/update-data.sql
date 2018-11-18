@@ -71,6 +71,9 @@ and mmr.rheme not like '%疫%'
 and mmr.rheme not like '%新购%'
 and mmr.rheme not like '%老年%'
 
+-- 统计
+select sum(fsa.should_paid_money) from t_gest_paid_record gpr join t_finance_settle_accounts fsa on gpr.settle_accounts_id=fsa.id where gpr.create_date >='2018-03-01' and gpr.create_date < '2018-04-01'
+
 -- 挂号信息 393
 select count(1) from t_medic_register_record where create_date>='2018-03-01'
 and create_date<'2018-04-01';
