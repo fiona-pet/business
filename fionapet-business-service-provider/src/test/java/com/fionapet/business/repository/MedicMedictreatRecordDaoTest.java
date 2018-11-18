@@ -91,16 +91,10 @@ public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
             MedicMedictreatRecord medicMedictreatRecordNew = createMedicMedictreatRecord(registerRecord, medicMedictreatRecord);
 
             // 复制处方信息
-            List<MedicPrescription> medicPrescriptionsNew = createMedicPrescription(medicMedictreatRecord.getRegisterNo(), medicMedictreatRecordNew, medicMedictreatRecord);
-
-            Set<String> prescriptionIdsOld = getMedicPrescriptionIdsOld(medicMedictreatRecord.getId());
-
             // 复制结算信息
-            createFinanceSettle(medicPrescriptionsNew, prescriptionIdsOld);
             // 复制结算详情
-
             // 复制支付记录
-
+            List<MedicPrescription> medicPrescriptionsNew = createMedicPrescription(medicMedictreatRecord.getRegisterNo(), medicMedictreatRecordNew, medicMedictreatRecord);
             return;
         }
     }
@@ -116,12 +110,30 @@ public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
     }
 
     private void createFinanceSettle(List<MedicPrescription> medicPrescriptionsNew, Set<String> prescriptionIdsOld) {
+
+        for (String medicPrescriptions: prescriptionIdsOld){
+            //
+        }
+
         List<FinanceSettleAccountsDetail> financeSettleAccountsDetailsOld = financeSettleAccountsDetailDao.findByRelationIdIn(prescriptionIdsOld);
+
+        List<FinanceSettleAccounts> financeSettleAccounts = getFinanceSettleAccounts(financeSettleAccountsDetailsOld);
+    }
+
+    private List<FinanceSettleAccounts> getFinanceSettleAccounts(List<FinanceSettleAccountsDetail> financeSettleAccountsDetailsOld) {
+        Set<String> ids = new HashSet<>();
+        for (FinanceSettleAccountsDetail financeSettleAccountsDetail: financeSettleAccountsDetailsOld){
+            ids.add(financeSettleAccountsDetail.getSettleAccountsDetailId());
+        }
+
+        List<FinanceSettleAccounts> financeSettleAccountsOld = financeSettleAccountsDao.findByIdIn(ids);
+
+        return financeSettleAccountsOld;
     }
 
     @Test
     public void testFindByRelationIdIn(){
-        List<FinanceSettleAccountsDetail> financeSettleAccountsDetailsOld = financeSettleAccountsDetailDao.findByRelationIdIn(ImmutableSet.of("ff80808160e7fa930161df4d05604c84"));
+        List<FinanceSettleAccountsDetail> financeSettleAccountsDetailsOld = financeSettleAccountsDetailDao.findByRelationId("ff80808160e7fa9301614f3cdb7d1f6d");
         logger.debug("financeSettleAccountsDetailsOld.size:{}" , financeSettleAccountsDetailsOld.size());
     }
 
@@ -173,7 +185,6 @@ public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
         medicPrescriptionDao.save(medicPrescription);
 
         //处方明细 复制
-        Map<String, MedicPrescriptionDetail> medicPrescriptionDetailMap = new HashMap<String, MedicPrescriptionDetail>();
         List<MedicPrescriptionDetail> medicPrescriptionDetails = medicPrescriptionDetailDao.findByPrescriptionId(medicPrescriptionOrgi.getId());
 
         for (MedicPrescriptionDetail medicPrescriptionDetail: medicPrescriptionDetails){
@@ -193,12 +204,64 @@ public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
             medicPrescriptionDetailDest.setUpdateDate(medicPrescription.getUpdateDate());
             medicPrescriptionDetailDest.setPaidTime(medicPrescription.getUpdateDate());
 
-            medicPrescriptionDetailMap.put(medicPrescriptionDetailDest.getItemCode()+":" + medicPrescriptionDetailDest.getGroupName(), medicPrescriptionDetailDest);
+            medicPrescriptionDetailDao.save(medicPrescriptionDetailDest);
+
+            coypFinanceSettle(medicPrescriptionOld.getId(), medicPrescriptionDetail.getId(), medicPrescription.getId(), medicPrescriptionDetailDest.getId(), medicPrescription.getUpdateDate());
         }
 
-        medicPrescriptionDetailDao.save(medicPrescriptionDetailMap.values());
+
 
         return medicPrescription;
+    }
+
+    private void coypFinanceSettle(String medicPrescriptionIdOld, String medicPrescriptionDetailIdOld, String medicPrescriptionId, String medicPrescriptionDetailId, Date date) {
+        logger.debug("coypFinanceSettle : medicPrescriptionIdOld:{} , medicPrescriptionDetailIdOld:{}", medicPrescriptionIdOld, medicPrescriptionDetailIdOld);
+        List<FinanceSettleAccountsDetail> financeSettleAccountsDetail = financeSettleAccountsDetailDao.findByRelationId(medicPrescriptionId);
+        FinanceSettleAccounts financeSettleAccounts = null;
+        // 判断 结算单是否存在
+        if (null == financeSettleAccountsDetail || financeSettleAccountsDetail.size() == 0){
+            // 复制结算单
+            FinanceSettleAccountsDetail financeSettleAccountsDetailOld = financeSettleAccountsDetailDao.findByRelationId(medicPrescriptionIdOld).get(0);
+            FinanceSettleAccounts financeSettleAccountsOld = financeSettleAccountsDao.findOne(financeSettleAccountsDetailOld.getSettleAccountsDetailId());
+
+            FinanceSettleAccounts financeSettleAccountsNew = new FinanceSettleAccounts();
+            BeanUtils.copyProperties(financeSettleAccountsOld,financeSettleAccountsNew,"id");
+
+            financeSettleAccountsNew.setSettleCode(financeSettleAccountsOld.getSettleCode() + getAddEndStr(date.getDay()));
+            financeSettleAccountsNew.setCreateDate(date);
+            financeSettleAccountsNew.setUpdateDate(date);
+
+            financeSettleAccountsDao.save(financeSettleAccountsNew);
+
+            GestPaidRecord gestPaidRecordOld = gestPaidRecordDao.findBySettleAccountsId(financeSettleAccountsOld.getId());
+            GestPaidRecord gestPaidRecordNew = new GestPaidRecord();
+
+            BeanUtils.copyProperties(gestPaidRecordOld,gestPaidRecordNew,"id");
+            gestPaidRecordNew.setCreateDate(date);
+            gestPaidRecordNew.setUpdateDate(date);
+            gestPaidRecordNew.setSettleAccountsId(financeSettleAccountsNew.getId());
+
+            gestPaidRecordDao.save(gestPaidRecordNew);
+
+            financeSettleAccounts = financeSettleAccountsNew;
+        }else{
+            financeSettleAccounts = financeSettleAccountsDao.findOne(financeSettleAccountsDetail.get(0).getSettleAccountsDetailId());
+        }
+
+        // 复制明细
+        FinanceSettleAccountsDetail financeSettleAccountsDetailOld = financeSettleAccountsDetailDao.findOneByRelationIdAndRelationDetailId(medicPrescriptionId, medicPrescriptionDetailIdOld);
+
+        if (null == financeSettleAccountsDetailOld) return;
+
+        FinanceSettleAccountsDetail financeSettleAccountsDetailNew = new FinanceSettleAccountsDetail();
+        BeanUtils.copyProperties(financeSettleAccountsDetailOld,financeSettleAccountsDetailNew,"id");
+        financeSettleAccountsDetailNew.setCreateDate(date);
+        financeSettleAccountsDetailNew.setUpdateDate(date);
+        financeSettleAccountsDetailNew.setSettleAccountsDetailId(financeSettleAccounts.getId());
+        financeSettleAccountsDetailNew.setRelationId(medicPrescriptionId);
+        financeSettleAccountsDetailNew.setRelationDetailId(medicPrescriptionDetailId);
+
+        financeSettleAccountsDetailDao.save(financeSettleAccountsDetailNew);
     }
 
     private MedicMedictreatRecord createMedicMedictreatRecord(MedicRegisterRecord registerRecord, MedicMedictreatRecord medicMedictreatRecord) {

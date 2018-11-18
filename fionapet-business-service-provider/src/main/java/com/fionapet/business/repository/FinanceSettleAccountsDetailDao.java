@@ -12,4 +12,8 @@ import java.util.Set;
  **/
 public interface FinanceSettleAccountsDetailDao extends DaoBase<FinanceSettleAccountsDetail> {
     List<FinanceSettleAccountsDetail> findByRelationIdIn(Set<String> prescriptionIdsOld);
+
+    FinanceSettleAccountsDetail findOneByRelationIdAndRelationDetailId(String medicPrescriptionId, String medicPrescriptionDetailId);
+
+    List<FinanceSettleAccountsDetail> findByRelationId(String medicPrescriptionIdOld);
 }
