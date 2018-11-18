@@ -82,7 +82,12 @@ and create_date<'2018-04-01';
 select * from t_medic_medictreat_record where create_date>='2018-03-01'
 and create_date<'2018-04-01';
 
--- 处方复制
+-- 处方复制 435
+select * from t_medic_prescription where create_date>='2018-03-01'
+and create_date<'2018-04-01';
+
+select * from t_medic_prescription_detail where create_date>='2018-03-01'
+and create_date<'2018-04-01';
 
 -- 收费信息
 

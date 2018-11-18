@@ -1,12 +1,16 @@
 package com.fionapet.business.repository;
 
 import com.fionapet.business.entity.MedicMedictreatRecord;
+import com.fionapet.business.entity.MedicPrescription;
+import com.fionapet.business.entity.MedicPrescriptionDetail;
 import com.fionapet.business.entity.MedicRegisterRecord;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import org.apache.commons.beanutils.BeanUtilsBean;
+import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.commons.beanutils.converters.DateConverter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
-import org.dubbo.x.entity.SearchFilter;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -20,8 +24,7 @@ import org.springside.modules.test.spring.SpringTransactionalTestCase;
 
 import javax.persistence.criteria.*;
 import java.text.ParseException;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 医生处理记录
@@ -39,6 +42,12 @@ public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
 
     @Autowired
     private MedicRegisterRecordDao medicRegisterRecordDao;
+
+    @Autowired
+    private  MedicPrescriptionDao medicPrescriptionDao;
+
+    @Autowired
+    private MedicPrescriptionDetailDao medicPrescriptionDetailDao;
 
     @Test
     public void findAll(){
@@ -78,9 +87,7 @@ public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
             MedicMedictreatRecord medicMedictreatRecordNew = createMedicMedictreatRecord(registerRecord, medicMedictreatRecord);
 
             // 复制处方信息
-            createMedicPrescription(medicMedictreatRecord.getRegisterNo(), medicMedictreatRecordNew);
-
-            // 复制处方详情
+            List<MedicPrescription> medicPrescriptionsNew = createMedicPrescription(medicMedictreatRecord.getRegisterNo(), medicMedictreatRecordNew, medicMedictreatRecord);
 
             // 复制结算信息
 
@@ -92,7 +99,81 @@ public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
         }
     }
 
-    private void createMedicPrescription(String registerNo, MedicMedictreatRecord medicMedictreatRecordNew) {
+    private List<MedicPrescription> createMedicPrescription(String registerNo, MedicMedictreatRecord medicMedictreatRecordNew, MedicMedictreatRecord medicMedictreatRecordOld) {
+        // 查询处方信息
+        List<MedicPrescription> medicPrescriptionsOld = medicPrescriptionDao.findByMedicRecordId(medicMedictreatRecordOld.getId());
+
+        List<MedicPrescription> medicPrescriptionsNew = new ArrayList<MedicPrescription>();
+
+       for (MedicPrescription medicPrescription: medicPrescriptionsOld){
+           MedicPrescription medicPrescriptionNew = copy(medicPrescription, medicMedictreatRecordNew);
+           medicPrescriptionsNew.add(medicPrescriptionNew);
+       }
+
+       logger.debug("medicPrescriptionsNew:{}",medicPrescriptionsNew);
+
+       return medicPrescriptionsNew;
+
+    }
+
+    public MedicPrescription copy(MedicPrescription medicPrescriptionOld, MedicMedictreatRecord medicMedictreatRecordNew){
+        ConvertUtils.register(new DateConverter(null), java.util.Date.class);
+
+        if (null == medicMedictreatRecordNew){
+            logger.warn("就诊编号为空!");
+        }
+
+        MedicPrescription medicPrescriptionOrgi = medicPrescriptionOld;
+        MedicPrescription medicPrescription = new MedicPrescription();
+        if (null != medicPrescriptionOrgi){
+            //属性复制
+            try {
+                BeanUtilsBean.getInstance().copyProperties(medicPrescription, medicPrescriptionOrgi);
+            } catch (Exception e) {
+                logger.warn("复制处方数据出错!", e);
+            }
+        }
+
+        medicPrescription.setId(null);
+        medicPrescription.setMedicRecordId(medicMedictreatRecordNew.getId());
+        medicPrescription.setMedicRecordCode(medicMedictreatRecordNew.getMediTreatmentCode());
+        medicPrescription.setCreateDate(medicMedictreatRecordNew.getCreateDate());
+        medicPrescription.setUpdateDate(medicMedictreatRecordNew.getCreateDate());
+
+        //获取 病例编号
+        String endStr = getAddEndStr(medicMedictreatRecordNew.getCreateDate().getDay());
+        medicPrescription.setPrescriptionCode(medicPrescriptionOld.getPrescriptionCode() + endStr);
+
+        medicPrescriptionDao.save(medicPrescription);
+
+        //处方明细 复制
+        Map<String, MedicPrescriptionDetail> medicPrescriptionDetailMap = new HashMap<String, MedicPrescriptionDetail>();
+        List<MedicPrescriptionDetail> medicPrescriptionDetails = medicPrescriptionDetailDao.findByPrescriptionId(medicPrescriptionOrgi.getId());
+
+        for (MedicPrescriptionDetail medicPrescriptionDetail: medicPrescriptionDetails){
+            MedicPrescriptionDetail medicPrescriptionDetailDest = new MedicPrescriptionDetail();
+
+            //属性复制
+            try {
+                BeanUtilsBean.getInstance().copyProperties(medicPrescriptionDetailDest, medicPrescriptionDetail);
+
+            } catch (Exception e) {
+                logger.debug("复制处方明细数据出错!");
+            }
+
+            medicPrescriptionDetailDest.setId(null);
+            medicPrescriptionDetailDest.setPrescriptionId(medicPrescription.getId());
+            medicPrescriptionDetailDest.setCreateDate(medicPrescription.getCreateDate());
+            medicPrescriptionDetailDest.setUpdateDate(medicPrescription.getUpdateDate());
+
+            medicPrescriptionDetailDest.setPaidStatus(null);
+
+            medicPrescriptionDetailMap.put(medicPrescriptionDetailDest.getItemCode()+":" + medicPrescriptionDetailDest.getGroupName(), medicPrescriptionDetailDest);
+        }
+
+        medicPrescriptionDetailDao.save(medicPrescriptionDetailMap.values());
+
+        return medicPrescription;
     }
 
     private MedicMedictreatRecord createMedicMedictreatRecord(MedicRegisterRecord registerRecord, MedicMedictreatRecord medicMedictreatRecord) {
@@ -118,7 +199,7 @@ public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
             return null;
         }
 
-        String endStr = StringUtils.leftPad(medicRegisterRecord.getCreateDate().getDay()+"", 2, '0');
+        String endStr = getAddEndStr(medicRegisterRecord.getCreateDate().getDay());
 
         MedicRegisterRecord medicRegisterRecordNew = new MedicRegisterRecord();
         BeanUtils.copyProperties(medicRegisterRecord,medicRegisterRecordNew,"id");
@@ -131,6 +212,10 @@ public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
         medicRegisterRecordDao.save(medicRegisterRecordNew);
 
         return medicRegisterRecordNew;
+    }
+
+    public String getAddEndStr(int day){
+        return StringUtils.leftPad(day + "", 2, '0');
     }
 
 
