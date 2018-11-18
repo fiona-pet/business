@@ -64,6 +64,16 @@ public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
 
     @Test
     @Rollback(false)
+    public void lfcreate4()throws ParseException{
+        //2 173275
+        //3 155966 old
+        Date start = DateUtils.parseDate("2018-04-01", "yyyy-MM-dd");
+        Date end = DateUtils.parseDate("2018-05-01", "yyyy-MM-dd");
+        createMonth(start, end, 34000);
+    }
+
+    @Test
+    @Rollback(false)
     public void create2()throws ParseException{
         //2 173275
         //3 155966 old
