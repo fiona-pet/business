@@ -1,10 +1,8 @@
 package com.fionapet.business.repository;
 
-import com.fionapet.business.entity.MedicMedictreatRecord;
-import com.fionapet.business.entity.MedicPrescription;
-import com.fionapet.business.entity.MedicPrescriptionDetail;
-import com.fionapet.business.entity.MedicRegisterRecord;
+import com.fionapet.business.entity.*;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtils;
@@ -49,6 +47,12 @@ public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
     @Autowired
     private MedicPrescriptionDetailDao medicPrescriptionDetailDao;
 
+    @Autowired
+    private FinanceSettleAccountsDao financeSettleAccountsDao;
+
+    @Autowired
+    private FinanceSettleAccountsDetailDao financeSettleAccountsDetailDao;
+
     @Test
     public void findAll(){
         List<MedicMedictreatRecord> medicMedictreatRecords = medicMedictreatRecordDao.findAllBy();
@@ -89,14 +93,36 @@ public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
             // 复制处方信息
             List<MedicPrescription> medicPrescriptionsNew = createMedicPrescription(medicMedictreatRecord.getRegisterNo(), medicMedictreatRecordNew, medicMedictreatRecord);
 
-            // 复制结算信息
+            Set<String> prescriptionIdsOld = getMedicPrescriptionIdsOld(medicMedictreatRecord.getId());
 
+            // 复制结算信息
+            createFinanceSettle(medicPrescriptionsNew, prescriptionIdsOld);
             // 复制结算详情
 
             // 复制支付记录
 
             return;
         }
+    }
+
+    private Set<String> getMedicPrescriptionIdsOld(String id) {
+        Set<String> ids = new HashSet<>();
+        // 查询处方信息
+        List<MedicPrescription> medicPrescriptionsOld = medicPrescriptionDao.findByMedicRecordId(id);
+        for (MedicPrescription medicPrescription: medicPrescriptionsOld){
+            ids.add(medicPrescription.getId());
+        }
+        return ids;
+    }
+
+    private void createFinanceSettle(List<MedicPrescription> medicPrescriptionsNew, Set<String> prescriptionIdsOld) {
+        List<FinanceSettleAccountsDetail> financeSettleAccountsDetailsOld = financeSettleAccountsDetailDao.findByRelationIdIn(prescriptionIdsOld);
+    }
+
+    @Test
+    public void testFindByRelationIdIn(){
+        List<FinanceSettleAccountsDetail> financeSettleAccountsDetailsOld = financeSettleAccountsDetailDao.findByRelationIdIn(ImmutableSet.of("ff80808160e7fa930161df4d05604c84"));
+        logger.debug("financeSettleAccountsDetailsOld.size:{}" , financeSettleAccountsDetailsOld.size());
     }
 
     private List<MedicPrescription> createMedicPrescription(String registerNo, MedicMedictreatRecord medicMedictreatRecordNew, MedicMedictreatRecord medicMedictreatRecordOld) {
