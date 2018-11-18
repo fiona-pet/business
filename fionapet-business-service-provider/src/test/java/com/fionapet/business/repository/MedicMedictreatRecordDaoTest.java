@@ -64,61 +64,84 @@ public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
 
     @Test
     @Rollback(false)
-    public void create3() throws ParseException {
+    public void create2()throws ParseException{
+        //2 173275
+        //3 155966 old
+        Date start = DateUtils.parseDate("2018-02-01", "yyyy-MM-dd");
+        Date end = DateUtils.parseDate("2018-03-01", "yyyy-MM-dd");
+        createMonth(start, end, 192000);
+    }
+
+    @Test
+    @Rollback(false)
+    public void create3()throws ParseException{
         //2 173275
         //3 155966 old
         Date start = DateUtils.parseDate("2018-03-01", "yyyy-MM-dd");
         Date end = DateUtils.parseDate("2018-04-01", "yyyy-MM-dd");
+        createMonth(start, end, 194000);
+    }
 
+    @Test
+    @Rollback(false)
+    public void create4()throws ParseException{
+        Date start = DateUtils.parseDate("2018-04-01", "yyyy-MM-dd");
+        Date end = DateUtils.parseDate("2018-05-01", "yyyy-MM-dd");
+        createMonth(start, end, 196000);
+    }
+
+    @Test
+    @Rollback(false)
+    public void create6()throws ParseException{
+        Date start = DateUtils.parseDate("2018-06-01", "yyyy-MM-dd");
+        Date end = DateUtils.parseDate("2018-07-01", "yyyy-MM-dd");
+        createMonth(start, end, 212000);
+    }
+
+    public void createMonth(Date start, Date end, int target) throws ParseException {
+
+
+        List<MedicMedictreatRecord> medicMedictreatRecords = findMonth3(DateUtils.addMonths(start, -1), DateUtils.addMonths(end, -1), ImmutableList.of("去势", "绝育", "免", "火化", "细小", "猫瘟"), ImmutableList.of("去势","绝育","去势","寄养","疫","新购","老年"));
+
+        for (MedicMedictreatRecord medicMedictreatRecord: medicMedictreatRecords){
+
+            if (sum(start,end) > target){
+                return;
+            }
+
+            try {
+                // 复制注册信息
+                MedicRegisterRecord registerRecord = createRegisterRecord(medicMedictreatRecord.getRegisterNo());
+
+                if(null == registerRecord){
+                    continue;
+                }
+
+                // 复制诊疗信息
+                MedicMedictreatRecord medicMedictreatRecordNew = createMedicMedictreatRecord(registerRecord, medicMedictreatRecord);
+
+                // 复制处方信息
+                // 复制结算信息
+                // 复制结算详情
+                // 复制支付记录
+                List<MedicPrescription> medicPrescriptionsNew = createMedicPrescription(medicMedictreatRecord.getRegisterNo(), medicMedictreatRecordNew, medicMedictreatRecord);
+            }catch (Exception e){
+                logger.error("copy error!", e);
+            }
+
+        }
+    }
+
+    private double sum(Date start, Date end){
         List<String[]> gestPaidRecords = gestPaidRecordDao.getReportForOperateAction(start, end);
         double sum = 0;
         for (Object[] pr: gestPaidRecords){
             sum += Double.parseDouble(pr[0]+"");
         }
         logger.debug("{}, sum:{}", start +"->"+ end, sum);
-
-        List<MedicMedictreatRecord> medicMedictreatRecords = findMonth3(DateUtils.addMonths(start, -1), DateUtils.addMonths(end, -1), ImmutableList.of("去势", "绝育", "免", "火化", "细小", "猫瘟"), ImmutableList.of("去势","绝育","去势","寄养","疫","新购","老年"));
-
-        for (MedicMedictreatRecord medicMedictreatRecord: medicMedictreatRecords){
-            // 复制注册信息
-            MedicRegisterRecord registerRecord = createRegisterRecord(medicMedictreatRecord.getRegisterNo());
-
-            if(null == registerRecord){
-                continue;
-            }
-
-            // 复制诊疗信息
-            MedicMedictreatRecord medicMedictreatRecordNew = createMedicMedictreatRecord(registerRecord, medicMedictreatRecord);
-
-            // 复制处方信息
-            // 复制结算信息
-            // 复制结算详情
-            // 复制支付记录
-            List<MedicPrescription> medicPrescriptionsNew = createMedicPrescription(medicMedictreatRecord.getRegisterNo(), medicMedictreatRecordNew, medicMedictreatRecord);
-            return;
-        }
+        return sum;
     }
 
-    private Set<String> getMedicPrescriptionIdsOld(String id) {
-        Set<String> ids = new HashSet<>();
-        // 查询处方信息
-        List<MedicPrescription> medicPrescriptionsOld = medicPrescriptionDao.findByMedicRecordId(id);
-        for (MedicPrescription medicPrescription: medicPrescriptionsOld){
-            ids.add(medicPrescription.getId());
-        }
-        return ids;
-    }
-
-    private void createFinanceSettle(List<MedicPrescription> medicPrescriptionsNew, Set<String> prescriptionIdsOld) {
-
-        for (String medicPrescriptions: prescriptionIdsOld){
-            //
-        }
-
-        List<FinanceSettleAccountsDetail> financeSettleAccountsDetailsOld = financeSettleAccountsDetailDao.findByRelationIdIn(prescriptionIdsOld);
-
-        List<FinanceSettleAccounts> financeSettleAccounts = getFinanceSettleAccounts(financeSettleAccountsDetailsOld);
-    }
 
     private List<FinanceSettleAccounts> getFinanceSettleAccounts(List<FinanceSettleAccountsDetail> financeSettleAccountsDetailsOld) {
         Set<String> ids = new HashSet<>();
@@ -249,7 +272,7 @@ public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
         }
 
         // 复制明细
-        FinanceSettleAccountsDetail financeSettleAccountsDetailOld = financeSettleAccountsDetailDao.findOneByRelationIdAndRelationDetailId(medicPrescriptionId, medicPrescriptionDetailIdOld);
+        FinanceSettleAccountsDetail financeSettleAccountsDetailOld = financeSettleAccountsDetailDao.findOneByRelationIdAndRelationDetailId(medicPrescriptionIdOld, medicPrescriptionDetailIdOld);
 
         if (null == financeSettleAccountsDetailOld) return;
 
