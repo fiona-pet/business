@@ -59,7 +59,7 @@ public class AuthInterceptor {
         LOGGER.debug("check token:{}", token);
 
         try {
-            boolean validateToken = true;//accountService.validateToken(token);
+            boolean validateToken = accountService.validateToken(token);
 
             if (!validateToken){
                 throw new AuthorizationException("token 验证失败!");

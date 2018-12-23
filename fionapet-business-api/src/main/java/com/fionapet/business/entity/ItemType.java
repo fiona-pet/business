@@ -47,8 +47,21 @@ public class ItemType extends CMSEntity {
     public void setItemName(String itemName) {
         this.itemName = itemName;
     }
-    
-//    /**
+
+    /**
+     * 商品名称 
+     */
+    @ApiModelProperty(value = "itemAlias", required = false)
+    private String itemAlias;
+
+    public String getItemAlias() {
+        return itemAlias;
+    }
+
+    public void setItemAlias(String itemAlias) {
+        this.itemAlias = itemAlias;
+    }
+    //    /**
 //     * 种类业务编号对应t_item_cate表的cate_no 
 //     */
 //    @ApiModelProperty(value = "cateNo")
