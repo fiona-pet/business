@@ -13,19 +13,19 @@ import java.util.Map;
  */
 public interface ReportService extends CURDService<ReportByPersonVO> {
 
-    List<ReportByPersonVO> person(String month, String day);
+    List<ReportByPersonVO> person(String year,String month, String day);
 
-    List<ReportByItemVO> item(String month, String day);
+    List<ReportByItemVO> item(String year,String month, String day);
 
-    List<String[]> gestPaidAction(String month, String day);
+    List<String[]> gestPaidAction(String year,String month, String day);
 
-    List<String[]> medicRegisterRecord(String month, String day);
+    List<String[]> medicRegisterRecord(String year,String month, String day);
 
-    Map<String, Long> gestVip(String month, String day);
+    Map<String, Long> gestVip(String year,String month, String day);
 
-    Map<String, List> doctor(String month, String user);
+    Map<String, List> doctor(String year,String month, String user);
 
-    Map<String, List> doctorInHospital(String month, String user);
+    Map<String, List> doctorInHospital(String year,String month, String user);
 
-    Map<String, String> foster(String month, String day);
+    Map<String, String> foster(String year,String month, String day);
 }

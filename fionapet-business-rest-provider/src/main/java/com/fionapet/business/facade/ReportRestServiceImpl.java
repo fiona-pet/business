@@ -39,42 +39,42 @@ public class ReportRestServiceImpl extends RestServiceBase<ReportByPersonVO> imp
     }
 
     @Override
-    public RestResult<List<ReportByPersonVO>> person(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") String month, @ApiParam("day") String day) {
-        return RestResult.OK(reportService.person(month,day));
+    public RestResult<List<ReportByPersonVO>> person(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("year") String year, @ApiParam("month") String month, @ApiParam("day") String day) {
+        return RestResult.OK(reportService.person(year,month,day));
     }
 
     @Override
-    public RestResult<Map<String, List>> doctor(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") String month, @ApiParam("user") String user) {
-        return RestResult.OK(reportService.doctor(month,user));
+    public RestResult<Map<String, List>> doctor(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("year") String year, @ApiParam("month") String month, @ApiParam("user") String user) {
+        return RestResult.OK(reportService.doctor(year,month,user));
     }
 
     @Override
-    public RestResult<Map<String, List>> doctorInHospital(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") String month, @ApiParam("user") String user) {
-        return RestResult.OK(reportService.doctorInHospital(month,user));
+    public RestResult<Map<String, List>> doctorInHospital(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("year") String year, @ApiParam("month") String month, @ApiParam("user") String user) {
+        return RestResult.OK(reportService.doctorInHospital(year,month,user));
     }
 
     @Override
-    public RestResult<List<String[]>> gestPaidAction(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") String month, @ApiParam("day") String day) {
-        return RestResult.OK(reportService.gestPaidAction(month,day));
+    public RestResult<List<String[]>> gestPaidAction(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("year") String year, @ApiParam("month") String month, @ApiParam("day") String day) {
+        return RestResult.OK(reportService.gestPaidAction(year,month,day));
     }
 
     @Override
-    public RestResult<List<ReportByItemVO>> item(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") String month, @ApiParam("day") String day) {
-        return RestResult.OK(reportService.item(month,day));
+    public RestResult<List<ReportByItemVO>> item(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("year") String year, @ApiParam("month") String month, @ApiParam("day") String day) {
+        return RestResult.OK(reportService.item(year,month,day));
     }
 
     @Override
-    public RestResult<List<String[]>> medicRegisterRecord(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") String month, @ApiParam("day") String day) {
-        return RestResult.OK(reportService.medicRegisterRecord(month,day));
+    public RestResult<List<String[]>> medicRegisterRecord(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("year") String year, @ApiParam("month") String month, @ApiParam("day") String day) {
+        return RestResult.OK(reportService.medicRegisterRecord(year,month,day));
     }
 
     @Override
-    public RestResult<Map<String, Long>> gestVip(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") String month, @ApiParam("day") String day) {
-        return RestResult.OK(reportService.gestVip(month,day));
+    public RestResult<Map<String, Long>> gestVip(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("year") String year, @ApiParam("month") String month, @ApiParam("day") String day) {
+        return RestResult.OK(reportService.gestVip(year,month,day));
     }
 
     @Override
-    public RestResult<Map<String, String>> foster(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") String month, @ApiParam("day") String day) {
-        return RestResult.OK(reportService.foster(month,day));
+    public RestResult<Map<String, String>> foster(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("year") String year, @ApiParam("month") String month, @ApiParam("day") String day) {
+        return RestResult.OK(reportService.foster(year,month,day));
     }
 }

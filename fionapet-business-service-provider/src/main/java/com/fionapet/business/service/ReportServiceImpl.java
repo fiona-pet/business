@@ -4,6 +4,7 @@ import com.fionapet.business.entity.*;
 import com.fionapet.business.repository.*;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
@@ -43,21 +44,28 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
     }
 
     @Override
-    public List<ReportByPersonVO> person(String month, String day) {
-        return reportDao.findCreateDateBetween(getDate(month, day, "01"),getDate(month, day, "31"));
+    public List<ReportByPersonVO> person(String year,String month, String day) {
+        return reportDao.findCreateDateBetween(getDate(year, month, day, "01"),getDate(year, month, day, "31"));
     }
 
     @Override
-    public List<ReportByItemVO> item(String month, String day) {
-        return reportByItemDao.findCreateDateBetween(getDate(month, day, "01"),getDate(month, day, "31"));
+    public List<ReportByItemVO> item(String year,String month, String day) {
+        return reportByItemDao.findCreateDateBetween(getDate(year, month, day, "01"),getDate(year, month, day, "31"));
     }
 
-    private String getDate(String month, String day, String defaultDay){
+    private String getDate(String year,String month, String day, String defaultDay){
         if (month.length() == 1){
             month = "0" + month;
         }
 
-        String date = DateFormatUtils.format(System.currentTimeMillis(), "yyyy-") + month;
+        String date = year;
+        if (StringUtils.isEmpty(date)){
+            date = DateFormatUtils.format(System.currentTimeMillis(), "yyyy-");
+        }else{
+            date = date + "-";
+        }
+
+        date += month;
 
         if ("-".equals(day)){
             day = defaultDay;
@@ -71,14 +79,14 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
     }
 
     @Override
-    public List<String[]> gestPaidAction(String month, String day) {
+    public List<String[]> gestPaidAction(String year,String month, String day) {
         Date start = new Date();
         Date end = new Date();
 
 
         try {
-            start = DateUtils.parseDate(getDate(month, day, "01") + " 00:00:00", "yyyy-MM-dd hh:mm:ss");
-            end = getEndDate(month, day);
+            start = DateUtils.parseDate(getDate(year, month, day, "01") + " 00:00:00", "yyyy-MM-dd hh:mm:ss");
+            end = getEndDate(year, month, day);
         } catch (ParseException e) {
             LOGGER.warn("Data Format ERROR!",e);
 
@@ -86,7 +94,7 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
         return gestPaidRecordDao.getReportForOperateAction(start, end);
     }
 
-    private Date getEndDate(String month, String day){
+    private Date getEndDate(String year,String month, String day){
         Date end = new Date();
         Calendar cale = Calendar.getInstance();
 
@@ -95,7 +103,7 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
         cale.set(Calendar.DAY_OF_MONTH, 0);
 
         try {
-            end = DateUtils.parseDate(getDate(month, day, cale.get(Calendar.DATE)+"") + " 23:59:59", "yyyy-MM-dd hh:mm:ss");
+            end = DateUtils.parseDate(getDate(year, month, day, cale.get(Calendar.DATE)+"") + " 23:59:59", "yyyy-MM-dd hh:mm:ss");
         } catch (ParseException e) {
             LOGGER.warn("Data Format ERROR!",e);
         }
@@ -104,13 +112,13 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
     }
 
     @Override
-    public List<String[]> medicRegisterRecord(String month, String day) {
+    public List<String[]> medicRegisterRecord(String year,String month, String day) {
         Date start = new Date();
         Date end = new Date();
 
         try {
-            start = DateUtils.parseDate(getDate(month, day, "01") + " 00:00:00", "yyyy-MM-dd hh:mm:ss");
-            end = getEndDate(month, day);
+            start = DateUtils.parseDate(getDate(year, month, day, "01") + " 00:00:00", "yyyy-MM-dd hh:mm:ss");
+            end = getEndDate(year, month, day);
         } catch (ParseException e) {
             LOGGER.warn("Data Format ERROR!",e);
 
@@ -119,13 +127,13 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
     }
 
     @Override
-    public Map<String, Long> gestVip(String month, String day) {
+    public Map<String, Long> gestVip(String year,String month, String day) {
         Date start = new Date();
         Date end = new Date();
 
         try {
-            start = DateUtils.parseDate(getDate(month, day, "01") + " 00:00:00", "yyyy-MM-dd hh:mm:ss");
-            end = getEndDate(month, day);
+            start = DateUtils.parseDate(getDate(year, month, day, "01") + " 00:00:00", "yyyy-MM-dd hh:mm:ss");
+            end = getEndDate(year, month, day);
         } catch (ParseException e) {
             LOGGER.warn("Data Format ERROR!",e);
 
@@ -152,23 +160,23 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
     }
 
     @Override
-    public Map<String, List> doctor(String month, String user) {
-        return doctorByType(month,user,"门诊处方");
+    public Map<String, List> doctor(String year,String month, String user) {
+        return doctorByType(year, month,user,"门诊处方");
     }
 
     @Override
-    public Map<String, List> doctorInHospital(String month, String user) {
-        return doctorByType(month, user, "住院处方");
+    public Map<String, List> doctorInHospital(String year,String month, String user) {
+        return doctorByType(year, month, user, "住院处方");
     }
 
     @Override
-    public Map<String, String> foster(String month, String day) {
+    public Map<String, String> foster(String year,String month, String day) {
         Date start = new Date();
         Date end = new Date();
 
         try {
-            start = DateUtils.parseDate(getDate(month, day, "01") + " 00:00:00", "yyyy-MM-dd hh:mm:ss");
-            end = getEndDate(month, day);
+            start = DateUtils.parseDate(getDate(year, month, day, "01") + " 00:00:00", "yyyy-MM-dd hh:mm:ss");
+            end = getEndDate(year, month, day);
         } catch (ParseException e) {
             LOGGER.warn("Data Format ERROR!",e);
 
@@ -189,14 +197,22 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
         return result;
     }
 
-    private Map<String, List> doctorByType(String month, String user, String type) {
+    private Map<String, List> doctorByType(String year,String month, String user, String type) {
         int lastDay = getLastDayOfMonth(month);
 
         if (month.length() == 1){
             month = "0" + month;
         }
 
-        String date = DateFormatUtils.format(System.currentTimeMillis(), "yyyy-") + month;
+        String date = year;
+        if (StringUtils.isEmpty(date)){
+            date = DateFormatUtils.format(System.currentTimeMillis(), "yyyy-");
+        }else{
+            date = date + "-";
+        }
+
+        date += month;
+
         LOGGER.debug("date:{} of lastDay:{}", date, lastDay);
 
         List<ReportByPersonVO> reportByPersonVOs = reportDao.findByNameAndCreateDateLikeAndType(user, date+"%",type);

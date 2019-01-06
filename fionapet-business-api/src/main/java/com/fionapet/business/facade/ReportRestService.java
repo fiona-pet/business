@@ -35,7 +35,7 @@ public interface ReportRestService extends CURDRestService<ReportByPersonVO>{
     @Path("/person")
     @ApiOperation(value = "统计报表",
             notes = "统计报表列表.")
-    RestResult<List<ReportByPersonVO>> person(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") @QueryParam("month") String month, @ApiParam("day") @QueryParam("day") String day);
+    RestResult<List<ReportByPersonVO>> person(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("year") @QueryParam("year") String year, @ApiParam("month") @QueryParam("month") String month, @ApiParam("day") @QueryParam("day") String day);
 
     /**
      * 统计报表-大夫
@@ -45,7 +45,7 @@ public interface ReportRestService extends CURDRestService<ReportByPersonVO>{
     @Path("/doctor")
     @ApiOperation(value = "统计报表-大夫",
             notes = "统计报表-大夫.")
-    RestResult<Map<String, List>> doctor(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") @QueryParam("month") String month, @ApiParam("user") @QueryParam("user") String user);
+    RestResult<Map<String, List>> doctor(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("year") @QueryParam("year") String year, @ApiParam("month") @QueryParam("month") String month, @ApiParam("user") @QueryParam("user") String user);
     /**
      * 统计报表-大夫
      * @return
@@ -54,7 +54,7 @@ public interface ReportRestService extends CURDRestService<ReportByPersonVO>{
     @Path("/doctor/inhospital")
     @ApiOperation(value = "统计报表-大夫",
             notes = "统计报表-大夫.")
-    RestResult<Map<String, List>> doctorInHospital(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") @QueryParam("month") String month, @ApiParam("user") @QueryParam("user") String user);
+    RestResult<Map<String, List>> doctorInHospital(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("year") @QueryParam("year") String year, @ApiParam("month") @QueryParam("month") String month, @ApiParam("user") @QueryParam("user") String user);
 
     /**
      * 统计报表
@@ -64,7 +64,7 @@ public interface ReportRestService extends CURDRestService<ReportByPersonVO>{
     @Path("/gest/paid/action")
     @ApiOperation(value = "统计报表",
             notes = "统计报表列表.")
-    RestResult<List<String[]>> gestPaidAction(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") @QueryParam("month") String month, @ApiParam("day") @QueryParam("day") String day);
+    RestResult<List<String[]>> gestPaidAction(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("year") @QueryParam("year") String year, @ApiParam("month") @QueryParam("month") String month, @ApiParam("day") @QueryParam("day") String day);
     /**
      * 统计报表
      * @return
@@ -73,7 +73,7 @@ public interface ReportRestService extends CURDRestService<ReportByPersonVO>{
     @Path("/item")
     @ApiOperation(value = "统计报表",
             notes = "统计报表列表.")
-    RestResult<List<ReportByItemVO>> item(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") @QueryParam("month") String month, @ApiParam("day") @QueryParam("day") String day);
+    RestResult<List<ReportByItemVO>> item(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("year") @QueryParam("year") String year, @ApiParam("month") @QueryParam("month") String month, @ApiParam("day") @QueryParam("day") String day);
 
     /**
      * 统计报表-挂号
@@ -83,7 +83,7 @@ public interface ReportRestService extends CURDRestService<ReportByPersonVO>{
     @Path("/medic/register/record")
     @ApiOperation(value = "统计报表-挂号",
             notes = "统计报表列表-挂号.")
-    RestResult<List<String[]>> medicRegisterRecord(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") @QueryParam("month") String month, @ApiParam("day") @QueryParam("day") String day);
+    RestResult<List<String[]>> medicRegisterRecord(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("year") @QueryParam("year") String year, @ApiParam("month") @QueryParam("month") String month, @ApiParam("day") @QueryParam("day") String day);
 
     /**
      * 统计报表-会员信息
@@ -93,7 +93,7 @@ public interface ReportRestService extends CURDRestService<ReportByPersonVO>{
     @Path("/gest/vip")
     @ApiOperation(value = "统计报表-会员信息",
             notes = "统计报表列表-会员信息.")
-    RestResult<Map<String, Long>> gestVip(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") @QueryParam("month") String month, @ApiParam("day") @QueryParam("day") String day);
+    RestResult<Map<String, Long>> gestVip(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("year") @QueryParam("year") String year, @ApiParam("month") @QueryParam("month") String month, @ApiParam("day") @QueryParam("day") String day);
     /**
      * 统计报表-寄养信息
      * @return
@@ -102,7 +102,7 @@ public interface ReportRestService extends CURDRestService<ReportByPersonVO>{
     @Path("/foster")
     @ApiOperation(value = "统计报表-寄养信息",
             notes = "统计报表列表-寄养信息.")
-    RestResult<Map<String, String>> foster(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("month") @QueryParam("month") String month, @ApiParam("day") @QueryParam("day") String day);
+    RestResult<Map<String, String>> foster(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("year") @QueryParam("year") String year, @ApiParam("month") @QueryParam("month") String month, @ApiParam("day") @QueryParam("day") String day);
 
 
     /**
