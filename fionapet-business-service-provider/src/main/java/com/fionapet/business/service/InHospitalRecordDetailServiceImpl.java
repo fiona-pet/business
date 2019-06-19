@@ -2,18 +2,22 @@ package com.fionapet.business.service;
 
 import com.fionapet.business.entity.InHospitalRecordDetail;
 import com.fionapet.business.entity.UserDictDetail;
+import com.fionapet.business.repository.InHospitalRecordDetailDao;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
-import com.fionapet.business.repository.InHospitalRecordDetailDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
- *  医院记录明细表
-* Created by tom on 2016-07-25 09:32:31.
+ * 医院记录明细表 Created by tom on 2016-07-25 09:32:31.
  */
-public class InHospitalRecordDetailServiceImpl extends CURDServiceBase<InHospitalRecordDetail> implements InHospitalRecordDetailService {
+
+@Service
+public class InHospitalRecordDetailServiceImpl extends CURDServiceBase<InHospitalRecordDetail>
+        implements InHospitalRecordDetailService {
+
     @Autowired
     private InHospitalRecordDetailDao inHospitalRecordDetailDao;
 
@@ -27,8 +31,10 @@ public class InHospitalRecordDetailServiceImpl extends CURDServiceBase<InHospita
 
     @Override
     public InHospitalRecordDetail createOrUpdte(InHospitalRecordDetail entity) {
-        List<UserDictDetail> units = userDictDetailService.findByDictDetailCodeOrId(entity.getRecipeUnit());
-        if (null != units && units.size()>0){
+        List<UserDictDetail>
+                units =
+                userDictDetailService.findByDictDetailCodeOrId(entity.getRecipeUnit());
+        if (null != units && units.size() > 0) {
             entity.setRecipeUnit(units.get(0).getValueNameCn());
         }
         return super.createOrUpdte(entity);

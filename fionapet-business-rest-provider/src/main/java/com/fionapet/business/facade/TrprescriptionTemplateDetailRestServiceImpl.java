@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class TrprescriptionTemplateDetailRestServiceImpl extends RestServiceBase<TrprescriptionTemplateDetail> implements TrprescriptionTemplateDetailRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TrprescriptionTemplateDetailRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private TrprescriptionTemplateDetailService trprescriptionTemplateDetailService;
 
     public TrprescriptionTemplateDetailService getTrprescriptionTemplateDetailService() {

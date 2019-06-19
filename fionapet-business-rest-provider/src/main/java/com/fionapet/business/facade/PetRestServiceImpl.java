@@ -22,9 +22,9 @@ import javax.ws.rs.HeaderParam;
 public class PetRestServiceImpl extends RestServiceBase<Pet> implements PetRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PetRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private PetService petService;
-
+    @org.springframework.beans.factory.annotation.Autowired
     private PetViewService petViewService;
 
     public PetService getPetService() {

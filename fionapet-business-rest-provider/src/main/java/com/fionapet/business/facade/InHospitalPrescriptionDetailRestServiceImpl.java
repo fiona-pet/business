@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class InHospitalPrescriptionDetailRestServiceImpl extends RestServiceBase<InHospitalPrescriptionDetail> implements InHospitalPrescriptionDetailRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InHospitalPrescriptionDetailRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private InHospitalPrescriptionDetailService inHospitalPrescriptionDetailService;
 
     public InHospitalPrescriptionDetailService getInHospitalPrescriptionDetailService() {

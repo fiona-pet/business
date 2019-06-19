@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class InventoryLogRestServiceImpl extends RestServiceBase<InventoryLog> implements InventoryLogRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InventoryLogRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private InventoryLogService inventoryLogService;
 
     public InventoryLogService getInventoryLogService() {

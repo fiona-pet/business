@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class CheckWarehouseRestServiceImpl extends RestServiceBase<CheckWarehouse> implements CheckWarehouseRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CheckWarehouseRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private CheckWarehouseService checkWarehouseService;
 
     public CheckWarehouseService getCheckWarehouseService() {

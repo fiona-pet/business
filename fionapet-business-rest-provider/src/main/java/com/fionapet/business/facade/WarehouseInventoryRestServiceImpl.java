@@ -6,6 +6,7 @@ import org.dubbo.x.facade.RestServiceBase;
 import com.fionapet.business.service.WarehouseInventoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 仓库存货清单
@@ -15,6 +16,7 @@ public class WarehouseInventoryRestServiceImpl extends RestServiceBase<Warehouse
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WarehouseInventoryRestServiceImpl.class);
 
+    @Autowired
     private WarehouseInventoryService warehouseInventoryService;
 
     public WarehouseInventoryService getWarehouseInventoryService() {

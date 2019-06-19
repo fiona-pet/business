@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class MicroSmsConfigRestServiceImpl extends RestServiceBase<MicroSmsConfig> implements MicroSmsConfigRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MicroSmsConfigRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private MicroSmsConfigService microSmsConfigService;
 
     public MicroSmsConfigService getMicroSmsConfigService() {

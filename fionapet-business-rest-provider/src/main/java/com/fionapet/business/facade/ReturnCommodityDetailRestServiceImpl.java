@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class ReturnCommodityDetailRestServiceImpl extends RestServiceBase<ReturnCommodityDetail> implements ReturnCommodityDetailRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReturnCommodityDetailRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private ReturnCommodityDetailService returnCommodityDetailService;
 
     public ReturnCommodityDetailService getReturnCommodityDetailService() {

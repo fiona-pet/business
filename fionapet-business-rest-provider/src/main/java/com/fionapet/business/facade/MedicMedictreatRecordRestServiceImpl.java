@@ -19,7 +19,7 @@ import javax.ws.rs.HeaderParam;
 public class MedicMedictreatRecordRestServiceImpl extends RestServiceBase<MedicMedictreatRecord> implements MedicMedictreatRecordRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MedicMedictreatRecordRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private MedicMedictreatRecordService medicMedictreatRecordService;
 
     public MedicMedictreatRecordService getMedicMedictreatRecordService() {

@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class ExpensesCateRestServiceImpl extends RestServiceBase<ExpensesCate> implements ExpensesCateRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExpensesCateRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private ExpensesCateService expensesCateService;
 
     public ExpensesCateService getExpensesCateService() {

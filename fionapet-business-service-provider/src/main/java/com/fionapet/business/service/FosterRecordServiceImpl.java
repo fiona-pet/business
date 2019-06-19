@@ -1,25 +1,25 @@
 package com.fionapet.business.service;
 
-import com.fionapet.business.entity.*;
-import com.fionapet.business.facade.vo.PayVO;
+import com.fionapet.business.entity.DictTypeDetail;
+import com.fionapet.business.entity.FosterRecord;
 import com.fionapet.business.repository.DictTypeDetailDao;
+import com.fionapet.business.repository.FosterRecordDao;
 import com.fionapet.business.repository.FosterRecordDetailDao;
-import com.fionapet.business.repository.PrepayMoneyDao;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
-import com.fionapet.business.repository.FosterRecordDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
- *  养育记录主表
-* Created by tom on 2016-07-25 09:32:32.
+ * 养育记录主表 Created by tom on 2016-07-25 09:32:32.
  */
-public class FosterRecordServiceImpl extends CURDServiceBase<FosterRecord> implements FosterRecordService {
+
+@Service
+public class FosterRecordServiceImpl extends CURDServiceBase<FosterRecord>
+        implements FosterRecordService {
+
     @Autowired
     private FosterRecordDao fosterRecordDao;
     @Autowired
@@ -40,7 +40,7 @@ public class FosterRecordServiceImpl extends CURDServiceBase<FosterRecord> imple
     @Transactional
     public FosterRecord over(String uuid) {
         FosterRecord fosterRecord = fosterRecordDao.findOne(uuid);
-        if (null == fosterRecord){
+        if (null == fosterRecord) {
             return null;
         }
 
@@ -95,7 +95,7 @@ public class FosterRecordServiceImpl extends CURDServiceBase<FosterRecord> imple
 //
 //        gestPaidRecordService.pay(payVO);
 
-        if( fosterRecord.getInputMoney() == 0) {
+        if (fosterRecord.getInputMoney() == 0) {
             //更新状态
             DictTypeDetail dictTypeDetail = dictTypeDetailDao.findByDictDetailCode("SM00039");
 

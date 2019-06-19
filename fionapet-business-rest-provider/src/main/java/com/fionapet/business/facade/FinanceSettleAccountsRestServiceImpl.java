@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class FinanceSettleAccountsRestServiceImpl extends RestServiceBase<FinanceSettleAccounts> implements FinanceSettleAccountsRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FinanceSettleAccountsRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private FinanceSettleAccountsService financeSettleAccountsService;
 
     public FinanceSettleAccountsService getFinanceSettleAccountsService() {

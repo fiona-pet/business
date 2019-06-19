@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class PersonsAppointmentRestServiceImpl extends RestServiceBase<PersonsAppointment> implements PersonsAppointmentRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PersonsAppointmentRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private PersonsAppointmentService personsAppointmentService;
 
     public PersonsAppointmentService getPersonsAppointmentService() {

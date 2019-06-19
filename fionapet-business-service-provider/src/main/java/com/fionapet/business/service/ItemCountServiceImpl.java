@@ -1,30 +1,42 @@
 package com.fionapet.business.service;
 
-import com.fionapet.business.entity.*;
+import com.fionapet.business.entity.InHospitalPrescriptionDetail;
+import com.fionapet.business.entity.ItemCount;
+import com.fionapet.business.entity.ItemCountChangeReason;
+import com.fionapet.business.entity.MedicPrescriptionDetail;
+import com.fionapet.business.entity.OrderVO;
+import com.fionapet.business.entity.WarehouseInrecord;
+import com.fionapet.business.entity.WarehouseInrecordDetail;
 import com.fionapet.business.entity.status.WarehouseStatus;
 import com.fionapet.business.exception.ApiException;
-import com.fionapet.business.repository.*;
+import com.fionapet.business.repository.ItemCountChangeReasonDao;
+import com.fionapet.business.repository.ItemCountDao;
+import com.fionapet.business.repository.WarehouseInrecordDao;
+import com.fionapet.business.repository.WarehouseInrecordDetailDao;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.locale.converters.DateLocaleConverter;
-import org.apache.commons.lang3.StringUtils;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.transaction.Transactional;
+
 /**
- *  库存信息
-* Created by tom on 2016-07-25 09:32:32.
+ * 库存信息 Created by tom on 2016-07-25 09:32:32.
  */
+
+@Service
 public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements ItemCountService {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemCountServiceImpl.class);
     @Autowired
     private ItemCountDao itemCountDao;
@@ -44,9 +56,12 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
     public void update(String warehouseInrecordId) {
         WarehouseInrecord warehouseInrecord = warehouseInrecordDao.findOne(warehouseInrecordId);
 
-        List<WarehouseInrecordDetail> warehouseInrecordDetails = warehouseInrecordDetailDao.findByInWarehouseCode(warehouseInrecord.getInWarehouseCode());
+        List<WarehouseInrecordDetail>
+                warehouseInrecordDetails =
+                warehouseInrecordDetailDao
+                        .findByInWarehouseCode(warehouseInrecord.getInWarehouseCode());
 
-        for (WarehouseInrecordDetail warehouseInrecordDetail: warehouseInrecordDetails){
+        for (WarehouseInrecordDetail warehouseInrecordDetail : warehouseInrecordDetails) {
             ItemCountChangeReason itemCountChangeReason = new ItemCountChangeReason();
 
             itemCountChangeReason.setChangeReason("入库");
@@ -58,14 +73,17 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
             itemCountChangeReason.setSourceBatchNumber(warehouseInrecordDetail.getBatchNumber());
             itemCountChangeReason.setSourceOutDateTime(warehouseInrecordDetail.getUpdateDate());
 
+            ItemCount
+                    itemCount =
+                    itemCountDao.findByItemCode(warehouseInrecordDetail.getItemCode());
 
-            ItemCount itemCount = itemCountDao.findByItemCode(warehouseInrecordDetail.getItemCode());
-
-            if (null == itemCount){
+            if (null == itemCount) {
                 itemCount = new ItemCount();
 
                 try {
-                    ConvertUtils.register(new DateLocaleConverter(Locale.SIMPLIFIED_CHINESE,"yyyy-MM-dd hh:mm:ss"), Date.class);
+                    ConvertUtils.register(new DateLocaleConverter(Locale.SIMPLIFIED_CHINESE,
+                                                                  "yyyy-MM-dd hh:mm:ss"),
+                                          Date.class);
 
                     BeanUtilsBean.getInstance().copyProperties(itemCount, warehouseInrecordDetail);
                 } catch (IllegalAccessException e) {
@@ -73,7 +91,7 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
                 } catch (InvocationTargetException e) {
                     e.printStackTrace();
                 }
-            }else{
+            } else {
                 itemCountChangeReason.setSourceOutDateTime(itemCount.getUpdateDate());
                 itemCountChangeReason.setSourceCount(itemCount.getItemCountNum());
 
@@ -81,22 +99,31 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
                 itemCount.setItemBulk(warehouseInrecordDetail.getItemBulk());
                 itemCount.setItemName(warehouseInrecordDetail.getItemName());
 
-
                 //商品进价是否有变化
-                if (Double.compare(itemCount.getInputPrice(), warehouseInrecordDetail.getInputPrice()) != 0){
+                if (Double.compare(itemCount.getInputPrice(),
+                                   warehouseInrecordDetail.getInputPrice()) != 0) {
                     //新单价=((原进价*库存+原进价/零散比*散装数量)+新进价*数量)/((原库存+新进数量)*零散比+散装数量)*零散比
                     //原成本
-                    double oldTotal = itemCount.getInputPrice() * itemCount.getItemCountNum() + itemCount.getInputPrice()/itemCount.getItemBulk()*itemCount.getScatteredCountNum();
+                    double
+                            oldTotal =
+                            itemCount.getInputPrice() * itemCount.getItemCountNum()
+                            + itemCount.getInputPrice() / itemCount.getItemBulk() * itemCount
+                                    .getScatteredCountNum();
                     //新进成本
-                    double newTotal = warehouseInrecordDetail.getInputPrice() * warehouseInrecordDetail.getInputCount();
+                    double
+                            newTotal =
+                            warehouseInrecordDetail.getInputPrice() * warehouseInrecordDetail
+                                    .getInputCount();
                     //总散装数量
-                    double count = (itemCount.getItemCountNum() + warehouseInrecordDetail.getInputCount())*itemCount.getItemBulk() + itemCount.getScatteredCountNum();
+                    double
+                            count =
+                            (itemCount.getItemCountNum() + warehouseInrecordDetail.getInputCount())
+                            * itemCount.getItemBulk() + itemCount.getScatteredCountNum();
 
-                    double newInputPrice = (oldTotal + newTotal)/count*itemCount.getItemBulk();
+                    double newInputPrice = (oldTotal + newTotal) / count * itemCount.getItemBulk();
 
                     itemCount.setInputPrice(newInputPrice);
                 }
-
 
                 itemCount.setSellPrice(warehouseInrecordDetail.getSellPrice());
                 itemCount.setPackageUnit(warehouseInrecordDetail.getPackageUnit());
@@ -106,7 +133,8 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
             itemCount.setWarehouseId(warehouseInrecord.getWarehouseId());
             itemCount.setWarehouseName(warehouseInrecord.getInWarehouse());
 
-            itemCount.setItemCountNum(itemCount.getItemCountNum() + warehouseInrecordDetail.getInputCount());
+            itemCount.setItemCountNum(
+                    itemCount.getItemCountNum() + warehouseInrecordDetail.getInputCount());
 
             createOrUpdte(itemCount);
 
@@ -129,18 +157,20 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
 
     @Override
     @Transactional
-    public void decrease(final MedicPrescriptionDetail medicPrescriptionDetail) throws ApiException{
+    public void decrease(final MedicPrescriptionDetail medicPrescriptionDetail)
+            throws ApiException {
         String itemCountStatus = null;
         ItemCount itemCount = itemCountDao.findByItemCode(medicPrescriptionDetail.getItemCode());
         //无库存
-        if (null == itemCount){
-            itemCountStatus = WarehouseStatus.NOT_FOUND+"";
+        if (null == itemCount) {
+            itemCountStatus = WarehouseStatus.NOT_FOUND + "";
 
-            LOGGER.error("{}[{}]: 商品没有库存！", medicPrescriptionDetail.getItemCode(), medicPrescriptionDetail.getItemName());
+            LOGGER.error("{}[{}]: 商品没有库存！", medicPrescriptionDetail.getItemCode(),
+                         medicPrescriptionDetail.getItemName());
 
             return;
-        }else {
-            if (null == itemCount.getItemBulk()|| itemCount.getItemBulk()==0){
+        } else {
+            if (null == itemCount.getItemBulk() || itemCount.getItemBulk() == 0) {
                 itemCount.setItemBulk(1);
             }
 
@@ -160,17 +190,26 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
             itemCountChangeReason.setCreateUserId(medicPrescriptionDetail.getCreateUserId());
             itemCountChangeReason.setUpdateUserId(medicPrescriptionDetail.getCreateUserId());
 
-            if ("1".equals(itemCount.getItemBulk())){
-                itemCount.setItemCountNum(itemCount.getItemCountNum()-medicPrescriptionDetail.getItemNum());
-            }else {
+            if ("1".equals(itemCount.getItemBulk())) {
+                itemCount.setItemCountNum(
+                        itemCount.getItemCountNum() - medicPrescriptionDetail.getItemNum());
+            } else {
                 //库存不足
-                if (medicPrescriptionDetail.getItemNum() != null && itemCount.getScatteredCountNum() < medicPrescriptionDetail.getItemNum()) {
-                    int count = (medicPrescriptionDetail.getItemNum() - (int) itemCount.getScatteredCountNum()) / itemCount.getItemBulk() + 1;
+                if (medicPrescriptionDetail.getItemNum() != null
+                    && itemCount.getScatteredCountNum() < medicPrescriptionDetail.getItemNum()) {
+                    int
+                            count =
+                            (medicPrescriptionDetail.getItemNum() - (int) itemCount
+                                    .getScatteredCountNum()) / itemCount.getItemBulk() + 1;
                     itemCount.setItemCountNum(itemCount.getItemCountNum() - count);
 
-                    itemCount.setScatteredCountNum(count * itemCount.getItemBulk() + itemCount.getScatteredCountNum() - medicPrescriptionDetail.getItemNum());
+                    itemCount.setScatteredCountNum(
+                            count * itemCount.getItemBulk() + itemCount.getScatteredCountNum()
+                            - medicPrescriptionDetail.getItemNum());
                 } else {
-                    itemCount.setScatteredCountNum(itemCount.getScatteredCountNum() - medicPrescriptionDetail.getItemNum());
+                    itemCount.setScatteredCountNum(
+                            itemCount.getScatteredCountNum() - medicPrescriptionDetail
+                                    .getItemNum());
                 }
             }
 
@@ -179,7 +218,6 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
             } else {
                 itemCountStatus = WarehouseStatus.ENOUGH + "";
             }
-
 
             itemCountChangeReason.setNewCount(itemCount.getItemCountNum());
             itemCountChangeReason.setNewScatteredCount(itemCount.getScatteredCountNum());
@@ -197,7 +235,8 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
     public void decrease(InHospitalPrescriptionDetail inHospitalPrescriptionDetail) {
         MedicPrescriptionDetail medicPrescriptionDetail = new MedicPrescriptionDetail();
         try {
-            BeanUtilsBean.getInstance().copyProperties(medicPrescriptionDetail, inHospitalPrescriptionDetail);
+            BeanUtilsBean.getInstance()
+                    .copyProperties(medicPrescriptionDetail, inHospitalPrescriptionDetail);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
@@ -209,7 +248,7 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
 
     @Override
     public List<OrderVO> order() {
-        return ((ItemCountDao)this.getDao()).genOrder();
+        return ((ItemCountDao) this.getDao()).genOrder();
     }
 
     @Override
@@ -217,12 +256,13 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
     public void decrease(int itemNum, ItemCountChangeReason itemCountChangeReason) {
         ItemCount itemCount = itemCountDao.findByItemCode(itemCountChangeReason.getItemCode());
         //无库存
-        if (null == itemCount){
-            LOGGER.error("{}[{}]: 商品没有库存！", itemCountChangeReason.getItemCode(), itemCountChangeReason.getItemName());
+        if (null == itemCount) {
+            LOGGER.error("{}[{}]: 商品没有库存！", itemCountChangeReason.getItemCode(),
+                         itemCountChangeReason.getItemName());
 
             return;
-        }else {
-            if (null == itemCount.getItemBulk()|| itemCount.getItemBulk()==0){
+        } else {
+            if (null == itemCount.getItemBulk() || itemCount.getItemBulk() == 0) {
                 itemCount.setItemBulk(1);
             }
             itemCountChangeReason.setItemCountId(itemCount.getId());
@@ -233,15 +273,20 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
             itemCountChangeReason.setSourceBatchNumber(itemCount.getBatchNumber());
             itemCountChangeReason.setSourceOutDateTime(itemCount.getUpdateDate());
 
-            if ("1".equals(itemCount.getItemBulk())){
-                itemCount.setItemCountNum(itemCount.getItemCountNum()-itemNum);
-            }else {
+            if ("1".equals(itemCount.getItemBulk())) {
+                itemCount.setItemCountNum(itemCount.getItemCountNum() - itemNum);
+            } else {
                 //库存不足
                 if (itemCount.getScatteredCountNum() < itemNum) {
-                    int count = (itemNum - (int) itemCount.getScatteredCountNum()) / itemCount.getItemBulk() + 1;
+                    int
+                            count =
+                            (itemNum - (int) itemCount.getScatteredCountNum()) / itemCount
+                                    .getItemBulk() + 1;
                     itemCount.setItemCountNum(itemCount.getItemCountNum() - count);
 
-                    itemCount.setScatteredCountNum(count * itemCount.getItemBulk() + itemCount.getScatteredCountNum() - itemNum);
+                    itemCount.setScatteredCountNum(
+                            count * itemCount.getItemBulk() + itemCount.getScatteredCountNum()
+                            - itemNum);
                 } else {
                     itemCount.setScatteredCountNum(itemCount.getScatteredCountNum() - itemNum);
                 }

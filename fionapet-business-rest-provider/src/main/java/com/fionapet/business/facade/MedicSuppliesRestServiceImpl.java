@@ -6,6 +6,7 @@ import org.dubbo.x.facade.RestServiceBase;
 import com.fionapet.business.service.MedicSuppliesService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 医生供应量表
@@ -15,6 +16,7 @@ public class MedicSuppliesRestServiceImpl extends RestServiceBase<MedicSupplies>
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MedicSuppliesRestServiceImpl.class);
 
+    @Autowired
     private MedicSuppliesService medicSuppliesService;
 
     public MedicSuppliesService getMedicSuppliesService() {

@@ -21,7 +21,7 @@ import javax.ws.rs.HeaderParam;
 public class GestRestServiceImpl extends RestServiceBase<Gest> implements GestRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GestRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private GestService gestService;
 
     public GestService getGestService() {

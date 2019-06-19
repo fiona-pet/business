@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class PersonsCmAppRestServiceImpl extends RestServiceBase<PersonsCmApp> implements PersonsCmAppRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PersonsCmAppRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private PersonsCmAppService personsCmAppService;
 
     public PersonsCmAppService getPersonsCmAppService() {

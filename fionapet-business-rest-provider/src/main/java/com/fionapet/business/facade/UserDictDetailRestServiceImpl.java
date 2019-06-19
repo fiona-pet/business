@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class UserDictDetailRestServiceImpl extends RestServiceBase<UserDictDetail> implements UserDictDetailRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDictDetailRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private UserDictDetailService userDictDetailService;
 
     public UserDictDetailService getUserDictDetailService() {

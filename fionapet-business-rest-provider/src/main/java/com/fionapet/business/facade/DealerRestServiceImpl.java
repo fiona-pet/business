@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class DealerRestServiceImpl extends RestServiceBase<Dealer> implements DealerRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DealerRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private DealerService dealerService;
 
     public DealerService getDealerService() {

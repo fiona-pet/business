@@ -6,6 +6,7 @@ import org.dubbo.x.facade.RestServiceBase;
 import com.fionapet.business.service.PhoneMessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 电话信息表
@@ -15,6 +16,7 @@ public class PhoneMessageRestServiceImpl extends RestServiceBase<PhoneMessage> i
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PhoneMessageRestServiceImpl.class);
 
+    @Autowired
     private PhoneMessageService phoneMessageService;
 
     public PhoneMessageService getPhoneMessageService() {

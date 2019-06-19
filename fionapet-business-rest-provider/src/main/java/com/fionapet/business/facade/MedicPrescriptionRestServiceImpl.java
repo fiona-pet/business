@@ -10,6 +10,7 @@ import com.fionapet.business.service.MedicPrescriptionService;
 import org.dubbo.x.util.ConstantVariable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.PathParam;
@@ -22,6 +23,7 @@ public class MedicPrescriptionRestServiceImpl extends RestServiceBase<MedicPresc
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MedicPrescriptionRestServiceImpl.class);
 
+    @Autowired
     private MedicPrescriptionService medicPrescriptionService;
 
     public MedicPrescriptionService getMedicPrescriptionService() {

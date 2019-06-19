@@ -19,7 +19,7 @@ import javax.ws.rs.HeaderParam;
 public class InHospitalRecordRestServiceImpl extends RestServiceBase<InHospitalRecord> implements InHospitalRecordRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InHospitalRecordRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private InHospitalRecordService inHospitalRecordService;
 
     public InHospitalRecordService getInHospitalRecordService() {

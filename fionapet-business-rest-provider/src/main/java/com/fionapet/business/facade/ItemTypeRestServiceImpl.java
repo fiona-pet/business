@@ -22,7 +22,7 @@ import java.util.List;
 public class ItemTypeRestServiceImpl extends RestServiceBase<ItemType> implements ItemTypeRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemTypeRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private ItemTypeService itemTypeService;
 
     public ItemTypeService getItemTypeService() {

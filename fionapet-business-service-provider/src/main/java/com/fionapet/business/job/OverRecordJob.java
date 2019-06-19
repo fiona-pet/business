@@ -4,10 +4,12 @@ import com.fionapet.business.service.MedicRegisterRecordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by tom on 16/8/18.
  */
+@Service
 public class OverRecordJob {
     private static final Logger LOGGER = LoggerFactory.getLogger(OverRecordJob.class);
     private static final String JOB_NAME = "Over Record";

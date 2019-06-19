@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class MedicChemicalExamtypeDetailRestServiceImpl extends RestServiceBase<MedicChemicalExamtypeDetail> implements MedicChemicalExamtypeDetailRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MedicChemicalExamtypeDetailRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private MedicChemicalExamtypeDetailService medicChemicalExamtypeDetailService;
 
     public MedicChemicalExamtypeDetailService getMedicChemicalExamtypeDetailService() {

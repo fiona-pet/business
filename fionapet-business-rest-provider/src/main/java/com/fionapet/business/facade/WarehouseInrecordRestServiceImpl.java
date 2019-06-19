@@ -19,7 +19,7 @@ import javax.ws.rs.HeaderParam;
 public class WarehouseInrecordRestServiceImpl extends RestServiceBase<WarehouseInrecord> implements WarehouseInrecordRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WarehouseInrecordRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private WarehouseInrecordService warehouseInrecordService;
 
     public WarehouseInrecordService getWarehouseInrecordService() {

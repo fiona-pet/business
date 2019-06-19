@@ -154,7 +154,7 @@ public class MedicMedictreatRecordDaoTest extends SpringTransactionalTestCase {
 
 
     private List<FinanceSettleAccounts> getFinanceSettleAccounts(List<FinanceSettleAccountsDetail> financeSettleAccountsDetailsOld) {
-        Set<String> ids = new HashSet<>();
+        Set<String> ids = new HashSet<String>();
         for (FinanceSettleAccountsDetail financeSettleAccountsDetail: financeSettleAccountsDetailsOld){
             ids.add(financeSettleAccountsDetail.getSettleAccountsDetailId());
         }

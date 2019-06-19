@@ -10,7 +10,9 @@ import org.springframework.context.ApplicationEventPublisherAware;
 /**
  * Created by tom on 2017/8/6.
  */
-public abstract class CURDEServiceBase< T extends Idable> extends CURDServiceBase<T> implements ApplicationEventPublisherAware {
+public abstract class CURDEServiceBase<T extends Idable> extends CURDServiceBase<T>
+        implements ApplicationEventPublisherAware {
+
     @Autowired
     private Auth auth;
 
@@ -29,7 +31,7 @@ public abstract class CURDEServiceBase< T extends Idable> extends CURDServiceBas
         this.publisher = applicationEventPublisher;
     }
 
-    public void publishEvent(ApplicationEvent event){
+    public void publishEvent(ApplicationEvent event) {
         auth.setCurrentUser(this.getCurrentUser());
         this.getPublisher().publishEvent(event);
     }

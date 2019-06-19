@@ -4,29 +4,39 @@ import com.fionapet.business.entity.DictTypeDetail;
 import com.fionapet.business.entity.MedicMedictreatRecord;
 import com.fionapet.business.entity.MedicPrescription;
 import com.fionapet.business.entity.MedicPrescriptionDetail;
-import com.fionapet.business.repository.*;
+import com.fionapet.business.repository.DictTypeDetailDao;
+import com.fionapet.business.repository.MedicMedictreatRecordDao;
+import com.fionapet.business.repository.MedicPrescriptionDao;
+import com.fionapet.business.repository.MedicPrescriptionDetailDao;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.ArrayUtils;
 import org.dubbo.x.exception.ApiException;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
 
 /**
- *  医生处方明细
-* Created by tom on 2016-07-18 11:56:08.
+ * 医生处方明细 Created by tom on 2016-07-18 11:56:08.
  */
-public class MedicPrescriptionServiceImpl extends CURDServiceBase<MedicPrescription> implements MedicPrescriptionService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MedicPrescriptionServiceImpl.class);
+
+@Service
+public class MedicPrescriptionServiceImpl extends CURDServiceBase<MedicPrescription>
+        implements MedicPrescriptionService {
+
+    private static final Logger
+            LOGGER =
+            LoggerFactory.getLogger(MedicPrescriptionServiceImpl.class);
     @Autowired
     private MedicPrescriptionDao medicPrescriptionDao;
     @Autowired
@@ -48,18 +58,23 @@ public class MedicPrescriptionServiceImpl extends CURDServiceBase<MedicPrescript
     public MedicPrescription copy(String id, String medicRecordCode) throws ApiException {
 
         ConvertUtils.register(new DateConverter(null), java.util.Date.class);
-        MedicMedictreatRecord medicMedictreatRecord = medicMedictreatRecordDao.findByMediTreatmentCode(medicRecordCode);
+        MedicMedictreatRecord
+                medicMedictreatRecord =
+                medicMedictreatRecordDao.findByMediTreatmentCode(medicRecordCode);
 
-        if (null == medicMedictreatRecord){
+        if (null == medicMedictreatRecord) {
             throw new ApiException("就诊编号为空!");
         }
 
-        MedicPrescription medicPrescriptionOrgi = medicPrescriptionDao.findByIdOrPrescriptionCode(id,id);
+        MedicPrescription
+                medicPrescriptionOrgi =
+                medicPrescriptionDao.findByIdOrPrescriptionCode(id, id);
         MedicPrescription medicPrescription = new MedicPrescription();
-        if (null != medicPrescriptionOrgi){
+        if (null != medicPrescriptionOrgi) {
             //属性复制
             try {
-                BeanUtilsBean.getInstance().copyProperties(medicPrescription, medicPrescriptionOrgi);
+                BeanUtilsBean.getInstance()
+                        .copyProperties(medicPrescription, medicPrescriptionOrgi);
             } catch (Exception e) {
                 LOGGER.warn("复制处方数据出错!", e);
                 throw new ApiException("复制处方数据出错!");
@@ -71,25 +86,33 @@ public class MedicPrescriptionServiceImpl extends CURDServiceBase<MedicPrescript
         medicPrescription.setMedicRecordCode(medicRecordCode);
 
         //获取 病例编号
-        String prescriptionCode = appConfigService.genNumberByName(AppConfigService.NUMBER_KEY_MEDIC_PRESCRIPTION_CODE);
+        String
+                prescriptionCode =
+                appConfigService
+                        .genNumberByName(AppConfigService.NUMBER_KEY_MEDIC_PRESCRIPTION_CODE);
         medicPrescription.setPrescriptionCode(prescriptionCode);
 
         createOrUpdte(medicPrescription);
 
         //处方明细 复制
 //        Set<MedicPrescriptionDetail> medicPrescriptionDetailList = new HashSet<MedicPrescriptionDetail>();
-        Map<String, MedicPrescriptionDetail> medicPrescriptionDetailMap = new HashMap<String, MedicPrescriptionDetail>();
-        List<MedicPrescriptionDetail> medicPrescriptionDetails = medicPrescriptionDetailDao.findByPrescriptionId(medicPrescriptionOrgi.getId());
+        Map<String, MedicPrescriptionDetail>
+                medicPrescriptionDetailMap =
+                new HashMap<String, MedicPrescriptionDetail>();
+        List<MedicPrescriptionDetail>
+                medicPrescriptionDetails =
+                medicPrescriptionDetailDao.findByPrescriptionId(medicPrescriptionOrgi.getId());
 
         //状态
         DictTypeDetail status = dictTypeDetailDao.findByDictDetailCode("SM00001");
 
-        for (MedicPrescriptionDetail medicPrescriptionDetail: medicPrescriptionDetails){
+        for (MedicPrescriptionDetail medicPrescriptionDetail : medicPrescriptionDetails) {
             MedicPrescriptionDetail medicPrescriptionDetailDest = new MedicPrescriptionDetail();
 
             //属性复制
             try {
-                BeanUtilsBean.getInstance().copyProperties(medicPrescriptionDetailDest, medicPrescriptionDetail);
+                BeanUtilsBean.getInstance()
+                        .copyProperties(medicPrescriptionDetailDest, medicPrescriptionDetail);
 
             } catch (Exception e) {
                 throw new ApiException("复制处方明细数据出错!");
@@ -105,7 +128,9 @@ public class MedicPrescriptionServiceImpl extends CURDServiceBase<MedicPrescript
             medicPrescriptionDetailDest.setStatus(status);
             medicPrescriptionDetailDest.setPaidStatus(null);
 
-            medicPrescriptionDetailMap.put(medicPrescriptionDetailDest.getItemCode()+":" + medicPrescriptionDetailDest.getGroupName(), medicPrescriptionDetailDest);
+            medicPrescriptionDetailMap.put(medicPrescriptionDetailDest.getItemCode() + ":"
+                                           + medicPrescriptionDetailDest.getGroupName(),
+                                           medicPrescriptionDetailDest);
 //            medicPrescriptionDetailList.add(medicPrescriptionDetailDest);
         }
 
@@ -117,9 +142,11 @@ public class MedicPrescriptionServiceImpl extends CURDServiceBase<MedicPrescript
     @Override
     @Transactional
     public void delete(String uuid) {
-        List<MedicPrescriptionDetail> medicPrescriptionDetails = medicPrescriptionDetailDao.findByPrescriptionId(uuid);
-        for(MedicPrescriptionDetail medicPrescriptionDetail: medicPrescriptionDetails){
-            if ("SM00051".equals(medicPrescriptionDetail.getPaidStatus())){
+        List<MedicPrescriptionDetail>
+                medicPrescriptionDetails =
+                medicPrescriptionDetailDao.findByPrescriptionId(uuid);
+        for (MedicPrescriptionDetail medicPrescriptionDetail : medicPrescriptionDetails) {
+            if ("SM00051".equals(medicPrescriptionDetail.getPaidStatus())) {
                 return;
             }
         }

@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class ItemDiscountRateRestServiceImpl extends RestServiceBase<ItemDiscountRate> implements ItemDiscountRateRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemDiscountRateRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private ItemDiscountRateService itemDiscountRateService;
 
     public ItemDiscountRateService getItemDiscountRateService() {

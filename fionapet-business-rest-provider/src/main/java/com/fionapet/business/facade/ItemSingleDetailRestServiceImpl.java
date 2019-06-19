@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class ItemSingleDetailRestServiceImpl extends RestServiceBase<ItemSingleDetail> implements ItemSingleDetailRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemSingleDetailRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private ItemSingleDetailService itemSingleDetailService;
 
     public ItemSingleDetailService getItemSingleDetailService() {

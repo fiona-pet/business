@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class ImagesRestServiceImpl extends RestServiceBase<Images> implements ImagesRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ImagesRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private ImagesService imagesService;
 
     public ImagesService getImagesService() {

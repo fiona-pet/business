@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class StoreDirectSellDetailRestServiceImpl extends RestServiceBase<StoreDirectSellDetail> implements StoreDirectSellDetailRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StoreDirectSellDetailRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private StoreDirectSellDetailService storeDirectSellDetailService;
 
     public StoreDirectSellDetailService getStoreDirectSellDetailService() {

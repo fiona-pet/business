@@ -10,16 +10,19 @@ import com.fionapet.business.repository.PersonsDao;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 /**
- *  宠物主人信息
-* Created by tom on 2016-07-31 16:42:52.
+ * 宠物主人信息 Created by tom on 2016-07-31 16:42:52.
  */
+
+@Service
 public class PersonsServiceImpl extends CURDServiceBase<Persons> implements PersonsService {
+
     @Autowired
     private PersonsDao personsDao;
 

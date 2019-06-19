@@ -3,18 +3,22 @@ package com.fionapet.business.service;
 import com.fionapet.business.entity.WarehouseInrecord;
 import com.fionapet.business.entity.WarehouseInrecordDetail;
 import com.fionapet.business.repository.WarehouseInrecordDao;
+import com.fionapet.business.repository.WarehouseInrecordDetailDao;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
-import com.fionapet.business.repository.WarehouseInrecordDetailDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
 /**
- *  进库记录明细
-* Created by tom on 2016-07-18 11:56:10.
+ * 进库记录明细 Created by tom on 2016-07-18 11:56:10.
  */
-public class WarehouseInrecordDetailServiceImpl extends CURDServiceBase<WarehouseInrecordDetail> implements WarehouseInrecordDetailService {
+
+@Service
+public class WarehouseInrecordDetailServiceImpl extends CURDServiceBase<WarehouseInrecordDetail>
+        implements WarehouseInrecordDetailService {
+
     @Autowired
     private WarehouseInrecordDetailDao warehouseInrecordDetailDao;
     @Autowired
@@ -30,12 +34,15 @@ public class WarehouseInrecordDetailServiceImpl extends CURDServiceBase<Warehous
     @Transactional
     public synchronized WarehouseInrecordDetail createOrUpdte(WarehouseInrecordDetail entity) {
         //更新入库信息
-        WarehouseInrecord warehouseInrecord = warehouseInrecordDao.findByInWarehouseCode(entity.getInWarehouseCode());
-        if (null != warehouseInrecord){
-            if (warehouseInrecord.getRemark() == null){
+        WarehouseInrecord
+                warehouseInrecord =
+                warehouseInrecordDao.findByInWarehouseCode(entity.getInWarehouseCode());
+        if (null != warehouseInrecord) {
+            if (warehouseInrecord.getRemark() == null) {
                 warehouseInrecord.setRemark(entity.getItemName());
-            }else if (warehouseInrecord.getRemark().indexOf(entity.getItemName()) == -1){
-                warehouseInrecord.setRemark(warehouseInrecord.getRemark() + "," + entity.getItemName());
+            } else if (warehouseInrecord.getRemark().indexOf(entity.getItemName()) == -1) {
+                warehouseInrecord
+                        .setRemark(warehouseInrecord.getRemark() + "," + entity.getItemName());
             }
             warehouseInrecordDao.save(warehouseInrecord);
         }
@@ -48,11 +55,16 @@ public class WarehouseInrecordDetailServiceImpl extends CURDServiceBase<Warehous
     // TODO 消息
     public void delete(String uuid) {
         WarehouseInrecordDetail warehouseInrecordDetail = warehouseInrecordDetailDao.findOne(uuid);
-        if (null != warehouseInrecordDetail){
-            WarehouseInrecord warehouseInrecord = warehouseInrecordDao.findByInWarehouseCode(warehouseInrecordDetail.getInWarehouseCode());
+        if (null != warehouseInrecordDetail) {
+            WarehouseInrecord
+                    warehouseInrecord =
+                    warehouseInrecordDao
+                            .findByInWarehouseCode(warehouseInrecordDetail.getInWarehouseCode());
             if (null != warehouseInrecord) {
-                warehouseInrecord.setInWarehouseTotalCost(warehouseInrecord.getInWarehouseTotalCost() - warehouseInrecordDetail.getInputCost());
-                warehouseInrecord.setTotalCount(warehouseInrecord.getTotalCount()-1);
+                warehouseInrecord.setInWarehouseTotalCost(
+                        warehouseInrecord.getInWarehouseTotalCost() - warehouseInrecordDetail
+                                .getInputCost());
+                warehouseInrecord.setTotalCount(warehouseInrecord.getTotalCount() - 1);
                 warehouseInrecordDao.save(warehouseInrecord);
             }
         }

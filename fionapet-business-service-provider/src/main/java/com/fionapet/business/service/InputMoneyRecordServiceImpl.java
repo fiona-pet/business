@@ -2,18 +2,22 @@ package com.fionapet.business.service;
 
 import com.fionapet.business.entity.Gest;
 import com.fionapet.business.entity.InputMoneyRecord;
+import com.fionapet.business.repository.InputMoneyRecordDao;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
-import com.fionapet.business.repository.InputMoneyRecordDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
 /**
- *  收款记录表
-* Created by tom on 2016-07-25 09:32:32.
+ * 收款记录表 Created by tom on 2016-07-25 09:32:32.
  */
-public class InputMoneyRecordServiceImpl extends CURDServiceBase<InputMoneyRecord> implements InputMoneyRecordService {
+
+@Service
+public class InputMoneyRecordServiceImpl extends CURDServiceBase<InputMoneyRecord>
+        implements InputMoneyRecordService {
+
     @Autowired
     private InputMoneyRecordDao inputMoneyRecordDao;
 
@@ -24,7 +28,7 @@ public class InputMoneyRecordServiceImpl extends CURDServiceBase<InputMoneyRecor
 
     @Override
     public void newRecord(Gest gest, Double money) {
-        if (null == gest){
+        if (null == gest) {
             return;
         }
 

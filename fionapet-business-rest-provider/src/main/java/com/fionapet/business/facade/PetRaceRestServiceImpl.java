@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class PetRaceRestServiceImpl extends RestServiceBase<PetRace> implements PetRaceRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PetRaceRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private PetRaceService petRaceService;
 
     public PetRaceService getPetRaceService() {

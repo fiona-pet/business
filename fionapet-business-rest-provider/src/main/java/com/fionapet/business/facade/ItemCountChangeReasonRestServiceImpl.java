@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class ItemCountChangeReasonRestServiceImpl extends RestServiceBase<ItemCountChangeReason> implements ItemCountChangeReasonRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemCountChangeReasonRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private ItemCountChangeReasonService itemCountChangeReasonService;
 
     public ItemCountChangeReasonService getItemCountChangeReasonService() {

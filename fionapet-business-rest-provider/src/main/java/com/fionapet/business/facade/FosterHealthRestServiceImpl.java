@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class FosterHealthRestServiceImpl extends RestServiceBase<FosterHealth> implements FosterHealthRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FosterHealthRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private FosterHealthService fosterHealthService;
 
     public FosterHealthService getFosterHealthService() {

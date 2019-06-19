@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class WarehouseMoverecordDetailRestServiceImpl extends RestServiceBase<WarehouseMoverecordDetail> implements WarehouseMoverecordDetailRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WarehouseMoverecordDetailRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private WarehouseMoverecordDetailService warehouseMoverecordDetailService;
 
     public WarehouseMoverecordDetailService getWarehouseMoverecordDetailService() {

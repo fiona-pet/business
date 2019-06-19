@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class ItemtypeChemicalexamRestServiceImpl extends RestServiceBase<ItemtypeChemicalexam> implements ItemtypeChemicalexamRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemtypeChemicalexamRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private ItemtypeChemicalexamService itemtypeChemicalexamService;
 
     public ItemtypeChemicalexamService getItemtypeChemicalexamService() {

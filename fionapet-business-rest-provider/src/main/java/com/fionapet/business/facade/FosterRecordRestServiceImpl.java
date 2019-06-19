@@ -19,7 +19,7 @@ import javax.ws.rs.HeaderParam;
 public class FosterRecordRestServiceImpl extends RestServiceBase<FosterRecord> implements FosterRecordRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FosterRecordRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private FosterRecordService fosterRecordService;
 
     public FosterRecordService getFosterRecordService() {

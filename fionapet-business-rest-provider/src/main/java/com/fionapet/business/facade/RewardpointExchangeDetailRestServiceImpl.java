@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class RewardpointExchangeDetailRestServiceImpl extends RestServiceBase<RewardpointExchangeDetail> implements RewardpointExchangeDetailRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RewardpointExchangeDetailRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private RewardpointExchangeDetailService rewardpointExchangeDetailService;
 
     public RewardpointExchangeDetailService getRewardpointExchangeDetailService() {

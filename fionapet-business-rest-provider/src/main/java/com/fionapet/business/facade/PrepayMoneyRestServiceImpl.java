@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class PrepayMoneyRestServiceImpl extends RestServiceBase<PrepayMoney> implements PrepayMoneyRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PrepayMoneyRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private PrepayMoneyService prepayMoneyService;
 
     public PrepayMoneyService getPrepayMoneyService() {

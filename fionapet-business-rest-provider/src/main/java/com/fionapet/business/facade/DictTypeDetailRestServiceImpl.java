@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class DictTypeDetailRestServiceImpl extends RestServiceBase<DictTypeDetail> implements DictTypeDetailRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DictTypeDetailRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private DictTypeDetailService dictTypeDetailService;
 
     public DictTypeDetailService getDictTypeDetailService() {

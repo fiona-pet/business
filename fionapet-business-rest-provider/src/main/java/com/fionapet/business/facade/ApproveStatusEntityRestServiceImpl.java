@@ -6,6 +6,7 @@ import org.dubbo.x.facade.RestServiceBase;
 import com.fionapet.business.service.ApproveStatusEntityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 审批状态实体
@@ -14,7 +15,7 @@ import org.slf4j.LoggerFactory;
 public class ApproveStatusEntityRestServiceImpl extends RestServiceBase<ApproveStatusEntity> implements ApproveStatusEntityRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ApproveStatusEntityRestServiceImpl.class);
-
+    @Autowired
     private ApproveStatusEntityService approveStatusEntityService;
 
     public ApproveStatusEntityService getApproveStatusEntityService() {

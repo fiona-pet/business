@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class SerialNumberRestServiceImpl extends RestServiceBase<SerialNumber> implements SerialNumberRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SerialNumberRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private SerialNumberService serialNumberService;
 
     public SerialNumberService getSerialNumberService() {

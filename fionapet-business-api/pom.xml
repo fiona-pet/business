@@ -18,7 +18,7 @@
     <parent>
         <groupId>com.fionapet</groupId>
         <artifactId>fionapet-business</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>2.0-SNAPSHOT</version>
     </parent>
     <artifactId>fionapet-business-api</artifactId>
     <packaging>jar</packaging>
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>cn.fiona.pet</groupId>
             <artifactId>fiona-pet-account-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>2.0-SNAPSHOT</version>
         </dependency>
       <dependency>
             <groupId>com.alibaba</groupId>

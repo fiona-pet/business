@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class InputMoneyRecordRestServiceImpl extends RestServiceBase<InputMoneyRecord> implements InputMoneyRecordRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InputMoneyRecordRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private InputMoneyRecordService inputMoneyRecordService;
 
     public InputMoneyRecordService getInputMoneyRecordService() {

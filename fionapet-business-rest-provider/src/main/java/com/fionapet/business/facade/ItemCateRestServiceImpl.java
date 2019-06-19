@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class ItemCateRestServiceImpl extends SelectRestServiceBase<ItemCate> implements ItemCateRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemCateRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private ItemCateService itemCateService;
 
     public ItemCateService getItemCateService() {

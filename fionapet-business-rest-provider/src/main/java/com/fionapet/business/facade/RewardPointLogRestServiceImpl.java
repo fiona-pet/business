@@ -6,6 +6,7 @@ import org.dubbo.x.facade.RestServiceBase;
 import com.fionapet.business.service.RewardPointLogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 序列号
@@ -15,6 +16,7 @@ public class RewardPointLogRestServiceImpl extends RestServiceBase<RewardPointLo
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RewardPointLogRestServiceImpl.class);
 
+    @Autowired
     private RewardPointLogService rewardPointLogService;
 
     public RewardPointLogService getRewardPointLogService() {

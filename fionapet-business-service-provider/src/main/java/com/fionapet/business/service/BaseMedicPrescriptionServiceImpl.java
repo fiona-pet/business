@@ -1,16 +1,20 @@
 package com.fionapet.business.service;
 
 import com.fionapet.business.entity.BaseMedicPrescription;
+import com.fionapet.business.repository.BaseMedicPrescriptionDao;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
-import com.fionapet.business.repository.BaseMedicPrescriptionDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
- *  处方
-* Created by tom on 2016-07-18 15:56:24.
+ * 处方 Created by tom on 2016-07-18 15:56:24.
  */
-public class BaseMedicPrescriptionServiceImpl extends CURDServiceBase<BaseMedicPrescription> implements BaseMedicPrescriptionService {
+
+@Service
+public class BaseMedicPrescriptionServiceImpl extends CURDServiceBase<BaseMedicPrescription>
+        implements BaseMedicPrescriptionService {
+
     @Autowired
     private BaseMedicPrescriptionDao baseMedicPrescriptionDao;
 

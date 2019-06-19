@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class CheckProcessSheetRestServiceImpl extends RestServiceBase<CheckProcessSheet> implements CheckProcessSheetRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CheckProcessSheetRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private CheckProcessSheetService checkProcessSheetService;
 
     public CheckProcessSheetService getCheckProcessSheetService() {

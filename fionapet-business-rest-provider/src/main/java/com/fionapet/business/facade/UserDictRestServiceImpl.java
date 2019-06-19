@@ -20,7 +20,7 @@ import java.util.Map;
 public class UserDictRestServiceImpl extends SelectRestServiceBase<UserDict> implements UserDictRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDictRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private UserDictService userDictService;
 
     public UserDictService getUserDictService() {

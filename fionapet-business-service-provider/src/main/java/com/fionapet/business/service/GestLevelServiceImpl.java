@@ -1,21 +1,28 @@
 package com.fionapet.business.service;
 
 import com.fionapet.business.entity.GestLevel;
+import com.fionapet.business.repository.GestLevelDao;
 import org.dubbo.x.entity.StatusEnum;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
-import com.fionapet.business.repository.GestLevelDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
- *  会员等级管理
-* Created by tom on 2016-07-31 16:36:25.
+ * 会员等级管理 Created by tom on 2016-07-31 16:36:25.
  */
+
+@Service
 public class GestLevelServiceImpl extends CURDServiceBase<GestLevel> implements GestLevelService {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(GestLevelServiceImpl.class);
     private static final String LEVEL_KEY_CN = "会员等级";
     private static final String LEVEL_KEY = "gestStyleSet";
@@ -33,15 +40,17 @@ public class GestLevelServiceImpl extends CURDServiceBase<GestLevel> implements 
         LOGGER.debug("selects params:{}", params);
 
         Map<String, String> paramKeyToValue = new HashMap<String, String>();
-        for (Map.Entry<String, String> param:params.entrySet()){
+        for (Map.Entry<String, String> param : params.entrySet()) {
             paramKeyToValue.put(param.getValue(), param.getKey());
         }
 
-        List<GestLevel> gestLevels = gestLevelDao.findByStatusDictDetailCode(StatusEnum.OK.toString());
+        List<GestLevel>
+                gestLevels =
+                gestLevelDao.findByStatusDictDetailCode(StatusEnum.OK.toString());
 
         List<Map<String, Object>> gestLevelsMap = new ArrayList<Map<String, Object>>();
 
-        for (GestLevel gestLevel: gestLevels){
+        for (GestLevel gestLevel : gestLevels) {
             Map<String, Object> gestLevelMap = new HashMap<String, Object>();
 
             gestLevelMap.put("valueNameCn", gestLevel.getLevelName());

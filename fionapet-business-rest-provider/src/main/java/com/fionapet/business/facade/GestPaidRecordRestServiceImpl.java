@@ -26,7 +26,7 @@ import java.util.List;
 public class GestPaidRecordRestServiceImpl extends RestServiceBase<GestPaidRecord> implements GestPaidRecordRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GestPaidRecordRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private GestPaidRecordService gestPaidRecordService;
 
     public GestPaidRecordService getGestPaidRecordService() {

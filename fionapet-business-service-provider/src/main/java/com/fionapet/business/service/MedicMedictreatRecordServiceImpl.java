@@ -3,8 +3,6 @@ package com.fionapet.business.service;
 import com.fionapet.business.entity.CMSEntity;
 import com.fionapet.business.entity.MedicMedictreatRecord;
 import com.fionapet.business.entity.MedicRegisterRecord;
-import com.fionapet.business.entity.Pet;
-import com.fionapet.business.event.PayEvent;
 import com.fionapet.business.event.PetEvent;
 import com.fionapet.business.repository.MedicMedictreatRecordDao;
 import com.fionapet.business.repository.MedicRegisterRecordDao;
@@ -13,7 +11,6 @@ import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
 import org.apache.commons.lang.StringUtils;
-import org.dubbo.x.facade.RestResult;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
 import org.slf4j.Logger;
@@ -21,18 +18,23 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
-import org.springframework.transaction.annotation.Isolation;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 
 /**
- * 医生处理记录
- * Created by tom on 2016-07-18 11:56:10.
+ * 医生处理记录 Created by tom on 2016-07-18 11:56:10.
  */
-public class MedicMedictreatRecordServiceImpl extends CURDServiceBase<MedicMedictreatRecord> implements MedicMedictreatRecordService ,ApplicationEventPublisherAware {
-    private final static Logger LOGGER = LoggerFactory.getLogger(MedicMedictreatRecordServiceImpl.class);
+
+@Service
+public class MedicMedictreatRecordServiceImpl extends CURDServiceBase<MedicMedictreatRecord>
+        implements MedicMedictreatRecordService, ApplicationEventPublisherAware {
+
+    private final static Logger
+            LOGGER =
+            LoggerFactory.getLogger(MedicMedictreatRecordServiceImpl.class);
 
     @Autowired
     private MedicMedictreatRecordDao medicMedictreatRecordDao;
@@ -63,19 +65,25 @@ public class MedicMedictreatRecordServiceImpl extends CURDServiceBase<MedicMedic
         ConvertUtils.register(new DateConverter(null), java.util.Date.class);
 
         synchronized (CURD_KEY) {
-            MedicMedictreatRecord medicMedictreatRecord = medicMedictreatRecordDao.findByRegisterNo(entity.getRegisterNo());
+            MedicMedictreatRecord
+                    medicMedictreatRecord =
+                    medicMedictreatRecordDao.findByRegisterNo(entity.getRegisterNo());
             if (null == medicMedictreatRecord) {
                 medicMedictreatRecord = new MedicMedictreatRecord();
                 medicMedictreatRecord.setStatus(CMSEntity.DEFAULT());
                 medicMedictreatRecord.setRegisterNo(entity.getRegisterNo());
                 appConfigService.setCurrentUser(getCurrentUser());
-                medicMedictreatRecord.setMediTreatmentCode(appConfigService.genNumberByName("就诊编号"));
+                medicMedictreatRecord
+                        .setMediTreatmentCode(appConfigService.genNumberByName("就诊编号"));
 
-                MedicRegisterRecord medicRegisterRecord = medicRegisterRecordDao.findByRegisterNo(entity.getRegisterNo());
+                MedicRegisterRecord
+                        medicRegisterRecord =
+                        medicRegisterRecordDao.findByRegisterNo(entity.getRegisterNo());
 
                 if (null != medicRegisterRecord) {
                     try {
-                        BeanUtilsBean.getInstance().copyProperties(medicMedictreatRecord, medicRegisterRecord);
+                        BeanUtilsBean.getInstance()
+                                .copyProperties(medicMedictreatRecord, medicRegisterRecord);
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     } catch (InvocationTargetException e) {
@@ -93,7 +101,7 @@ public class MedicMedictreatRecordServiceImpl extends CURDServiceBase<MedicMedic
             } else {
                 if (entity.getId() == null) {
                     entity = medicMedictreatRecord;
-                }else {
+                } else {
                     entity.setId(medicMedictreatRecord.getId());
                 }
             }
@@ -113,7 +121,8 @@ public class MedicMedictreatRecordServiceImpl extends CURDServiceBase<MedicMedic
     @Override
     public MedicMedictreatRecord payReturnVisit(String uuid, String remark) {
         MedicMedictreatRecord medicMedictreatRecord = this.detail(uuid);
-        if (null != medicMedictreatRecord && StringUtils.isNotBlank(remark) && StringUtils.isNotEmpty(remark)){
+        if (null != medicMedictreatRecord && StringUtils.isNotBlank(remark) && StringUtils
+                .isNotEmpty(remark)) {
             medicMedictreatRecord.setPayReturnVisit(true);
             medicMedictreatRecord.setPayReturnVisitDate(new Date());
             medicMedictreatRecord.setPayReturnVisitRemark(remark);

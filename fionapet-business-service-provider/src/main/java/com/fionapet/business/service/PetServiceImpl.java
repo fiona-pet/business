@@ -1,40 +1,30 @@
 package com.fionapet.business.service;
 
 import com.fionapet.business.entity.Pet;
-import com.fionapet.business.entity.PetView;
-import com.fionapet.business.repository.PetViewDao;
+import com.fionapet.business.repository.PetDao;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.commons.lang3.time.DateUtils;
-import org.dubbo.x.entity.PageSearch;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
-import com.fionapet.business.repository.PetDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import javax.xml.crypto.Data;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.transaction.Transactional;
 
 /**
- *  宠物
-* Created by tom on 2016-07-19 10:31:06.
+ * 宠物 Created by tom on 2016-07-19 10:31:06.
  */
+
+@Service
 public class PetServiceImpl extends CURDServiceBase<Pet> implements PetService {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(PetServiceImpl.class);
     @Autowired
     private PetDao petDao;
@@ -53,12 +43,13 @@ public class PetServiceImpl extends CURDServiceBase<Pet> implements PetService {
 
         LOGGER.debug("create or update:{}", entity);
 
-        if (null != entity.getPetBirthday()){
+        if (null != entity.getPetBirthday()) {
             entity.setAge(getAge(entity.getPetBirthday()));
         }
 
-        if (null == entity.getId()){
-            entity.setSickFileCode(appConfigService.genNumberByName(AppConfigService.NUMBER_KEY_BLBH));
+        if (null == entity.getId()) {
+            entity.setSickFileCode(
+                    appConfigService.genNumberByName(AppConfigService.NUMBER_KEY_BLBH));
         }
 
         if (null != entity.getId()) {
@@ -96,9 +87,9 @@ public class PetServiceImpl extends CURDServiceBase<Pet> implements PetService {
         int age = yearNow - yearBirth;
 
         LOGGER.debug("yearNow:{}, yearBirth:{}", yearNow, yearBirth);
-        LOGGER.debug("month:{}",(Math.abs(monthBirth-monthNow)/12.0));
+        LOGGER.debug("month:{}", (Math.abs(monthBirth - monthNow) / 12.0));
 
-        return (float)(age + Math.abs(monthBirth-monthNow)/12.0);
+        return (float) (age + Math.abs(monthBirth - monthNow) / 12.0);
     }
 
 }

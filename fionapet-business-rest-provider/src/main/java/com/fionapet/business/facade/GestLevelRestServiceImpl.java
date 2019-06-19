@@ -20,7 +20,7 @@ import java.util.Map;
 public class GestLevelRestServiceImpl extends SelectRestServiceBase<GestLevel> implements GestLevelRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GestLevelRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private GestLevelService gestLevelService;
 
     public GestLevelService getGestLevelService() {

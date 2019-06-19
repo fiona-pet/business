@@ -20,7 +20,7 @@ import java.util.List;
 public class ItemCountRestServiceImpl extends RestServiceBase<ItemCount> implements ItemCountRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemCountRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private ItemCountService itemCountService;
 
     public ItemCountService getItemCountService() {

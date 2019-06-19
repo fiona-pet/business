@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class BusinesCateRestServiceImpl extends RestServiceBase<BusinesCate> implements BusinesCateRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BusinesCateRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private BusinesCateService businesCateService;
 
     public BusinesCateService getBusinesCateService() {

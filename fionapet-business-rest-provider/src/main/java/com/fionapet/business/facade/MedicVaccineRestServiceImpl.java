@@ -6,15 +6,18 @@ import org.dubbo.x.facade.RestServiceBase;
 import com.fionapet.business.service.MedicVaccineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 育苗表
 * Created by tom on 2016-07-18 11:56:09.
  */
+
 public class MedicVaccineRestServiceImpl extends RestServiceBase<MedicVaccine> implements MedicVaccineRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MedicVaccineRestServiceImpl.class);
 
+    @Autowired
     private MedicVaccineService medicVaccineService;
 
     public MedicVaccineService getMedicVaccineService() {

@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class ItemtypeSuppliesRestServiceImpl extends RestServiceBase<ItemtypeSupplies> implements ItemtypeSuppliesRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemtypeSuppliesRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private ItemtypeSuppliesService itemtypeSuppliesService;
 
     public ItemtypeSuppliesService getItemtypeSuppliesService() {

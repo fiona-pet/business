@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class VipInputTemRestServiceImpl extends RestServiceBase<VipInputTem> implements VipInputTemRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VipInputTemRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private VipInputTemService vipInputTemService;
 
     public VipInputTemService getVipInputTemService() {

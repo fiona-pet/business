@@ -20,7 +20,7 @@ import java.util.Map;
 public class DictTypeRestServiceImpl extends SelectRestServiceBase<DictType> implements DictTypeRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DictTypeRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private DictTypeService dictTypeService;
 
     public DictTypeService getDictTypeService() {

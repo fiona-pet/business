@@ -1,34 +1,31 @@
 package com.fionapet.business.service;
 
-import cn.fiona.pet.account.entity.Account;
-import cn.fiona.pet.account.entity.Role;
 import cn.fiona.pet.account.entity.User;
-import cn.fiona.pet.account.exception.ApiException;
 import cn.fiona.pet.account.service.AccountService;
 import com.fionapet.business.entity.DictTypeDetail;
 import com.fionapet.business.entity.MedicRegisterRecord;
-import com.fionapet.business.entity.Persons;
-import com.fionapet.business.entity.UserDict;
 import com.fionapet.business.facade.vo.BillItemVO;
 import com.fionapet.business.repository.DictTypeDetailDao;
 import com.fionapet.business.repository.MedicMedictreatRecordDao;
-import org.dubbo.x.entity.PageSearch;
-import org.dubbo.x.entity.SearchFilter;
+import com.fionapet.business.repository.MedicRegisterRecordDao;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
-import com.fionapet.business.repository.MedicRegisterRecordDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 /**
- *  医生登记记录明细
-* Created by tom on 2016-07-18 11:56:10.
+ * 医生登记记录明细 Created by tom on 2016-07-18 11:56:10.
  */
-public class MedicRegisterRecordServiceImpl extends CURDServiceBase<MedicRegisterRecord> implements MedicRegisterRecordService {
+
+@Service
+public class MedicRegisterRecordServiceImpl extends CURDServiceBase<MedicRegisterRecord>
+        implements MedicRegisterRecordService {
+
     @Autowired
     private MedicRegisterRecordDao medicRegisterRecordDao;
     @Autowired
@@ -55,7 +52,7 @@ public class MedicRegisterRecordServiceImpl extends CURDServiceBase<MedicRegiste
 
     @Override
     public List<MedicRegisterRecord> listAll() {
-        User user = (User)getCurrentUser();
+        User user = (User) getCurrentUser();
         return medicRegisterRecordDao.findByDoctor(user.getName());
     }
 
@@ -100,12 +97,13 @@ public class MedicRegisterRecordServiceImpl extends CURDServiceBase<MedicRegiste
     @Override
     @Transactional
     public MedicRegisterRecord createOrUpdte(MedicRegisterRecord entity) {
-        if (entity.getId() == null){
+        if (entity.getId() == null) {
             DictTypeDetail dictTypeDetail = dictTypeDetailDao.findByDictDetailCode("SM00034");
             entity.setStatus(dictTypeDetail);
-        }else{
+        } else {
             MedicRegisterRecord medicRegisterRecordOld = super.detail(entity.getId());
-            if (null != medicRegisterRecordOld && "SM00051".equalsIgnoreCase(medicRegisterRecordOld.getPaidStatus())) {
+            if (null != medicRegisterRecordOld && "SM00051"
+                    .equalsIgnoreCase(medicRegisterRecordOld.getPaidStatus())) {
                 entity.setPaidStatus("SM00051");
             }
         }
@@ -117,9 +115,11 @@ public class MedicRegisterRecordServiceImpl extends CURDServiceBase<MedicRegiste
     public List<BillItemVO> billDetail(String id) {
         List<BillItemVO> result = new ArrayList<BillItemVO>();
 
-        List<MedicRegisterRecord> medicRegisterRecords = medicRegisterRecordDao.findByPetIdAndPaidStatusNot(id, "SM00051");
+        List<MedicRegisterRecord>
+                medicRegisterRecords =
+                medicRegisterRecordDao.findByPetIdAndPaidStatusNot(id, "SM00051");
 
-        for (MedicRegisterRecord medicRegisterRecord: medicRegisterRecords){
+        for (MedicRegisterRecord medicRegisterRecord : medicRegisterRecords) {
             BillItemVO billItemVO = new BillItemVO();
 
             billItemVO.setId(medicRegisterRecord.getId());

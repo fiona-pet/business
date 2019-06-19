@@ -6,6 +6,7 @@ import org.dubbo.x.facade.RestServiceBase;
 import com.fionapet.business.service.PersonsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 宠物主人信息
@@ -15,6 +16,7 @@ public class PersonsRestServiceImpl extends RestServiceBase<Persons> implements 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PersonsRestServiceImpl.class);
 
+    @Autowired
     private PersonsService personsService;
 
     public PersonsService getPersonsService() {

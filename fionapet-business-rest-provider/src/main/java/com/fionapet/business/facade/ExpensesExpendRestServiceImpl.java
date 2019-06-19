@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class ExpensesExpendRestServiceImpl extends RestServiceBase<ExpensesExpend> implements ExpensesExpendRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExpensesExpendRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private ExpensesExpendService expensesExpendService;
 
     public ExpensesExpendService getExpensesExpendService() {

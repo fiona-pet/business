@@ -9,6 +9,7 @@ import com.fionapet.business.service.AppConfigService;
 import org.dubbo.x.util.ConstantVariable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.HeaderParam;
 
@@ -20,6 +21,7 @@ public class AppConfigRestServiceImpl extends RestServiceBase<AppConfig> impleme
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppConfigRestServiceImpl.class);
 
+    @Autowired
     private AppConfigService appConfigService;
 
     public AppConfigService getAppConfigService() {

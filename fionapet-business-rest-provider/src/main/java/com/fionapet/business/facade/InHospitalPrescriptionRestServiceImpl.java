@@ -21,7 +21,7 @@ import javax.ws.rs.HeaderParam;
 public class InHospitalPrescriptionRestServiceImpl extends RestServiceBase<InHospitalPrescription> implements InHospitalPrescriptionRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InHospitalPrescriptionRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private InHospitalPrescriptionService inHospitalPrescriptionService;
 
     public InHospitalPrescriptionService getInHospitalPrescriptionService() {

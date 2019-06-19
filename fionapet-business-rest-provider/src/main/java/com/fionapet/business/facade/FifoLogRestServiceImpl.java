@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class FifoLogRestServiceImpl extends RestServiceBase<FifoLog> implements FifoLogRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FifoLogRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private FifoLogService fifoLogService;
 
     public FifoLogService getFifoLogService() {

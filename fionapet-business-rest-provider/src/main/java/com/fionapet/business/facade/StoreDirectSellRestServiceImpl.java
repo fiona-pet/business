@@ -6,6 +6,7 @@ import org.dubbo.x.facade.RestServiceBase;
 import com.fionapet.business.service.StoreDirectSellService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 仓库直销主表
@@ -15,6 +16,7 @@ public class StoreDirectSellRestServiceImpl extends RestServiceBase<StoreDirectS
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StoreDirectSellRestServiceImpl.class);
 
+    @Autowired
     private StoreDirectSellService storeDirectSellService;
 
     public StoreDirectSellService getStoreDirectSellService() {

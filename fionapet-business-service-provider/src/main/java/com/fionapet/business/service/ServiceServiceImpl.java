@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *  服务主表
 * Created by tom on 2016-07-18 11:56:11.
  */
+@org.springframework.stereotype.Service
 public class ServiceServiceImpl extends CURDServiceBase<Service> implements ServiceService {
     @Autowired
     private ServiceDao serviceDao;

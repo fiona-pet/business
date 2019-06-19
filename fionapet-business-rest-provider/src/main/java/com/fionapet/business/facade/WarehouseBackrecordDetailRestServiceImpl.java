@@ -6,6 +6,7 @@ import org.dubbo.x.facade.RestServiceBase;
 import com.fionapet.business.service.WarehouseBackrecordDetailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 退回记录明细
@@ -15,6 +16,7 @@ public class WarehouseBackrecordDetailRestServiceImpl extends RestServiceBase<Wa
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WarehouseBackrecordDetailRestServiceImpl.class);
 
+    @Autowired
     private WarehouseBackrecordDetailService warehouseBackrecordDetailService;
 
     public WarehouseBackrecordDetailService getWarehouseBackrecordDetailService() {

@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class PromptRestServiceImpl extends RestServiceBase<Prompt> implements PromptRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PromptRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private PromptService promptService;
 
     public PromptService getPromptService() {

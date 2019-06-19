@@ -22,7 +22,7 @@ import java.util.Map;
 public class ReportRestServiceImpl extends RestServiceBase<ReportByPersonVO> implements ReportRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private ReportService reportService;
 
     public ReportService getReportService() {

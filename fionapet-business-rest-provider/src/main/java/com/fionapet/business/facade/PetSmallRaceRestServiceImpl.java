@@ -6,6 +6,7 @@ import org.dubbo.x.facade.RestServiceBase;
 import com.fionapet.business.service.PetSmallRaceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 宠物品种
@@ -15,6 +16,7 @@ public class PetSmallRaceRestServiceImpl extends RestServiceBase<PetSmallRace> i
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PetSmallRaceRestServiceImpl.class);
 
+    @Autowired
     private PetSmallRaceService petSmallRaceService;
 
     public PetSmallRaceService getPetSmallRaceService() {

@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class FosterRecordDetailRestServiceImpl extends RestServiceBase<FosterRecordDetail> implements FosterRecordDetailRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FosterRecordDetailRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private FosterRecordDetailService fosterRecordDetailService;
 
     public FosterRecordDetailService getFosterRecordDetailService() {

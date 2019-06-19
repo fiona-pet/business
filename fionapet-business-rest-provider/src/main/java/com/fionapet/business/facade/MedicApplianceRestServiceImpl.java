@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class MedicApplianceRestServiceImpl extends RestServiceBase<MedicAppliance> implements MedicApplianceRestService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MedicApplianceRestServiceImpl.class);
-
+    @org.springframework.beans.factory.annotation.Autowired
     private MedicApplianceService medicApplianceService;
 
     public MedicApplianceService getMedicApplianceService() {

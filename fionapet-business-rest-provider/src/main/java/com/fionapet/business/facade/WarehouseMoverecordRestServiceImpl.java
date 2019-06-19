@@ -9,6 +9,7 @@ import com.fionapet.business.service.WarehouseMoverecordService;
 import org.dubbo.x.util.ConstantVariable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.HeaderParam;
 
@@ -20,6 +21,7 @@ public class WarehouseMoverecordRestServiceImpl extends RestServiceBase<Warehous
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WarehouseMoverecordRestServiceImpl.class);
 
+    @Autowired
     private WarehouseMoverecordService warehouseMoverecordService;
 
     public WarehouseMoverecordService getWarehouseMoverecordService() {
