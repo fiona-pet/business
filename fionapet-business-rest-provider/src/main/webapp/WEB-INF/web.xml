@@ -14,9 +14,8 @@
         <param-value>/WEB-INF/classes/META-INF/spring/applicationContext.xml,
             /WEB-INF/classes/META-INF/spring/fionapet-business-rest-provider.xml,
             /WEB-INF/classes/META-INF/spring/applicationContext-service.xml,
-            /WEB-INF/classes/META-INF/spring/applicationContext-quartz.xml,
-            <!--/WEB-INF/classes/META-INF/spring/fionapet-business-service-provider.xml,-->
-            /WEB-INF/classes/META-INF/spring/fionapet-business-service-provider-tom.xml</param-value>
+            /WEB-INF/classes/META-INF/spring/applicationContext-quartz.xml
+        </param-value>
     </context-param>
 
     <context-param>
@@ -51,7 +50,8 @@
 
     <servlet>
         <servlet-name>resteasy</servlet-name>
-        <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+        <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher
+        </servlet-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>com.fionapet.business.servlet.PetStoreApplication</param-value>
