@@ -82,6 +82,9 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
     }
     @Override
     public List<ReportByItemMonthVO> itemMonth(String year, String month) {
+        if (month.length() == 1) {
+            month = "0" + month;
+        }
         return reportByItemMonthDao.findByCreateDateOrderByTotalDesc(year+"-"+month);
     }
 
