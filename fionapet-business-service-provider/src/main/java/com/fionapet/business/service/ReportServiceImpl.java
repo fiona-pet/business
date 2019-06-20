@@ -1,6 +1,8 @@
 package com.fionapet.business.service;
 
 import com.fionapet.business.entity.FosterRecord;
+import com.fionapet.business.entity.ReportByItemDayVO;
+import com.fionapet.business.entity.ReportByItemMonthVO;
 import com.fionapet.business.entity.ReportByItemVO;
 import com.fionapet.business.entity.ReportByPersonVO;
 import com.fionapet.business.entity.StatusEntity;
@@ -10,6 +12,7 @@ import com.fionapet.business.repository.GestPaidRecordDao;
 import com.fionapet.business.repository.InputMoneyRecordDao;
 import com.fionapet.business.repository.MedicRegisterRecordDao;
 import com.fionapet.business.repository.ReportByItemDao;
+import com.fionapet.business.repository.ReportByItemMonthDao;
 import com.fionapet.business.repository.ReportDao;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -44,6 +47,8 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
     @Autowired
     private ReportByItemDao reportByItemDao;
     @Autowired
+    private ReportByItemMonthDao reportByItemMonthDao;
+    @Autowired
     private GestPaidRecordDao gestPaidRecordDao;
     @Autowired
     private MedicRegisterRecordDao medicRegisterRecordDao;
@@ -66,9 +71,18 @@ public class ReportServiceImpl extends CURDServiceBase<ReportByPersonVO> impleme
     }
 
     @Override
-    public List<ReportByItemVO> item(String year, String month, String day) {
-        return reportByItemDao.findCreateDateBetween(getDate(year, month, day, "01"),
-                                                     getDate(year, month, day, "31"));
+    public List<ReportByItemDayVO> itemDay(String year, String month, String day) {
+        if (!"-".equals(day)){
+            return reportByItemDao.findByCreateDateOrderByTotalDesc(getDate(year, month, day, day));
+        }else{
+            return reportByItemDao.findCreateDateBetweenOrderByTotalDesc(getDate(year, month, day, "01"),
+                                                         getDate(year, month, day, "31"));
+        }
+
+    }
+    @Override
+    public List<ReportByItemMonthVO> itemMonth(String year, String month) {
+        return reportByItemMonthDao.findByCreateDateOrderByTotalDesc(year+"-"+month);
     }
 
     private String getDate(String year, String month, String day, String defaultDay) {

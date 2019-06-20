@@ -676,3 +676,37 @@ where ic.item_count_num*ic.item_bulk+ic.scattered_count_num < 0
 ORDER BY ic.update_date desc
 
 
+-- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --
+-- --- Table structure for v_report_by_item  商品统计报表
+-- -- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+drop view if exists v_report_by_item;
+create view v_report_by_item as
+select uuid()                                                         id,
+       mpd.item_code,
+       mpd.item_name,
+       sum(total_num)                                                 total_num,
+       avg(infact_price)                                              avg_price,
+       sum(mpd.total_cost)                                            total,
+       avg(ic.input_price / ic.item_bulk)                             avg_input_price,
+       avg(ic.input_price / ic.item_bulk) * sum(total_num)            total_cost,
+       avg(ic.item_count_num * ic.item_bulk + ic.scattered_count_num) inventory,
+       substr(mpd.create_date, 1, 10)                                 create_date
+from t_finance_settle_accounts_detail mpd
+       LEFT JOIN t_item_count ic ON ic.item_code = mpd.item_code
+group by item_code, item_name, substr(mpd.create_date, 1, 10)
+
+drop view if exists v_report_by_item_month;
+create view v_report_by_item_month as
+select uuid()                                                         id,
+       mpd.item_code,
+       mpd.item_name,
+       sum(total_num)                                                 total_num,
+       avg(infact_price)                                              avg_price,
+       sum(mpd.total_cost)                                            total,
+       avg(ic.input_price / ic.item_bulk)                             avg_input_price,
+       avg(ic.input_price / ic.item_bulk) * sum(total_num)            total_cost,
+       avg(ic.item_count_num * ic.item_bulk + ic.scattered_count_num) inventory,
+       substr(mpd.create_date, 1, 7)                                 create_date
+from t_finance_settle_accounts_detail mpd
+       LEFT JOIN t_item_count ic ON ic.item_code = mpd.item_code
+group by item_code, item_name, substr(mpd.create_date, 1, 7)

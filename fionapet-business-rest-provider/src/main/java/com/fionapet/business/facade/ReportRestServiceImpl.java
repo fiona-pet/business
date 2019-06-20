@@ -1,5 +1,7 @@
 package com.fionapet.business.facade;
 
+import com.fionapet.business.entity.ReportByItemDayVO;
+import com.fionapet.business.entity.ReportByItemMonthVO;
 import com.fionapet.business.entity.ReportByItemVO;
 import com.fionapet.business.entity.ReportByPersonVO;
 import com.fionapet.business.service.ReportService;
@@ -59,8 +61,13 @@ public class ReportRestServiceImpl extends RestServiceBase<ReportByPersonVO> imp
     }
 
     @Override
-    public RestResult<List<ReportByItemVO>> item(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("year") String year, @ApiParam("month") String month, @ApiParam("day") String day) {
-        return RestResult.OK(reportService.item(year,month,day));
+    public RestResult<List<ReportByItemDayVO>> itemDay(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("year") String year, @ApiParam("month") String month, @ApiParam("day") String day) {
+        return RestResult.OK(reportService.itemDay(year,month,day));
+    }
+
+    @Override
+    public RestResult<List<ReportByItemMonthVO>> itemMonth(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("year") String year, @ApiParam("month") String month) {
+        return RestResult.OK(reportService.itemMonth(year,month));
     }
 
     @Override

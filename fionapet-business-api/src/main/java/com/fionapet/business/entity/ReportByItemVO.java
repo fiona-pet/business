@@ -4,13 +4,13 @@ import org.dubbo.x.entity.Idable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.Table;
 
 /**
  * Created by tom on 16/10/23.
  */
-@Entity
-@Table(name = "v_report_by_item")
+@MappedSuperclass
 public class ReportByItemVO implements Idable {
 
     @Id
@@ -47,10 +47,7 @@ public class ReportByItemVO implements Idable {
      * 库存
      */
     private Double inventory;
-    /**
-     * 类型
-     */
-    private String type;
+
     /**
      * 销售时间
      */
@@ -128,14 +125,6 @@ public class ReportByItemVO implements Idable {
         this.inventory = inventory;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public String getCreateDate() {
         return createDate;
     }
@@ -156,7 +145,6 @@ public class ReportByItemVO implements Idable {
                 ", avgInputPrice=" + avgInputPrice +
                 ", totalCost=" + totalCost +
                 ", inventory=" + inventory +
-                ", type='" + type + '\'' +
                 ", createDate='" + createDate + '\'' +
                 '}';
     }

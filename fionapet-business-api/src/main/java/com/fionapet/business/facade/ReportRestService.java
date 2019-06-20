@@ -1,6 +1,8 @@
 package com.fionapet.business.facade;
 
 import com.alibaba.dubbo.rpc.protocol.rest.support.ContentType;
+import com.fionapet.business.entity.ReportByItemDayVO;
+import com.fionapet.business.entity.ReportByItemMonthVO;
 import com.fionapet.business.entity.ReportByItemVO;
 import com.fionapet.business.entity.ReportByPersonVO;
 import io.swagger.annotations.Api;
@@ -70,10 +72,19 @@ public interface ReportRestService extends CURDRestService<ReportByPersonVO>{
      * @return
      */
     @GET
-    @Path("/item")
+    @Path("/item/day")
     @ApiOperation(value = "统计报表",
             notes = "统计报表列表.")
-    RestResult<List<ReportByItemVO>> item(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("year") @QueryParam("year") String year, @ApiParam("month") @QueryParam("month") String month, @ApiParam("day") @QueryParam("day") String day);
+    RestResult<List<ReportByItemDayVO>> itemDay(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("year") @QueryParam("year") String year, @ApiParam("month") @QueryParam("month") String month, @ApiParam("day") @QueryParam("day") String day);
+    /**
+     * 统计报表
+     * @return
+     */
+    @GET
+    @Path("/item/month")
+    @ApiOperation(value = "统计报表",
+            notes = "统计报表列表.")
+    RestResult<List<ReportByItemMonthVO>> itemMonth(@HeaderParam(ConstantVariable.HEADER_AUTHORIZATION_KEY) String token, @ApiParam("year") @QueryParam("year") String year, @ApiParam("month") @QueryParam("month") String month);
 
     /**
      * 统计报表-挂号
