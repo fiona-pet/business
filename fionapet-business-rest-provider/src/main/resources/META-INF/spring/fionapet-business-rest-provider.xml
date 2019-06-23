@@ -647,6 +647,17 @@
 
     <!--养育健康状况表 api -->
 
+    <!--养育健康状况表 api -->
+    <dubbo:service interface="com.fionapet.business.facade.InHospitalHealthRestService"
+                   ref="inHospitalHealthRestService"
+                   protocol="rest" validation="true" timeout="5000"/>
+
+    <bean id="inHospitalHealthRestService"
+          class="com.fionapet.business.facade.InHospitalHealthRestServiceImpl">
+    </bean>
+
+    <!--养育健康状况表 api -->
+
 
     <!--养育记录主表 api -->
     <dubbo:service interface="com.fionapet.business.facade.FosterRecordRestService"
