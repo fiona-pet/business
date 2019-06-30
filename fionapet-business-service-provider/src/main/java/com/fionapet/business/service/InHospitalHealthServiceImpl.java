@@ -1,6 +1,7 @@
 package com.fionapet.business.service;
 
 import com.fionapet.business.entity.InHospitalHealth;
+import com.fionapet.business.entity.Persons;
 import com.fionapet.business.repository.InHospitalHealthDao;
 import org.dubbo.x.repository.DaoBase;
 import org.dubbo.x.service.CURDServiceBase;
@@ -21,5 +22,13 @@ public class InHospitalHealthServiceImpl extends CURDServiceBase<InHospitalHealt
     @Override
     public DaoBase<InHospitalHealth> getDao() {
         return inHospitalHealthDao;
+    }
+
+    @Override
+    public InHospitalHealth createOrUpdte(InHospitalHealth entity) {
+        Persons persons = new Persons();
+        persons.setId(getCurrentUser().getId());
+        entity.setCreateUser(persons);
+        return super.createOrUpdte(entity);
     }
 }
