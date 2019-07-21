@@ -1,21 +1,6 @@
 package com.fionapet.business.service;
 
-import com.fionapet.business.entity.BillVO;
-import com.fionapet.business.entity.CMSEntity;
-import com.fionapet.business.entity.DictTypeDetail;
-import com.fionapet.business.entity.FinanceSettleAccounts;
-import com.fionapet.business.entity.FinanceSettleAccountsDetail;
-import com.fionapet.business.entity.Gest;
-import com.fionapet.business.entity.GestPaidRecord;
-import com.fionapet.business.entity.InHospitalPrescription;
-import com.fionapet.business.entity.InHospitalPrescriptionDetail;
-import com.fionapet.business.entity.InHospitalRecord;
-import com.fionapet.business.entity.ItemType;
-import com.fionapet.business.entity.MedicPrescriptionDetail;
-import com.fionapet.business.entity.MedicRegisterRecord;
-import com.fionapet.business.entity.Service;
-import com.fionapet.business.entity.ServiceDetail;
-import com.fionapet.business.entity.SettleAccountsView;
+import com.fionapet.business.entity.*;
 import com.fionapet.business.event.PayEvent;
 import com.fionapet.business.exception.ApiException;
 import com.fionapet.business.facade.vo.PayVO;
@@ -81,6 +66,11 @@ public class GestPaidRecordServiceImpl extends CURDEServiceBase<GestPaidRecord>
     private InHospitalPrescriptionService inHospitalPrescriptionService;
     @Autowired
     private InHospitalRecordService inHospitalRecordService;
+
+    @Autowired
+    private FosterRecordDetailService fosterRecordDetailService;
+    @Autowired
+    private FosterRecordService fosterRecordService;
 
     @Autowired
     private ServiceService serviceService;
@@ -342,6 +332,38 @@ public class GestPaidRecordServiceImpl extends CURDEServiceBase<GestPaidRecord>
                             inHospitalRecordService.createOrUpdte(inHospitalRecord);
                         }
                     }
+                }
+
+                //减少 存款
+                if ("寄养".equals(pay.getGestPaidRecord().getOperateAction())) {
+                    if ("寄养消费".equals(settleAccountsView.getBusinessType())) {
+                        FosterRecordDetail
+                                fosterRecordDetail =
+                                fosterRecordDetailService
+                                        .detail(settleAccountsView.getRelationDetailId());
+                        fosterRecordDetail
+                                .setPaidStatus(dictTypeDetail.getDictDetailCode());
+                        fosterRecordDetail.setPaidTime(new Date());
+
+                        //消除库存
+                        itemCountService.decrease(fosterRecordDetail);
+
+                        fosterRecordDetailService
+                                .createOrUpdte(fosterRecordDetail);
+
+                        FosterRecord
+                                fosterRecord =
+                                fosterRecordService
+                                        .detail(fosterRecordDetail.getFosterId());
+                        if (null != fosterRecord) {
+                            fosterRecord.setInputMoney(fosterRecord.getInputMoney() - Double
+                                    .parseDouble(String.format("%.2f", financeSettleAccountsDetail
+                                            .getTotalCost())));
+                            fosterRecordService.createOrUpdte(fosterRecord);
+                        }
+                    }
+
+
                 }
 
                 this.publishEvent(

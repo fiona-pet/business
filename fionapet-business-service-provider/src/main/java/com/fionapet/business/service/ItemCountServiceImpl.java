@@ -1,12 +1,6 @@
 package com.fionapet.business.service;
 
-import com.fionapet.business.entity.InHospitalPrescriptionDetail;
-import com.fionapet.business.entity.ItemCount;
-import com.fionapet.business.entity.ItemCountChangeReason;
-import com.fionapet.business.entity.MedicPrescriptionDetail;
-import com.fionapet.business.entity.OrderVO;
-import com.fionapet.business.entity.WarehouseInrecord;
-import com.fionapet.business.entity.WarehouseInrecordDetail;
+import com.fionapet.business.entity.*;
 import com.fionapet.business.entity.status.WarehouseStatus;
 import com.fionapet.business.exception.ApiException;
 import com.fionapet.business.repository.ItemCountChangeReasonDao;
@@ -244,6 +238,23 @@ public class ItemCountServiceImpl extends CURDServiceBase<ItemCount> implements 
         }
 
         decrease(medicPrescriptionDetail);
+    }
+
+
+    public void decrease(FosterRecordDetail fosterRecordDetail){
+
+        MedicPrescriptionDetail medicPrescriptionDetail = new MedicPrescriptionDetail();
+        try {
+            BeanUtilsBean.getInstance()
+                    .copyProperties(medicPrescriptionDetail, fosterRecordDetail);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        decrease(medicPrescriptionDetail);
+
     }
 
     @Override

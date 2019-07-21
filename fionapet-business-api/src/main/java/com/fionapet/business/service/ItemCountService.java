@@ -28,6 +28,13 @@ public interface ItemCountService extends CURDService<ItemCount> {
     void decrease(InHospitalPrescriptionDetail inHospitalPrescriptionDetail);
 
     /**
+     * 消除库存
+     *
+     * @param fosterRecordDetail
+     */
+    void decrease(FosterRecordDetail fosterRecordDetail);
+
+    /**
      * 缺货订单
      * @return
      */
