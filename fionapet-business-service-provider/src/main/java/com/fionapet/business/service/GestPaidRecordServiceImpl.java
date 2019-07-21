@@ -73,6 +73,9 @@ public class GestPaidRecordServiceImpl extends CURDEServiceBase<GestPaidRecord>
     private FosterRecordService fosterRecordService;
 
     @Autowired
+    private PrepayMoneyService prepayMoneyService;
+
+    @Autowired
     private ServiceService serviceService;
     @Autowired
     private ServiceDetailService serviceDetailService;
@@ -330,6 +333,11 @@ public class GestPaidRecordServiceImpl extends CURDEServiceBase<GestPaidRecord>
                                     .parseDouble(String.format("%.2f", financeSettleAccountsDetail
                                             .getTotalCost())));
                             inHospitalRecordService.createOrUpdte(inHospitalRecord);
+
+
+                            updatePrepayMoney(inHospitalRecord.getId(), - Double
+                                    .parseDouble(String.format("%.2f", financeSettleAccountsDetail
+                                            .getTotalCost())), "住院消费");
                         }
                     }
                 }
@@ -360,6 +368,11 @@ public class GestPaidRecordServiceImpl extends CURDEServiceBase<GestPaidRecord>
                                     .parseDouble(String.format("%.2f", financeSettleAccountsDetail
                                             .getTotalCost())));
                             fosterRecordService.createOrUpdte(fosterRecord);
+
+                            updatePrepayMoney(fosterRecord.getId(), - Double
+                                    .parseDouble(String.format("%.2f", financeSettleAccountsDetail
+                                            .getTotalCost())), "寄养消费");
+
                         }
                     }
 
@@ -386,6 +399,16 @@ public class GestPaidRecordServiceImpl extends CURDEServiceBase<GestPaidRecord>
         }
 
         return financeSettleAccounts;
+    }
+
+    private void updatePrepayMoney(String id, double value, String remark){
+        PrepayMoney prepayMoney = new PrepayMoney();
+        prepayMoney.setRelationId(id);
+        prepayMoney.setInputMoney(value);
+        prepayMoney.setRemark(remark);
+        prepayMoneyService.setCurrentUser(getCurrentUser());
+
+        prepayMoneyService.createOrUpdte(prepayMoney);
     }
 
     @Override
