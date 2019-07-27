@@ -18,7 +18,7 @@ import java.util.Date;
 @Entity
 @Table(name = "t_in_hospital_prescription")
 @ApiModel("住院处方")
-public class InHospitalPrescription extends CMSEntity {
+public class InHospitalPrescription extends CMSPEntity {
     /**
      * 医生记录编号
      */

@@ -1,9 +1,6 @@
 package com.fionapet.business.service;
 
-import com.fionapet.business.entity.DictTypeDetail;
-import com.fionapet.business.entity.InHospitalPrescription;
-import com.fionapet.business.entity.InHospitalPrescriptionDetail;
-import com.fionapet.business.entity.InHospitalRecord;
+import com.fionapet.business.entity.*;
 import com.fionapet.business.repository.DictTypeDetailDao;
 import com.fionapet.business.repository.InHospitalPrescriptionDao;
 import com.fionapet.business.repository.InHospitalPrescriptionDetailDao;
@@ -84,6 +81,7 @@ public class InHospitalPrescriptionServiceImpl extends CURDServiceBase<InHospita
         inHospitalPrescription.setInHospitalId(inHospitalRecord.getId());
         inHospitalPrescription.setInHospitalNo(inHospitalRecordCode);
 
+
         //获取 病例编号
         String
                 prescriptionCode =
@@ -149,5 +147,13 @@ public class InHospitalPrescriptionServiceImpl extends CURDServiceBase<InHospita
             }
         }
         super.delete(uuid);
+    }
+
+    @Override
+    public InHospitalPrescription createOrUpdte(InHospitalPrescription entity) {
+        Persons persons = new Persons();
+        persons.setId(getCurrentUser().getId());
+        entity.setCreateUser(persons);
+        return super.createOrUpdte(entity);
     }
 }
