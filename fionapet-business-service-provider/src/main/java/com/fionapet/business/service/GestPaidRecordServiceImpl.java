@@ -11,6 +11,7 @@ import com.fionapet.business.repository.GestPaidRecordDao;
 import com.fionapet.business.repository.ItemTypeDao;
 import com.fionapet.business.repository.PetDao;
 import com.fionapet.business.repository.SettleAccountsDao;
+import org.apache.commons.lang.StringUtils;
 import org.dubbo.x.repository.DaoBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
+import javax.validation.constraints.Null;
 
 /**
  * 顾客支付记录表 Created by tom on 2016-07-25 09:32:34.
@@ -200,6 +202,8 @@ public class GestPaidRecordServiceImpl extends CURDEServiceBase<GestPaidRecord>
             medicRegisterRecordService.setCurrentUser(getCurrentUser());
             medicPrescriptionDetailService.setCurrentUser(getCurrentUser());
 
+            String prepayMoneyUpdateId = null;
+
             for (SettleAccountsView settleAccountsView : payList) {
                 FinanceSettleAccountsDetail
                         financeSettleAccountsDetail =
@@ -302,6 +306,8 @@ public class GestPaidRecordServiceImpl extends CURDEServiceBase<GestPaidRecord>
                     }
                 }
 
+
+
                 //减少 存款
                 if ("住院".equals(pay.getGestPaidRecord().getOperateAction())) {
                     if ("住院处置处方".equals(settleAccountsView.getBusinessType())) {
@@ -332,12 +338,10 @@ public class GestPaidRecordServiceImpl extends CURDEServiceBase<GestPaidRecord>
                             inHospitalRecord.setInputMoney(inHospitalRecord.getInputMoney() - Double
                                     .parseDouble(String.format("%.2f", financeSettleAccountsDetail
                                             .getTotalCost())));
+
+                            prepayMoneyUpdateId = inHospitalRecord.getId();
+
                             inHospitalRecordService.createOrUpdte(inHospitalRecord);
-
-
-                            updatePrepayMoney(inHospitalRecord.getId(), - Double
-                                    .parseDouble(String.format("%.2f", financeSettleAccountsDetail
-                                            .getTotalCost())), "住院消费");
                         }
                     }
                 }
@@ -367,12 +371,10 @@ public class GestPaidRecordServiceImpl extends CURDEServiceBase<GestPaidRecord>
                             fosterRecord.setInputMoney(fosterRecord.getInputMoney() - Double
                                     .parseDouble(String.format("%.2f", financeSettleAccountsDetail
                                             .getTotalCost())));
+
+                            prepayMoneyUpdateId = fosterRecord.getId();
+
                             fosterRecordService.createOrUpdte(fosterRecord);
-
-                            updatePrepayMoney(fosterRecord.getId(), - Double
-                                    .parseDouble(String.format("%.2f", financeSettleAccountsDetail
-                                            .getTotalCost())), "寄养消费");
-
                         }
                     }
 
@@ -383,6 +385,10 @@ public class GestPaidRecordServiceImpl extends CURDEServiceBase<GestPaidRecord>
                         new PayEvent(settleAccountsView, pay.getGestPaidRecord().getOperateAction(),
                                      settleAccountsView.getBusinessType(), getToken()));
 
+            }
+
+            if (("住院".equals(pay.getGestPaidRecord().getOperateAction()) || ("寄养".equals(pay.getGestPaidRecord().getOperateAction()))) && StringUtils.isNotEmpty(prepayMoneyUpdateId)) {
+                updatePrepayMoney(prepayMoneyUpdateId, -financeSettleAccounts.getShouldPaidMoney(), pay.getGestPaidRecord().getOperateAction() + "消费");
             }
 
             GestPaidRecord gestPaidRecord = new GestPaidRecord();

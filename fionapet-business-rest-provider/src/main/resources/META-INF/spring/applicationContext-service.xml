@@ -57,7 +57,7 @@
 	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 
 	<!-- production环境 -->
-	<beans profile="bj">
+	<beans profile="lf">
 		<context:property-placeholder ignore-unresolvable="true"
 									  location="classpath*:/application-bj.properties" />
 
