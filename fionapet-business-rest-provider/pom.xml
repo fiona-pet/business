@@ -45,7 +45,7 @@
          <jdbc.driver.artifactId>mysql-connector-java</jdbc.driver.artifactId>
          <jdbc.driver.version>5.1.22</jdbc.driver.version>
 
-        <junit.version>4.11</junit.version>
+        <junit.version>4.13.1</junit.version>
         <assertj.version>1.6.1</assertj.version>
     </properties>
     <dependencies>
